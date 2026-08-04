@@ -1,0 +1,15 @@
+Building a real project with vibe coding — Part 2.
+
+By the end, we’ll build a website like this.
+
+In the previous video, we set up the project. Now, before we start the implementation, we’ll use a skill to fully analyze the website idea.
+
+You can get useful resources like this, along with tools used by top engineers, for free on my Telegram channel.
+
+Here, it asks us everything about the website: what it is about, who it is for, and which tech stack we need.
+
+The best part of this skill is that it turns the interview results into a clear implementation plan.
+
+Then, it starts building the project based on that plan.
+
+The next part is coming soon.
