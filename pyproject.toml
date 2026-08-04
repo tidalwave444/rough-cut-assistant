@@ -3,7 +3,20 @@ name = "roughcut"
 version = "0.1.0"
 description = "Turns a black-screen recording and its script into a Premiere-importable rough cut"
 requires-python = ">=3.12,<3.13"
-dependencies = []
+dependencies = [
+    "faster-whisper>=1.1",
+]
+
+[project.scripts]
+roughcut = "roughcut.cli:main"
+
+[project.optional-dependencies]
+# The CUDA runtime CTranslate2 links against. Installed as an extra so the pure
+# stages — everything below the analysis seam — can be developed without them.
+gpu = [
+    "nvidia-cublas-cu12>=12.3",
+    "nvidia-cudnn-cu12>=9.1",
+]
 
 [dependency-groups]
 dev = [
@@ -20,8 +33,18 @@ packages = ["src/roughcut"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# The media stage is excluded by default: it is the only test that needs ffmpeg, the
+# model and a GPU. Run it on its own with `pytest -m slow`.
+addopts = "-m 'not slow'"
+markers = [
+    "slow: opens the real recording — needs ffmpeg, the Whisper model and a GPU",
+]
 
 [tool.mypy]
 python_version = "3.12"
 strict = true
 files = ["src", "tests"]
+
+[[tool.mypy.overrides]]
+module = ["faster_whisper.*"]
+ignore_missing_imports = true

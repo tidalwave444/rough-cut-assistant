@@ -1,0 +1,139 @@
+"""Tests for the command line, all of them below the seam.
+
+Nothing here opens a recording: `render` works from an analysis artifact, and the
+failure paths are reached before the media stage would start.
+"""
+
+import json
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+import pytest
+
+from roughcut.cli import main
+
+ANALYSIS = {
+    "source": {
+        "filename": "sequence.mp4",
+        "duration_seconds": 86.25,
+        "fps": 60,
+        "ntsc": False,
+        "width": 1920,
+        "height": 1080,
+        "audio_sample_rate": 48000,
+        "audio_channels": 2,
+    },
+    "words": [
+        {"text": "Building", "start_seconds": 0.5, "end_seconds": 0.9, "confidence": 0.98},
+        {"text": "it.", "start_seconds": 0.9, "end_seconds": 1.4, "confidence": 0.9},
+    ],
+    "silences": [{"start_seconds": 1.4, "end_seconds": 3.0}],
+}
+
+
+@pytest.fixture
+def analysis(tmp_path: Path) -> Path:
+    path = tmp_path / "sequence.analysis.json"
+    path.write_text(json.dumps(ANALYSIS), encoding="utf-8")
+    return path
+
+
+@pytest.fixture
+def script(tmp_path: Path) -> Path:
+    path = tmp_path / "script.txt"
+    path.write_text("Building a real project.\r\n\r\nThe end.\r\n", encoding="utf-8")
+    return path
+
+
+def test_rendering_an_analysis_writes_a_sequence_and_a_report(
+    analysis: Path, script: Path, tmp_path: Path
+) -> None:
+    out = tmp_path / "out"
+
+    code = main(["render", str(analysis), str(script), "-o", str(out)])
+
+    assert code == 0
+    assert (out / "sequence.report.txt").read_text(encoding="utf-8").startswith("Rough cut")
+    sequence = ET.parse(out / "sequence.xml").getroot().find("sequence")
+    assert sequence is not None
+    assert sequence.findtext("name") == "RoughCut"
+    # The whole recording, at 60fps: 86.25s is 5175 frames.
+    assert sequence.findtext("duration") == "5175"
+
+
+def test_rendering_needs_no_media_present(analysis: Path, script: Path, tmp_path: Path) -> None:
+    # The analysis names sequence.mp4, which exists nowhere near this test.
+    assert main(["render", str(analysis), str(script), "-o", str(tmp_path / "out")]) == 0
+
+
+def test_a_missing_script_is_reported_without_writing_anything(
+    analysis: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    out = tmp_path / "out"
+
+    code = main(["render", str(analysis), str(tmp_path / "nope.txt"), "-o", str(out)])
+
+    assert code == 2
+    assert "Script not found" in capsys.readouterr().err
+    assert not out.exists()
+
+
+def test_a_missing_analysis_is_reported(
+    script: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    code = main(["render", str(tmp_path / "nope.json"), str(script), "-o", str(tmp_path / "out")])
+
+    assert code == 2
+    assert "Analysis not found" in capsys.readouterr().err
+
+
+def test_a_malformed_analysis_is_reported_by_field(
+    script: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    path = tmp_path / "broken.analysis.json"
+    document = dict(ANALYSIS)
+    del document["source"]
+    path.write_text(json.dumps(document), encoding="utf-8")
+
+    code = main(["render", str(path), str(script), "-o", str(tmp_path / "out")])
+
+    assert code == 2
+    assert "'source'" in capsys.readouterr().err
+
+
+def test_cutting_a_recording_that_is_not_there_is_reported(
+    script: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    code = main(
+        ["cut", str(tmp_path / "nope.mp4"), str(script), "-o", str(tmp_path / "out")]
+    )
+
+    assert code == 2
+    assert "Recording not found" in capsys.readouterr().err
+
+
+def test_cutting_reads_the_script_before_touching_the_recording(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    # Both inputs are wrong; the script is the one worth complaining about first,
+    # because the alternative is discovering it after a transcription.
+    code = main(
+        [
+            "cut",
+            str(tmp_path / "nope.mp4"),
+            str(tmp_path / "nope.txt"),
+            "-o",
+            str(tmp_path / "out"),
+        ]
+    )
+
+    assert code == 2
+    assert "Script not found" in capsys.readouterr().err
+
+
+def test_the_report_is_printed_as_well_as_written(
+    analysis: Path, script: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    main(["render", str(analysis), str(script), "-o", str(tmp_path / "out")])
+
+    assert "Source duration    00:01:26.250" in capsys.readouterr().out

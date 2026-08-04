@@ -10,7 +10,8 @@ both the video and the audio stream even though the picture is never used.
 from dataclasses import dataclass
 from urllib.parse import quote
 
-from roughcut.plan import Clip, Marker, Plan, Sequence, SourceMedia
+from roughcut.analysis import SourceMedia
+from roughcut.plan import Clip, Marker, Plan, Sequence
 from roughcut.xmlwriter import Element, el, leaf, to_xml
 
 MARKER_HAS_NO_DURATION = -1

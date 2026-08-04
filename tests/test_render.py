@@ -2,23 +2,15 @@ import xml.etree.ElementTree as ET
 from dataclasses import replace
 from pathlib import Path
 
-from roughcut.plan import Clip, Marker, Plan, Sequence, SourceMedia
+from conftest import FIXTURE_SOURCE
+
+from roughcut.analysis import SourceMedia
+from roughcut.plan import Clip, Marker, Plan, Sequence
 from roughcut.render import render_fcp7
 
 # Hand-authored and confirmed to import into Premiere. It is the contract, so it is
 # never regenerated from the renderer — that would make the golden test circular.
 REFERENCE_XML = Path(__file__).resolve().parents[1] / "media" / "minimal2.xml"
-
-FIXTURE_SOURCE = SourceMedia(
-    filename="sequence.mp4",
-    duration_seconds=86.250000,
-    fps=60,
-    ntsc=False,
-    width=1920,
-    height=1080,
-    audio_sample_rate=48000,
-    audio_channels=2,
-)
 
 
 def spike_plan() -> Plan:
