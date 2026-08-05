@@ -1,0 +1,17 @@
+Building a real project with vibe coding — Part 2.
+
+Today, we’re moving from setup to actual development.
+
+In the previous part, we prepared the project and installed everything we needed. But before writing any code, we need a clear plan.
+
+That’s why I’m using a special skill that works like a product interview.
+
+It asks important questions: What problem does the website solve? Who is it for? What features do we need? And which technologies should we use?
+
+You can find this skill and other useful tools used by experienced engineers for free on my Telegram channel.
+
+After answering the questions, the skill turns everything into a detailed development plan.
+
+Now we can start building the website step by step without getting lost.
+
+In the next part, we’ll begin the implementation.

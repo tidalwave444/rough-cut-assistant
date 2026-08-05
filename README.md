@@ -33,6 +33,12 @@ uv run roughcut render out/sequence.analysis.json media/textt.txt -o out
 XML, and the report. Re-running reuses the analysis unless the recording or a media
 setting changed, so iterating on the cut costs no transcription.
 
+The cut is one clip per script line, butt-spliced in the order the script writes them
+— not the order they were recorded — with a marker at each line carrying its text, and
+one marker per item where a line enumerates. The report says where each line was found
+in the recording, names any line the recording does not contain, and lists the speech
+the cut is not using: retakes, and material that is off the script.
+
 Import the XML into Premiere and relink the clip once when prompted — the XML
 references the recording by bare filename, so it arrives offline by design.
 
@@ -49,4 +55,5 @@ uv run mypy
 
 The fixture recording's analysis is committed at
 `tests/fixtures/sequence.analysis.json`, so the golden test runs the real recording's
-timings without the MP4 or a GPU.
+timings without the MP4 or a GPU. Both the XML and the report are golden: a change to
+how lines are located reads as a line moving rather than as a frame count changing.

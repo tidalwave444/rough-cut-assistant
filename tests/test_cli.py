@@ -25,9 +25,13 @@ ANALYSIS = {
     },
     "words": [
         {"text": "Building", "start_seconds": 0.5, "end_seconds": 0.9, "confidence": 0.98},
-        {"text": "it.", "start_seconds": 0.9, "end_seconds": 1.4, "confidence": 0.9},
+        {"text": "a", "start_seconds": 0.9, "end_seconds": 1.1, "confidence": 0.98},
+        {"text": "real", "start_seconds": 1.1, "end_seconds": 1.5, "confidence": 0.98},
+        {"text": "project.", "start_seconds": 1.5, "end_seconds": 2.0, "confidence": 0.9},
+        {"text": "The", "start_seconds": 4.0, "end_seconds": 4.2, "confidence": 0.98},
+        {"text": "end.", "start_seconds": 4.2, "end_seconds": 4.6, "confidence": 0.9},
     ],
-    "silences": [{"start_seconds": 1.4, "end_seconds": 3.0}],
+    "silences": [{"start_seconds": 2.0, "end_seconds": 4.0}],
 }
 
 
@@ -57,8 +61,12 @@ def test_rendering_an_analysis_writes_a_sequence_and_a_report(
     sequence = ET.parse(out / "sequence.xml").getroot().find("sequence")
     assert sequence is not None
     assert sequence.findtext("name") == "RoughCut"
-    # The whole recording, at 60fps: 86.25s is 5175 frames.
-    assert sequence.findtext("duration") == "5175"
+    # Two lines, 1.5s and 0.6s of speech, spliced: 2.1s is 126 frames at 60fps.
+    assert sequence.findtext("duration") == "126"
+    assert [marker.findtext("name") for marker in sequence.findall("marker")] == [
+        "Line 1",
+        "Line 2",
+    ]
 
 
 def test_rendering_needs_no_media_present(analysis: Path, script: Path, tmp_path: Path) -> None:

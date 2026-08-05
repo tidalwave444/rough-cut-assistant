@@ -3,7 +3,7 @@
 <xmeml version="4">
   <sequence id="sequence-1">
     <name>RoughCut</name>
-    <duration>5175</duration>
+    <duration>4608</duration>
     <rate>
       <timebase>60</timebase>
       <ntsc>FALSE</ntsc>
@@ -71,9 +71,9 @@
               <ntsc>FALSE</ntsc>
             </rate>
             <start>0</start>
-            <end>5175</end>
+            <end>218</end>
             <in>0</in>
-            <out>5175</out>
+            <out>218</out>
             <file id="file-1">
               <name>sequence.mp4</name>
               <pathurl>file://localhost/sequence.mp4</pathurl>
@@ -125,8 +125,201 @@
               <trackindex>1</trackindex>
             </sourcetrack>
           </clipitem>
+          <clipitem id="clipitem-2">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>218</start>
+            <end>737</end>
+            <in>218</in>
+            <out>737</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-3">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>737</start>
+            <end>1567</end>
+            <in>737</in>
+            <out>1567</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-4">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1567</start>
+            <end>2374</end>
+            <in>1567</in>
+            <out>2374</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-5">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2374</start>
+            <end>3307</end>
+            <in>2374</in>
+            <out>3307</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-6">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>3307</start>
+            <end>4097</end>
+            <in>3410</in>
+            <out>4200</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-7">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>4097</start>
+            <end>4402</end>
+            <in>4200</in>
+            <out>4505</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-8">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>4402</start>
+            <end>4608</end>
+            <in>4505</in>
+            <out>4711</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
         </track>
       </audio>
     </media>
+    <marker>
+      <name>Line 1</name>
+      <comment>Building a real project with vibe coding — Part 2.</comment>
+      <in>0</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 2</name>
+      <comment>By the end, we’ll build a website like this.</comment>
+      <in>218</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 3</name>
+      <comment>In the previous video, we set up the project. Now, before we start the implementation, we’ll use a skill to fully analyze the website idea.</comment>
+      <in>737</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 4</name>
+      <comment>You can get useful resources like this, along with tools used by top engineers, for free on my Telegram channel.</comment>
+      <in>1567</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 5.1</name>
+      <comment>Here, it asks us everything about the website: what it is about,</comment>
+      <in>2374</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 5.2</name>
+      <comment>who it is for,</comment>
+      <in>2922</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 5.3</name>
+      <comment>and which tech stack we need.</comment>
+      <in>3066</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6</name>
+      <comment>The best part of this skill is that it turns the interview results into a clear implementation plan.</comment>
+      <in>3307</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 7</name>
+      <comment>Then, it starts building the project based on that plan.</comment>
+      <in>4097</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 8</name>
+      <comment>The next part is coming soon.</comment>
+      <in>4402</in>
+      <out>-1</out>
+    </marker>
   </sequence>
 </xmeml>

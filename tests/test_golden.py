@@ -13,12 +13,14 @@ from pathlib import Path
 from roughcut.analysis import load_analysis
 from roughcut.plan import build_plan
 from roughcut.render import render_fcp7
+from roughcut.report import render_report
 from roughcut.script import read_script
 
 REPO = Path(__file__).resolve().parents[1]
 ANALYSIS = REPO / "tests" / "fixtures" / "sequence.analysis.json"
 SCRIPT = REPO / "media" / "textt.txt"
 GOLDEN_XML = REPO / "tests" / "fixtures" / "sequence.golden.xml"
+GOLDEN_REPORT = REPO / "tests" / "fixtures" / "sequence.golden.report.txt"
 
 
 def assert_golden(path: Path, produced: str, update: bool) -> None:
@@ -32,6 +34,17 @@ def test_the_fixture_recording_renders_the_expected_sequence(update_golden: bool
     plan = build_plan(analysis, read_script(SCRIPT))
 
     assert_golden(GOLDEN_XML, render_fcp7(plan), update_golden)
+
+
+def test_the_fixture_recording_reports_the_expected_cut(update_golden: bool) -> None:
+    # Where every line was found is the reviewable part of an alignment change: a
+    # heuristic that moves a line shows up here as a line moving, not as a frame count.
+    analysis = load_analysis(ANALYSIS)
+    script = read_script(SCRIPT)
+
+    report = render_report(analysis, script, build_plan(analysis, script))
+
+    assert_golden(GOLDEN_REPORT, report, update_golden)
 
 
 def test_the_committed_analysis_describes_the_fixture_recording() -> None:
