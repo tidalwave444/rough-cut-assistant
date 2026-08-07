@@ -34,11 +34,37 @@ ANALYSIS = {
     "silences": [{"start_seconds": 2.0, "end_seconds": 4.0}],
 }
 
+PAUSED = {
+    "source": ANALYSIS["source"],
+    # One line read with two seconds of nothing in the middle of it: 3.5s of recording.
+    "words": [
+        {"text": "Building", "start_seconds": 0.5, "end_seconds": 0.9, "confidence": 0.98},
+        {"text": "a", "start_seconds": 0.9, "end_seconds": 1.1, "confidence": 0.98},
+        {"text": "real", "start_seconds": 1.1, "end_seconds": 1.5, "confidence": 0.98},
+        {"text": "project.", "start_seconds": 3.5, "end_seconds": 4.0, "confidence": 0.9},
+    ],
+    "silences": [{"start_seconds": 1.5, "end_seconds": 3.5}],
+}
+
 
 @pytest.fixture
 def analysis(tmp_path: Path) -> Path:
     path = tmp_path / "sequence.analysis.json"
     path.write_text(json.dumps(ANALYSIS), encoding="utf-8")
+    return path
+
+
+@pytest.fixture
+def paused(tmp_path: Path) -> Path:
+    path = tmp_path / "paused.analysis.json"
+    path.write_text(json.dumps(PAUSED), encoding="utf-8")
+    return path
+
+
+@pytest.fixture
+def one_line(tmp_path: Path) -> Path:
+    path = tmp_path / "one-line.txt"
+    path.write_text("Building a real project.\n", encoding="utf-8")
     return path
 
 
@@ -137,6 +163,36 @@ def test_cutting_reads_the_script_before_touching_the_recording(
 
     assert code == 2
     assert "Script not found" in capsys.readouterr().err
+
+
+def rendered_frames(analysis: Path, script: Path, out: Path, *flags: str) -> str | None:
+    """How long the rough cut runs, in frames, for one run of `render`."""
+    assert main(["render", str(analysis), str(script), "-o", str(out), *flags]) == 0
+    sequence = ET.parse(out / "sequence.xml").getroot().find("sequence")
+    assert sequence is not None
+    return sequence.findtext("duration")
+
+
+def test_the_pause_floor_and_threshold_are_command_line_options(
+    paused: Path, one_line: Path, tmp_path: Path
+) -> None:
+    # 3.5s of line with a 2s pause in it, at 60fps: 1.8s by default as the pause
+    # collapses to the 0.3s floor, 2.5s with the floor raised to a second, and the
+    # whole 3.5s once the threshold is lifted past the gap.
+    default = rendered_frames(paused, one_line, tmp_path / "a")
+    floored = rendered_frames(paused, one_line, tmp_path / "b", "--pause-floor-seconds", "1.0")
+    kept = rendered_frames(paused, one_line, tmp_path / "c", "--pause-threshold-seconds", "3")
+
+    assert (default, floored, kept) == ("108", "150", "210")
+
+
+def test_the_pause_padding_is_a_command_line_option(
+    paused: Path, one_line: Path, tmp_path: Path
+) -> None:
+    # A pad wider than half the silence leaves nothing of it safe to cut.
+    padded = rendered_frames(paused, one_line, tmp_path / "a", "--pause-padding-seconds", "1.5")
+
+    assert padded == "210"
 
 
 def test_the_report_is_printed_as_well_as_written(

@@ -14,6 +14,7 @@ from pathlib import Path
 from roughcut.analysis import Analysis, load_analysis
 from roughcut.analyze import AnalysisRun, AnalysisSettings, analysis_for
 from roughcut.errors import RoughCutError
+from roughcut.pauses import PauseSettings
 from roughcut.plan import build_plan
 from roughcut.render import render_fcp7
 from roughcut.report import render_report
@@ -47,14 +48,14 @@ def _cut(args: argparse.Namespace) -> int:
     script = read_script(Path(args.script))
     run = _analysis_run(args, recording)
     _report_analysis(run, _analysis_path(args, recording))
-    _write_cut(run.analysis, script, Path(args.out_dir))
+    _write_cut(run.analysis, script, Path(args.out_dir), _pauses(args))
     return 0
 
 
 def _render(args: argparse.Namespace) -> int:
     """Plan and render from an existing artifact, without opening the recording."""
     script = read_script(Path(args.script))
-    _write_cut(load_analysis(Path(args.analysis)), script, Path(args.out_dir))
+    _write_cut(load_analysis(Path(args.analysis)), script, Path(args.out_dir), _pauses(args))
     return 0
 
 
@@ -82,13 +83,24 @@ def _settings(args: argparse.Namespace) -> AnalysisSettings:
     )
 
 
+def _pauses(args: argparse.Namespace) -> PauseSettings:
+    """How tight this run's cut is, as asked for on the command line."""
+    return PauseSettings(
+        threshold_seconds=args.pause_threshold_seconds,
+        floor_seconds=args.pause_floor_seconds,
+        padding_seconds=args.pause_padding_seconds,
+    )
+
+
 def _report_analysis(run: AnalysisRun, artifact: Path) -> None:
     what = "Reused analysis" if run.reused else "Analyzed"
     print(f"{what}: {artifact} ({len(run.analysis.words)} words)")
 
 
-def _write_cut(analysis: Analysis, script: list[ScriptLine], out_dir: Path) -> None:
-    plan = build_plan(analysis, script)
+def _write_cut(
+    analysis: Analysis, script: list[ScriptLine], out_dir: Path, pauses: PauseSettings
+) -> None:
+    plan = build_plan(analysis, script, pauses)
     stem = Path(analysis.source.filename).stem
     report = render_report(analysis, script, plan)
     _write(out_dir / f"{stem}.xml", render_fcp7(plan))
@@ -121,7 +133,7 @@ def _parser() -> argparse.ArgumentParser:
 
     cut = commands.add_parser(
         "cut",
-        parents=[_output_options(), _media_options()],
+        parents=[_output_options(), _media_options(), _pause_options()],
         help="Analyze, plan and render: the whole tool.",
     )
     cut.add_argument("recording", help="The MP4 to cut.")
@@ -130,7 +142,7 @@ def _parser() -> argparse.ArgumentParser:
 
     render = commands.add_parser(
         "render",
-        parents=[_output_options()],
+        parents=[_output_options(), _pause_options()],
         help="Plan and render from an existing analysis, touching no media.",
     )
     render.add_argument("analysis", help="An analysis artifact written by `analyze` or `cut`.")
@@ -147,6 +159,35 @@ def _output_options() -> argparse.ArgumentParser:
         "--out-dir",
         default=str(DEFAULT_OUT_DIR),
         help=f"Where the XML, the report and the analysis go (default: {DEFAULT_OUT_DIR}).",
+    )
+    return options
+
+
+def _pause_options() -> argparse.ArgumentParser:
+    """How tight the cut is.
+
+    These decide the plan rather than the analysis, so they cost nothing to change:
+    `render` takes them too, and re-running with a different floor never re-transcribes.
+    """
+    defaults = PauseSettings()
+    options = argparse.ArgumentParser(add_help=False)
+    options.add_argument(
+        "--pause-threshold-seconds",
+        type=float,
+        default=defaults.threshold_seconds,
+        help="A gap between words longer than this is shortened. Shorter ones are kept.",
+    )
+    options.add_argument(
+        "--pause-floor-seconds",
+        type=float,
+        default=defaults.floor_seconds,
+        help="How long a shortened pause still lasts. Pauses are collapsed, never closed.",
+    )
+    options.add_argument(
+        "--pause-padding-seconds",
+        type=float,
+        default=defaults.padding_seconds,
+        help="Quiet kept either side of a shortened pause, so that speech is not clipped.",
     )
     return options
 

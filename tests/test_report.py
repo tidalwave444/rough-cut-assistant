@@ -16,6 +16,15 @@ def report_for(words: list[Word]) -> str:
     return render_report(described, SCRIPT, build_plan(described, SCRIPT))
 
 
+def report_with_a_pause() -> str:
+    """Line 1 read with two seconds of quiet in the middle of it."""
+    words = spoken("Building a real project with vibe", at=0.0) + spoken(
+        "coding, part two.", at=5.0
+    )
+    described = Analysis(source=FIXTURE_SOURCE, words=words, silences=[Silence(3.0, 5.0)])
+    return render_report(described, SCRIPT[:1], build_plan(described, SCRIPT[:1]))
+
+
 def test_the_report_names_the_recording_it_describes() -> None:
     assert "sequence.mp4" in report_for(CLEAN_READ)
 
@@ -68,6 +77,24 @@ def test_off_script_material_is_listed_as_such_with_what_was_said() -> None:
 
     assert "00:00:06.000–00:00:10.500  off-script" in report
     assert "Sorry, my microphone was unplugged" in report
+
+
+def test_the_report_counts_the_pauses_it_shortened() -> None:
+    assert "Pauses shortened   1" in report_with_a_pause()
+
+
+def test_each_shortened_pause_is_listed_with_what_it_gave_up() -> None:
+    # Two seconds of gap three seconds in, cut back to the floor.
+    assert (
+        "  00:00:03.000   00:00:02.000   00:00:00.300   00:00:01.700" in report_with_a_pause()
+    )
+
+
+def test_a_cut_with_no_pause_worth_shortening_says_so_and_tabulates_nothing() -> None:
+    report = report_for(CLEAN_READ)
+
+    assert "Pauses shortened   0" in report
+    assert "What each pause gave up" not in report
 
 
 def test_a_cut_that_uses_all_of_the_recording_lists_nothing_as_unused() -> None:

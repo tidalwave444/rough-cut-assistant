@@ -11,6 +11,7 @@ did I say that the cut is not using.
 
 from roughcut.align import Leftover
 from roughcut.analysis import Analysis
+from roughcut.pauses import Pause
 from roughcut.plan import Plan, rough_cut, timeline_duration_seconds
 from roughcut.script import ScriptLine
 
@@ -24,9 +25,9 @@ NOWHERE = "—"
 
 HOW_THE_CUT_WAS_MADE = (
     "One clip per script line, spliced in the order the script writes them — so the\n"
-    "dead air between lines is gone, while a pause inside a line is still as it was\n"
-    "spoken. Where a line was read more than once the first reading plays, and every\n"
-    "reading the cut passed over is listed below."
+    "dead air between lines is gone, while a long pause inside a line is shortened to\n"
+    "a beat rather than closed. Where a line was read more than once the first reading\n"
+    "plays, and every reading the cut passed over is listed below."
 )
 
 
@@ -47,10 +48,12 @@ def render_report(analysis: Analysis, script: list[ScriptLine], plan: Plan) -> s
             _label("Script lines", len(script)),
             _label("Lines found", len(plan.lines)),
             _label("Lines not found", len(plan.missing)),
+            _label("Pauses shortened", len(plan.shortened)),
             "",
             HOW_THE_CUT_WAS_MADE,
             "",
             *_where_each_line_went(script, plan),
+            *_what_each_pause_gave_up(plan.shortened),
             *_what_is_not_used(plan.leftovers),
             "",
         ]
@@ -72,6 +75,30 @@ def _where_each_line_went(script: list[ScriptLine], plan: Plan) -> list[str]:
         rows.append(
             f"{line.number:>4}  {source.ljust(TIME_WIDTH)}"
             f"{timeline.ljust(TIME_WIDTH)}{line.text}"
+        )
+    return rows
+
+
+def _what_each_pause_gave_up(pauses: list[Pause]) -> list[str]:
+    """Every pause the cut took time out of — where it was, and how much came out.
+
+    Both the old length and the new one, because the question this answers is whether
+    the cut is too tight, and "1.7 s removed" does not say what is left.
+    """
+    if not pauses:
+        return []
+    rows = [
+        "",
+        "What each pause gave up",
+        "",
+        f"  {'At'.ljust(TIME_WIDTH)}{'Was'.ljust(TIME_WIDTH)}{'Now'.ljust(TIME_WIDTH)}Removed",
+    ]
+    for pause in pauses:
+        rows.append(
+            f"  {_duration(pause.gap_start_seconds).ljust(TIME_WIDTH)}"
+            f"{_duration(pause.gap_seconds).ljust(TIME_WIDTH)}"
+            f"{_duration(pause.remaining_seconds).ljust(TIME_WIDTH)}"
+            f"{_duration(pause.removed_seconds)}"
         )
     return rows
 

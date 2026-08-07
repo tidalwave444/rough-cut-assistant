@@ -39,6 +39,14 @@ one marker per item where a line enumerates. The report says where each line was
 in the recording, names any line the recording does not contain, and lists the speech
 the cut is not using: retakes, and material that is off the script.
 
+A long pause *inside* a line is shortened rather than removed: a gap over 0.7 s
+collapses to 0.3 s, and only as far as a detected silence corroborates it, so the read
+still breathes and the cut never lands inside a word. `--pause-threshold-seconds`,
+`--pause-floor-seconds` and `--pause-padding-seconds` tighten or loosen the whole cut
+in one run. They decide the plan rather than the analysis, so `render` takes them too
+and trying a different floor costs no transcription. The report says what each pause
+gave up.
+
 Import the XML into Premiere and relink the clip once when prompted — the XML
 references the recording by bare filename, so it arrives offline by design.
 

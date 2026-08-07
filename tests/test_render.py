@@ -145,7 +145,8 @@ def test_an_ntsc_source_declares_the_whole_timebase_and_the_ntsc_flag() -> None:
 
 def test_seconds_are_converted_to_frames_by_rounding() -> None:
     source = replace(FIXTURE_SOURCE, filename="take.mp4", duration_seconds=3.0, fps=30)
-    # 1.01s is 30.3 frames and rounds down; 2.99s is 89.7 and rounds up.
+    # 1.01s is 30.3 frames and rounds down; the 1.98s the clip runs for is 59.4 and
+    # rounds down too; 1.99s of timeline is 59.7 and rounds up.
     plan = one_sequence(
         source,
         clips=[
@@ -160,8 +161,30 @@ def test_seconds_are_converted_to_frames_by_rounding() -> None:
 
     root = rendered(plan)
     clipitem = root.findall("./sequence/media/audio/track/clipitem")[0]
-    assert _timings(clipitem) == {"start": 0, "end": 60, "in": 30, "out": 90}
+    assert _timings(clipitem) == {"start": 0, "end": 59, "in": 30, "out": 89}
     assert root.findtext("./sequence/marker/in") == "60"
+
+
+def test_butt_spliced_clips_meet_on_a_frame_rather_than_overlapping() -> None:
+    # Source times that land between frames, laid end to end — what a shortened pause
+    # produces. Two clipitems overlapping on one audio track is a sequence Premiere
+    # cannot lay out, and a frame of hole between them is a click.
+    plan = one_sequence(
+        FIXTURE_SOURCE,
+        clips=[
+            Clip(3.64, 6.546625, 3.64),
+            Clip(7.635021, 12.28, 6.546625),
+            Clip(12.28, 26.12, 11.191604),
+        ],
+    )
+
+    timings = [
+        _timings(item) for item in rendered(plan).findall("./sequence/media/audio/track/clipitem")
+    ]
+
+    assert [frames["start"] for frames in timings[1:]] == [
+        frames["end"] for frames in timings[:-1]
+    ]
 
 
 def test_each_sequence_in_a_plan_is_rendered_with_its_own_clip_ids() -> None:

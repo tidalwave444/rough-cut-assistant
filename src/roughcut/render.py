@@ -115,18 +115,30 @@ class _ClipFrames:
 def _frames(clip: Clip, fps: float) -> _ClipFrames:
     """A clip's source range and its timeline placement, all in frames.
 
-    The end is derived from the start rather than rounded on its own, so a clip always
-    occupies exactly as many frames as it takes from the source and successive clips
-    can't drift apart by a frame.
+    Both ends are quantised on the *timeline* and the source out point is derived from
+    them, rather than the other way round. Butt-spliced clips then meet on a frame
+    however their seconds fall: one clip's timeline end and the next one's timeline
+    start are the same quantity, so they round together. Quantising each source end on
+    its own instead lets the two disagree by a whole frame — which puts two clipitems
+    on top of each other on a single audio track, a sequence Premiere cannot lay out.
+
+    The half-frame of error moves to the source range, where it is what it always was:
+    inaudible on a splice.
+
+    "The same quantity" is exact in arithmetic and within an ulp in floats, since the
+    plan reaches the two by different routes. The golden test asserts the meeting on
+    the real recording, which is where a rounding boundary would show up.
     """
-    source_in = to_frames(clip.source_in_seconds, fps)
-    source_out = to_frames(clip.source_out_seconds, fps)
     start = to_frames(clip.timeline_start_seconds, fps)
+    end = to_frames(
+        clip.timeline_start_seconds + clip.source_out_seconds - clip.source_in_seconds, fps
+    )
+    source_in = to_frames(clip.source_in_seconds, fps)
     return _ClipFrames(
         source_in=source_in,
-        source_out=source_out,
+        source_out=source_in + (end - start),
         start=start,
-        end=start + (source_out - source_in),
+        end=end,
     )
 
 

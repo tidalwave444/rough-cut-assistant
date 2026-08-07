@@ -8,6 +8,7 @@ wording at once.
 Rewrite the expected files with `pytest --update-golden` when the change is intended.
 """
 
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from roughcut.analysis import load_analysis
@@ -45,6 +46,25 @@ def test_the_fixture_recording_reports_the_expected_cut(update_golden: bool) -> 
     report = render_report(analysis, script, build_plan(analysis, script))
 
     assert_golden(GOLDEN_REPORT, report, update_golden)
+
+
+def test_the_fixture_cut_splices_every_clip_onto_the_end_of_the_last() -> None:
+    # Asserted on the real recording rather than on hand-picked times, because this is
+    # where awkward numbers come from: a shortened pause puts clip boundaries on
+    # fractions of a frame, and one audio track can hold neither two clipitems at once
+    # nor a frame of hole between them.
+    analysis = load_analysis(ANALYSIS)
+    plan = build_plan(analysis, read_script(SCRIPT))
+
+    clipitems = ET.fromstring(render_fcp7(plan)).findall(
+        "./sequence/media/audio/track/clipitem"
+    )
+
+    frames = [
+        (int(item.findtext("start") or ""), int(item.findtext("end") or ""))
+        for item in clipitems
+    ]
+    assert [start for start, _ in frames[1:]] == [end for _, end in frames[:-1]]
 
 
 def test_the_committed_analysis_describes_the_fixture_recording() -> None:
