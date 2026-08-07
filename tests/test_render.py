@@ -198,6 +198,11 @@ def test_each_sequence_in_a_plan_is_rendered_with_its_own_clip_ids() -> None:
     )
 
     root = rendered(plan)
+    # One file, both sequences, each named for the project panel.
+    assert [s.findtext("name") for s in root.findall("sequence")] == [
+        "RoughCut",
+        "RoughCut_Alternates",
+    ]
     assert [s.get("id") for s in root.findall("sequence")] == ["seq-1", "seq-2"]
     clip_ids = [c.get("id") for c in root.iter("clipitem")]
     assert clip_ids == ["clipitem-1", "clipitem-2"]

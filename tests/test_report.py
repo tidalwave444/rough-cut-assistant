@@ -1,4 +1,14 @@
-from conftest import FIXTURE_SOURCE, LINE_1, LINE_2, LINE_3, SCRIPT, clean_read, spoken
+from conftest import (
+    FIXTURE_SOURCE,
+    LINE_1,
+    LINE_2,
+    LINE_2_STOPS_SHORT,
+    LINE_3,
+    SCRIPT,
+    clean_read,
+    retakes,
+    spoken,
+)
 
 from roughcut.analysis import Analysis, Silence, Word
 from roughcut.plan import Clip, Plan, Sequence, build_plan
@@ -61,10 +71,51 @@ def test_a_line_the_recording_does_not_contain_is_flagged_rather_than_timed() ->
     assert "   2  not found      —              Today we are moving" in report
 
 
-def test_a_retake_is_listed_with_the_line_it_repeats() -> None:
+def test_a_second_reading_of_a_line_is_a_take_of_it_rather_than_unused_speech() -> None:
     report = report_for(CLEAN_READ + spoken(LINE_2, at=20.0))
 
-    assert "00:00:20.000–00:00:24.500  retake of line 2" in report
+    assert "Takes considered   4" in report
+    assert "Not used" not in report
+
+
+def test_every_take_considered_is_listed_with_its_coverage_and_its_outcome() -> None:
+    # The line number is written once and its takes hang below it, so a line read
+    # three times reads as one block rather than as three rows to match up by eye.
+    report = report_for(retakes(LINE_2, LINE_2, LINE_2_STOPS_SHORT))
+
+    assert "Line  Take  Source         Coverage  Disfluencies  Outcome" in report
+    assert "   2     1  00:00:06.000   100%      0             a later take" in report
+    assert "         2  00:00:13.000   100%      0             selected" in report
+    assert "         3  00:00:20.000   67%       0             truncated — stopped 3" in report
+
+
+def test_a_line_read_more_than_once_has_its_choice_explained_in_one_sentence() -> None:
+    report = report_for(retakes(LINE_2, LINE_2, LINE_2_STOPS_SHORT))
+
+    assert "  Line 2  take 2 of 3; take 3 truncated — stopped 3 words short" in report
+
+
+def test_a_line_read_only_once_needs_no_sentence_explaining_the_choice() -> None:
+    report = report_for(CLEAN_READ)
+
+    assert "Which take was used" not in report
+
+
+def test_a_line_whose_every_take_was_disqualified_is_flagged_for_re_recording() -> None:
+    report = report_for(
+        retakes(LINE_2_STOPS_SHORT, f"{LINE_2_STOPS_SHORT} to", LINE_2_STOPS_SHORT)
+    )
+
+    assert "Lines flagged      1" in report
+    assert "Lines whose best take was poor" in report
+    assert "  Line 2  take 2 of 3, the least bad — every take was disqualified" in report
+
+
+def test_a_cut_whose_every_line_stands_flags_nothing() -> None:
+    report = report_for(CLEAN_READ)
+
+    assert "Lines flagged      0" in report
+    assert "Lines whose best take was poor" not in report
 
 
 def test_off_script_material_is_listed_as_such_with_what_was_said() -> None:

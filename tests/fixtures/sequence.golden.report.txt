@@ -7,12 +7,15 @@ Words transcribed  163
 Script lines       8
 Lines found        8
 Lines not found    0
+Takes considered   8
+Lines flagged      0
 Pauses shortened   1
 
 One clip per script line, spliced in the order the script writes them — so the
 dead air between lines is gone, while a long pause inside a line is shortened to
-a beat rather than closed. Where a line was read more than once the first reading
-plays, and every reading the cut passed over is listed below.
+a beat rather than closed. Where a line was read more than once the last complete
+reading plays, and every reading passed over is laid end to end in the alternates
+sequence beside the cut.
 
 Where each line was found
 
@@ -25,6 +28,18 @@ Line  Source         Timeline       Script
    6  00:00:56.840   00:00:54.032   The best part of this skill is that it turns the interview results into a clear implementation plan.
    7  00:01:10.000   00:01:07.192   Then, it starts building the project based on that plan.
    8  00:01:15.080   00:01:12.272   The next part is coming soon.
+
+Every take considered
+
+Line  Take  Source         Coverage  Disfluencies  Outcome
+   1     1  00:00:00.000   89%       0             selected
+   2     1  00:00:03.640   100%      0             selected
+   3     1  00:00:12.280   92%       0             selected
+   4     1  00:00:26.120   95%       0             selected
+   5     1  00:00:39.560   100%      0             selected
+   6     1  00:00:56.840   100%      0             selected
+   7     1  00:01:10.000   90%       0             selected
+   8     1  00:01:15.080   100%      0             selected
 
 What each pause gave up
 

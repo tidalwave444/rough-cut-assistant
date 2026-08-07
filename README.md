@@ -37,7 +37,16 @@ The cut is one clip per script line, butt-spliced in the order the script writes
 — not the order they were recorded — with a marker at each line carrying its text, and
 one marker per item where a line enumerates. The report says where each line was found
 in the recording, names any line the recording does not contain, and lists the speech
-the cut is not using: retakes, and material that is off the script.
+no line accounts for.
+
+Where a line was read more than once, **the last complete reading plays**: a person
+re-records until satisfied and then stops, so recency selects and scoring only vetoes
+— a take that stops short of the end of the line, holds too little of it, or stumbles
+too often is passed over for the one before it. When no take survives, the least bad
+plays and the line is flagged as worth recording again. Every reading passed over is
+laid end to end in a second sequence, `RoughCut_Alternates`, each marked with its line,
+its take number and the reason it lost, so overruling a choice is a drag rather than a
+hunt. The report tabulates every take considered with its coverage and its outcome.
 
 A long pause *inside* a line is shortened rather than removed: a gap over 0.7 s
 collapses to 0.3 s, and only as far as a detected silence corroborates it, so the read

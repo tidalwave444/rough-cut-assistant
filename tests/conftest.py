@@ -28,6 +28,9 @@ LINE_1 = "Building a real project with vibe coding, part two."
 LINE_2 = "Today we are moving from setup to actual development."
 LINE_3 = "In the next part we will begin the implementation."
 
+LINE_2_STOPS_SHORT = "Today we are moving from setup"
+"""Line 2 abandoned six words in — an attempt that never reaches the end of it."""
+
 
 def spoken(text: str, *, at: float) -> list[Word]:
     """A sentence heard from `at`, one word every `WORD_SECONDS`.
@@ -44,6 +47,18 @@ def spoken(text: str, *, at: float) -> list[Word]:
 def clean_read() -> list[Word]:
     """The script read once through, in order, with dead air between the lines."""
     return spoken(LINE_1, at=0.0) + spoken(LINE_2, at=6.0) + spoken(LINE_3, at=13.0)
+
+
+def retakes(*attempts: str) -> list[Word]:
+    """Line 2 attempted several times, between a clean line 1 and a clean line 3.
+
+    Seven seconds apart, so every attempt starts on a round number and the dead air
+    between them is longer than any attempt is short.
+    """
+    words = spoken(LINE_1, at=0.0)
+    for index, attempt in enumerate(attempts):
+        words += spoken(attempt, at=6.0 + index * 7.0)
+    return words + spoken(LINE_3, at=6.0 + len(attempts) * 7.0)
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:

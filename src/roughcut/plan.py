@@ -11,8 +11,10 @@ from roughcut.align import Leftover, SpokenLine, align
 from roughcut.analysis import Analysis, SourceMedia
 from roughcut.pauses import Pause, PauseSettings, Tightened, pauses_to_shorten, tighten
 from roughcut.script import ScriptLine, beats
+from roughcut.takes import Chosen, Take, choose
 
 ROUGH_CUT = "RoughCut"
+ALTERNATES = "RoughCut_Alternates"
 
 
 @dataclass(frozen=True)
@@ -50,7 +52,7 @@ class Sequence:
 
 @dataclass(frozen=True)
 class PlacedLine:
-    """One script line: where it was found, and where it now plays.
+    """One script line: which reading of it plays, and where it now sits.
 
     The clips beside it say the same thing in timeline terms; this says it in script
     terms, which is what a person reading the report wants to know. A line reaches the
@@ -58,9 +60,16 @@ class PlacedLine:
     """
 
     line: ScriptLine
+    chosen: Chosen
+    """Every reading of the line that was found, and which of them won."""
     tightened: Tightened
-    """The stretch it was read in, with the long pauses inside it shortened."""
+    """The stretch the chosen take was read in, with its long pauses shortened."""
     timeline_start_seconds: float
+
+    @property
+    def take(self) -> Take:
+        """The reading that plays."""
+        return self.chosen.take
 
     @property
     def source_in_seconds(self) -> float:
@@ -85,9 +94,14 @@ class Plan:
     missing: list[ScriptLine] = field(default_factory=list)
     """The lines the recording does not contain, skipped rather than fabricated."""
     leftovers: list[Leftover] = field(default_factory=list)
-    """Speech the cut does not use: retakes, and material off the script."""
+    """Speech no line accounts for: material off the script."""
     shortened: list[Pause] = field(default_factory=list)
     """The pauses the cut took time out of, in the order they were recorded."""
+
+    @property
+    def flagged(self) -> list[PlacedLine]:
+        """The lines whose every take was disqualified — the ones worth re-recording."""
+        return [line for line in self.lines if line.chosen.flagged]
 
 
 def build_plan(
@@ -95,19 +109,19 @@ def build_plan(
 ) -> Plan:
     """Decide the cut: one clip per script line, spliced in the order they are written.
 
-    Each line plays from where it was first read well enough to stand for the line,
-    and a marker sits at its start carrying its text — so scrubbing the timeline says
-    which visual belongs where. A line the recording does not contain is skipped and
-    reported; the cut is still usable without it.
+    Each line plays from its last complete reading, and a marker sits at its start
+    carrying its text — so scrubbing the timeline says which visual belongs where. A
+    line the recording does not contain is skipped and reported; the cut is still
+    usable without it.
 
     The dead air between lines goes entirely, because nothing splices it back in. A
     long pause *inside* a line is shortened to a floor instead: it is speech the cut
     keeps, and a read with no pauses left in it is a read nobody wants.
 
-    What is not decided yet: where a line was read more than once the first reading
-    plays while the rest are recorded as retakes (07). Only the rough cut is produced
-    — the alternates sequence arrives with take selection, because until something is
-    rejected it would import empty.
+    Every reading the cut passed over is laid end to end in a second sequence beside
+    it, so that overruling a choice takes seconds. It is always emitted, even when
+    nothing lost: one import gives both sequences, and an alternates timeline that is
+    there and empty says "nothing was rejected" where a missing one says nothing.
     """
     alignment = align(analysis.words, script)
     placed = _placed(
@@ -128,12 +142,9 @@ def build_plan(
                     for line in placed
                     for segment in line.tightened.segments
                 ],
-                markers=[
-                    marker
-                    for spoken, line in zip(alignment.spoken, placed, strict=True)
-                    for marker in _markers(spoken, line)
-                ],
-            )
+                markers=[marker for line in placed for marker in _markers(line)],
+            ),
+            _alternates_sequence(placed, analysis.source),
         ],
         lines=placed,
         missing=alignment.missing,
@@ -146,14 +157,16 @@ def build_plan(
 
 
 def _placed(spoken: list[SpokenLine], pauses: list[Pause]) -> list[PlacedLine]:
-    """Lay the located lines end to end, in script order, each already tightened."""
+    """Choose each line's take and lay the chosen ones end to end, in script order."""
     placed = []
     timeline = 0.0
     for line in spoken:
-        tightened = tighten(line.start_seconds, line.end_seconds, pauses)
+        chosen = choose(line.takes)
+        tightened = tighten(chosen.take.start_seconds, chosen.take.end_seconds, pauses)
         placed.append(
             PlacedLine(
                 line=line.line,
+                chosen=chosen,
                 tightened=tightened,
                 timeline_start_seconds=timeline,
             )
@@ -162,19 +175,51 @@ def _placed(spoken: list[SpokenLine], pauses: list[Pause]) -> list[PlacedLine]:
     return placed
 
 
-def _markers(spoken: SpokenLine, placed: PlacedLine) -> list[Marker]:
+def _alternates_sequence(placed: list[PlacedLine], source: SourceMedia) -> Sequence:
+    """The readings that lost, butt-spliced in script order and each one marked.
+
+    Untightened and unpadded: an alternate is there to be auditioned and dragged into
+    the cut, not to be used as it stands, so it plays exactly as it was recorded.
+    """
+    clips = []
+    markers = []
+    timeline = 0.0
+    for line in placed:
+        for decision in line.chosen.alternates:
+            take = decision.take
+            clips.append(
+                Clip(
+                    source_in_seconds=take.start_seconds,
+                    source_out_seconds=take.end_seconds,
+                    timeline_start_seconds=timeline,
+                )
+            )
+            markers.append(
+                Marker(
+                    name=take.name,
+                    comment=decision.reason,
+                    timeline_position_seconds=timeline,
+                )
+            )
+            timeline += take.duration_seconds
+    return Sequence(
+        id="sequence-2", name=ALTERNATES, source=source, clips=clips, markers=markers
+    )
+
+
+def _markers(placed: PlacedLine) -> list[Marker]:
     """One marker per beat of the line, at the moment that beat was reached.
 
     Named for the line so the timeline reads in script terms, and numbered within it
     when the line enumerates — `Line 6.2` is the second item of the sixth line.
     """
-    found = beats(spoken.line)
+    found = beats(placed.line)
     return [
         Marker(
-            name=_marker_name(spoken.line.number, index, len(found)),
+            name=_marker_name(placed.line.number, index, len(found)),
             comment=beat.text,
             timeline_position_seconds=placed.timeline_of(
-                spoken.time_of_token(beat.token_offset)
+                placed.take.time_of_token(beat.token_offset)
             ),
         )
         for index, beat in enumerate(found, start=1)
@@ -191,6 +236,14 @@ def rough_cut(plan: Plan) -> Sequence:
         if sequence.name == ROUGH_CUT:
             return sequence
     raise ValueError(f"This plan has no {ROUGH_CUT} sequence")
+
+
+def alternates(plan: Plan) -> Sequence:
+    """The sequence holding the readings the cut passed over."""
+    for sequence in plan.sequences:
+        if sequence.name == ALTERNATES:
+            return sequence
+    raise ValueError(f"This plan has no {ALTERNATES} sequence")
 
 
 def timeline_duration_seconds(sequence: Sequence) -> float:

@@ -8,13 +8,14 @@ each line sits without any span competing globally. Repeated phrases cannot stea
 other's matches, because a match can only ever move forward through both texts.
 
 Only then are the **leftovers** — the speech the spine did not claim — scored, and only
-against the script lines neighbouring them. A leftover that reads like an already
-located line is a retake of it. A leftover that reads like a line the spine could not
-place *is* that line: a pickup recorded out of order is invisible to a monotonic spine,
-and this is where it is recovered. Anything else is off-script material.
+against the script lines neighbouring them. A leftover that reads like a located line
+is another take of it. A leftover that reads like a line the spine could not place *is*
+that line: a pickup recorded out of order is invisible to a monotonic spine, and this
+is where it is recovered. Anything else is off-script material.
 
-Choosing between a line's takes is not done here — this stage keeps the first reading
-good enough to stand for the line and labels the rest (ticket 07).
+Alignment finds every reading of every line and measures each of them; it does not
+choose between them. What the measurements mean, and which reading therefore plays,
+belongs to `takes`.
 """
 
 from collections.abc import Sequence
@@ -23,13 +24,14 @@ from difflib import SequenceMatcher
 
 from roughcut.analysis import Word
 from roughcut.script import ScriptLine
+from roughcut.takes import Take, disfluencies_in
 from roughcut.tokens import Transcript, tokenize
 
 # How much of a line has to be heard in one stretch before that stretch counts as a
 # reading of it. Below this it is a coincidence — a "the" and an "and" in common.
 MINIMUM_COVERAGE = 0.5
 
-# How much of a line a leftover has to contain before it is called a retake of it
+# How much of a line a leftover has to contain before it is called another take of it
 # rather than something else that was said. Higher than the spine's bar: a leftover
 # is judged against a line the spine already had its pick of.
 RETAKE_COVERAGE = 0.6
@@ -42,30 +44,20 @@ SPAN_GAP_TOKENS = 4
 
 @dataclass(frozen=True)
 class SpokenLine:
-    """A script line located in the recording: where it starts, ends, and reads."""
+    """A script line located in the recording: every reading of it that was found."""
 
     line: ScriptLine
-    start_seconds: float
-    end_seconds: float
-    token_seconds: tuple[float, ...]
-    """When each of the line's tokens was reached — how a beat becomes a time."""
-
-    def time_of_token(self, offset: int) -> float:
-        """When the line had got as far as its `offset`-th token."""
-        if not self.token_seconds:
-            return self.start_seconds
-        return self.token_seconds[min(max(offset, 0), len(self.token_seconds) - 1)]
+    takes: list[Take]
+    """In the order recorded, which is the order take selection reasons about."""
 
 
 @dataclass(frozen=True)
 class Leftover:
-    """Speech the cut does not use: a retake of a line, or material off the script."""
+    """Speech no script line accounts for: material off the script."""
 
     start_seconds: float
     end_seconds: float
     text: str
-    retake_of: ScriptLine | None = None
-    """The line this repeats, or None when it matches nothing near it."""
 
 
 @dataclass(frozen=True)
@@ -133,32 +125,37 @@ class _Aligner:
         self._script = list(script)
         self._heard = Transcript.of(words)
         self._tokens = {line.number: tokenize(line.text) for line in self._script}
-        self._takes: dict[int, _Span] = {}
+        self._takes: dict[int, list[_Span]] = {}
 
     def run(self) -> Alignment:
-        for line, span in self._spine():
-            self._takes[line.number] = span
+        self._takes = self._spine()
         leftovers = self._label(self._unclaimed())
         return Alignment(
             spoken=[
-                self._spoken_line(line, self._takes[line.number])
-                for line in self._script
-                if line.number in self._takes
+                self._spoken_line(line) for line in self._script if line.number in self._takes
             ],
             missing=[line for line in self._script if line.number not in self._takes],
             leftovers=sorted(leftovers, key=lambda leftover: leftover.start_seconds),
         )
 
-    def _spine(self) -> list[tuple[ScriptLine, _Span]]:
-        """The monotonic reading of the script: at most one span per line, in order."""
+    def _spine(self) -> dict[int, list[_Span]]:
+        """The monotonic reading of the script: every span of it that reads as a line.
+
+        A line read twice has its matches scattered across both attempts, so the spans
+        are split apart before they are judged — otherwise a line's region would run
+        from the first attempt to the last and swallow every reading in between.
+        """
         matched = self._matched_by_line()
-        located = []
+        located = {}
         for line in self._script:
             tokens = len(self._tokens[line.number])
-            for span in _split(matched[line.number], _gap_for(tokens)):
-                if span.covers(tokens) >= MINIMUM_COVERAGE:
-                    located.append((line, span))
-                    break
+            spans = [
+                span
+                for span in _split(matched[line.number], _gap_for(tokens))
+                if span.covers(tokens) >= MINIMUM_COVERAGE
+            ]
+            if spans:
+                located[line.number] = spans
         return located
 
     def _matched_by_line(self) -> dict[int, list[tuple[int, int]]]:
@@ -180,7 +177,9 @@ class _Aligner:
 
     def _unclaimed(self) -> list[_Run]:
         """The runs of transcript tokens no line's take covers, in the order heard."""
-        claimed = sorted((span.first, span.last) for span in self._takes.values())
+        claimed = sorted(
+            (span.first, span.last) for spans in self._takes.values() for span in spans
+        )
         runs = []
         cursor = 0
         for first, last in claimed:
@@ -192,22 +191,22 @@ class _Aligner:
         return runs
 
     def _label(self, runs: list[_Run]) -> list[Leftover]:
-        """Call each leftover a retake, an unplaced line's only reading, or off-script.
+        """Take every leftover that reads as a script line; call the rest off-script.
 
-        A leftover that recovers a line the spine could not place stops being a
-        leftover: it becomes that line's take, which is what puts a pickup recorded
-        out of order back in its written place. Only the part of the run that reads as
-        the line is taken, though — whatever was said either side of it is put back on
-        the pile and labelled in its own right, because a pickup take is usually
-        introduced by a mutter and nothing said should vanish unreported.
+        A leftover reading as a line the spine already placed is another take of it,
+        and one reading a line the spine could not place *is* that line — which is what
+        puts a pickup recorded out of order back in its written place. Either way only
+        the part of the run that reads as the line is taken: whatever was said either
+        side of it goes back on the pile and is labelled in its own right, because a
+        retake is usually introduced by a mutter and nothing said may vanish unreported.
         """
         leftovers = []
         pending = list(reversed(runs))
         while pending:
             run = pending.pop()
             match = self._best_match(run)
-            if match is not None and match.line.number not in self._takes:
-                self._takes[match.line.number] = match.span
+            if match is not None:
+                self._takes.setdefault(match.line.number, []).append(match.span)
                 pending.extend(reversed(run.outside(match.span)))
                 continue
             leftovers.append(
@@ -215,7 +214,6 @@ class _Aligner:
                     start_seconds=self._heard.start_of(run.first),
                     end_seconds=self._heard.end_of(run.last),
                     text=self._heard.said_between(run.first, run.last),
-                    retake_of=match.line if match else None,
                 )
             )
         return leftovers
@@ -261,8 +259,16 @@ class _Aligner:
         numbers = [line.number for line in self._script]
         if not numbers:
             return []
-        before = [number for number, span in self._takes.items() if span.last < first]
-        after = [number for number, span in self._takes.items() if span.first > first]
+        before = [
+            number
+            for number, spans in self._takes.items()
+            if max(span.last for span in spans) < first
+        ]
+        after = [
+            number
+            for number, spans in self._takes.items()
+            if min(span.first for span in spans) > first
+        ]
         low = max(before, default=min(numbers))
         high = min(after, default=max(numbers))
         return [
@@ -272,13 +278,31 @@ class _Aligner:
             or line.number not in self._takes
         ]
 
-    def _spoken_line(self, line: ScriptLine, span: _Span) -> SpokenLine:
-        end = self._heard.end_of(span.last)
+    def _spoken_line(self, line: ScriptLine) -> SpokenLine:
+        """Every reading of one line, numbered in the order it was recorded."""
+        spans = sorted(self._takes[line.number], key=lambda span: span.first)
         return SpokenLine(
             line=line,
+            takes=[
+                self._take(line, number, span)
+                for number, span in enumerate(spans, start=1)
+            ],
+        )
+
+    def _take(self, line: ScriptLine, number: int, span: _Span) -> Take:
+        """One reading, measured — what it held, where it stopped, how it stumbled."""
+        tokens = len(self._tokens[line.number])
+        end = self._heard.end_of(span.last)
+        return Take(
+            line=line,
+            number=number,
             start_seconds=self._heard.start_of(span.first),
             end_seconds=end,
-            token_seconds=self._token_seconds(span, len(self._tokens[line.number]), end),
+            token_seconds=self._token_seconds(span, tokens, end),
+            tokens=tokens,
+            heard_tokens=len(span.pairs),
+            unread_at_end=tokens - 1 - max(offset for _, offset in span.pairs),
+            disfluencies=disfluencies_in(self._heard.texts[span.first : span.last + 1]),
         )
 
     def _token_seconds(self, span: _Span, tokens: int, end: float) -> tuple[float, ...]:

@@ -56,8 +56,10 @@ def test_the_fixture_cut_splices_every_clip_onto_the_end_of_the_last() -> None:
     analysis = load_analysis(ANALYSIS)
     plan = build_plan(analysis, read_script(SCRIPT))
 
+    # The rough cut alone: the alternates sequence beside it starts its own timeline
+    # at zero, and reading the two as one run of clips would report a false overlap.
     clipitems = ET.fromstring(render_fcp7(plan)).findall(
-        "./sequence/media/audio/track/clipitem"
+        "./sequence[name='RoughCut']/media/audio/track/clipitem"
     )
 
     frames = [
