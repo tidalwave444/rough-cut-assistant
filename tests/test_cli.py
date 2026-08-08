@@ -195,6 +195,37 @@ def test_the_pause_padding_is_a_command_line_option(
     assert padded == "210"
 
 
+def test_how_long_an_off_script_region_must_run_to_survive_is_an_option(
+    analysis: Path, one_line: Path, tmp_path: Path
+) -> None:
+    # "The end." is in the recording but not in a one-line script: 0.6s of speech,
+    # dropped as a fragment by default and kept in place once the bar is under it.
+    dropped = rendered_frames(analysis, one_line, tmp_path / "a")
+    kept = rendered_frames(
+        analysis, one_line, tmp_path / "b", "--off-script-keep-seconds", "0.5"
+    )
+
+    assert (dropped, kept) == ("90", "126")
+
+
+def test_the_stop_phrase_list_is_a_command_line_option(
+    analysis: Path, one_line: Path, tmp_path: Path
+) -> None:
+    # Given phrases replace the built-in list rather than adding to it, so what the
+    # run drops is exactly what was asked for.
+    silenced = rendered_frames(
+        analysis,
+        one_line,
+        tmp_path / "a",
+        "--off-script-keep-seconds",
+        "0.5",
+        "--stop-phrases",
+        "the end",
+    )
+
+    assert silenced == "90"
+
+
 def test_the_report_is_printed_as_well_as_written(
     analysis: Path, script: Path, tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:

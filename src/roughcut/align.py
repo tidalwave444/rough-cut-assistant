@@ -15,7 +15,9 @@ is where it is recovered. Anything else is off-script material.
 
 Alignment finds every reading of every line and measures each of them; it does not
 choose between them. What the measurements mean, and which reading therefore plays,
-belongs to `takes`.
+belongs to `takes`. The same division holds for what is left over: alignment measures
+how much of a leftover is an adjacent line's own words, and `offscript` decides whether
+that makes it a restart worth removing.
 """
 
 from collections.abc import Sequence
@@ -58,6 +60,21 @@ class Leftover:
     start_seconds: float
     end_seconds: float
     text: str
+    nearest: ScriptLine | None = None
+    """The adjacent script line this most reads like, if it reads like one at all."""
+    likeness: float = 0.0
+    """How much of what was said here is that line's own words, in order.
+
+    Containment, not coverage — the measurement the other way up. An attempt abandoned
+    four words into a twenty-word line holds a fifth of the line and would be nobody's
+    reading of it, but everything it said *was* the line, which is what an abandoned
+    attempt sounds like. Measuring that belongs here, beside the token streams; what it
+    means for a leftover belongs to `offscript`.
+    """
+
+    @property
+    def duration_seconds(self) -> float:
+        return self.end_seconds - self.start_seconds
 
 
 @dataclass(frozen=True)
@@ -209,14 +226,44 @@ class _Aligner:
                 self._takes.setdefault(match.line.number, []).append(match.span)
                 pending.extend(reversed(run.outside(match.span)))
                 continue
-            leftovers.append(
-                Leftover(
-                    start_seconds=self._heard.start_of(run.first),
-                    end_seconds=self._heard.end_of(run.last),
-                    text=self._heard.said_between(run.first, run.last),
-                )
-            )
+            leftovers.append(self._leftover(run))
         return leftovers
+
+    def _leftover(self, run: _Run) -> Leftover:
+        """What was said across a run no line claimed, and what it most reads like."""
+        nearest, likeness = self._likeness(run)
+        return Leftover(
+            start_seconds=self._heard.start_of(run.first),
+            end_seconds=self._heard.end_of(run.last),
+            text=self._heard.said_between(run.first, run.last),
+            nearest=nearest,
+            likeness=likeness,
+        )
+
+    def _likeness(self, run: _Run) -> tuple[ScriptLine | None, float]:
+        """Which line beside this run it most reads like, and how much of it is that line.
+
+        The same matcher the retake pass used, with the fraction taken the other way
+        up: not how much of the line was said, but how much of what was said is the
+        line. That is the reading a run has already failed to be a take of, so it is
+        the only reading left that can name it.
+
+        Only the lines the run sits *between* are asked — not, as the retake pass also
+        asks, every line the spine placed nowhere. A line picked up at the far end of
+        the session is worth recovering wherever it turns up, but a fragment that
+        happens to echo a line written minutes away is not an attempt at it, and this
+        measurement only ever removes material.
+        """
+        heard = self._heard.texts[run.first : run.last + 1]
+        if not heard:
+            return None, 0.0
+        nearest: ScriptLine | None = None
+        likeness = 0.0
+        for line in self._between(run.first):
+            share = len(_pairs(_matcher(heard, self._tokens[line.number]))) / len(heard)
+            if share > likeness:
+                nearest, likeness = line, share
+        return nearest, likeness
 
     def _best_match(self, run: _Run) -> _Match | None:
         """The line this leftover reads as, if it reads as one at all.
@@ -248,14 +295,23 @@ class _Aligner:
         return best
 
     def _neighbours(self, first: int) -> list[ScriptLine]:
-        """The lines a leftover could belong to: the ones it sits between.
+        """The lines a leftover could be a take of: the ones it sits between, and any
+        line the spine placed nowhere at all.
 
-        The lines located either side of it in the recording, everything written
-        between those two, and every line the spine placed nowhere at all. A located
-        line can only be repeated near where it sits, but a line that was never found
-        could have been picked up anywhere in the recording — most likely at the end,
-        which is nowhere near where it is written.
+        A located line can only be repeated near where it sits, but a line that was
+        never found could have been picked up anywhere in the recording — most likely
+        at the end, which is nowhere near where it is written.
         """
+        between = {line.number for line in self._between(first)}
+        return [
+            line
+            for line in self._script
+            if line.number in between or line.number not in self._takes
+        ]
+
+    def _between(self, first: int) -> list[ScriptLine]:
+        """The lines a run sits between: the ones located either side of it in the
+        recording, and everything written between those two."""
         numbers = [line.number for line in self._script]
         if not numbers:
             return []
@@ -272,10 +328,7 @@ class _Aligner:
         low = max(before, default=min(numbers))
         high = min(after, default=max(numbers))
         return [
-            line
-            for line in self._script
-            if min(low, high) <= line.number <= max(low, high)
-            or line.number not in self._takes
+            line for line in self._script if min(low, high) <= line.number <= max(low, high)
         ]
 
     def _spoken_line(self, line: ScriptLine) -> SpokenLine:

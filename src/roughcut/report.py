@@ -9,29 +9,32 @@ Below that it answers the second: where did each line of my script end up, and w
 did I say that the cut is not using.
 """
 
-from roughcut.align import Leftover
 from roughcut.analysis import Analysis
+from roughcut.offscript import OffScript
 from roughcut.pauses import Pause
 from roughcut.plan import PlacedLine, Plan, rough_cut, timeline_duration_seconds
 from roughcut.script import ScriptLine
 
 LABEL_WIDTH = 19
 TIME_WIDTH = 15
-REASON_WIDTH = 20
 COVERAGE_WIDTH = 10
 DISFLUENCY_WIDTH = 14
-EXCERPT_LENGTH = 60
+
+# Wide enough for the longest outcome an off-script region can carry, which is a stop
+# phrase quoted back: `cut — a stop phrase, "let me try that again"`.
+OUTCOME_WIDTH = 46
 
 NOT_FOUND = "not found"
 NOWHERE = "—"
-OFF_SCRIPT = "off-script"
 
 HOW_THE_CUT_WAS_MADE = (
     "One clip per script line, spliced in the order the script writes them — so the\n"
     "dead air between lines is gone, while a long pause inside a line is shortened to\n"
     "a beat rather than closed. Where a line was read more than once the last complete\n"
     "reading plays, and every reading passed over is laid end to end in the alternates\n"
-    "sequence beside the cut."
+    "sequence beside the cut. Anything said that the script does not account for goes\n"
+    "only if it is short, an abandoned attempt at the line beside it, or on the\n"
+    "stop-phrase list; anything else stays where it was said, marked as off-script."
 )
 
 
@@ -55,6 +58,8 @@ def render_report(analysis: Analysis, script: list[ScriptLine], plan: Plan) -> s
             _label("Takes considered", sum(len(line.chosen.decisions) for line in plan.lines)),
             _label("Lines flagged", len(plan.flagged)),
             _label("Pauses shortened", len(plan.shortened)),
+            _label("Off-script kept", len(plan.kept)),
+            _label("Off-script cut", len(plan.cut)),
             "",
             HOW_THE_CUT_WAS_MADE,
             "",
@@ -63,7 +68,7 @@ def render_report(analysis: Analysis, script: list[ScriptLine], plan: Plan) -> s
             *_which_take_was_used(plan.lines),
             *_which_lines_are_poor(plan.flagged),
             *_what_each_pause_gave_up(plan.shortened),
-            *_what_is_not_used(plan.leftovers),
+            *_what_was_said_off_script(plan.off_script),
             "",
         ]
     )
@@ -176,21 +181,31 @@ def _what_each_pause_gave_up(pauses: list[Pause]) -> list[str]:
     return rows
 
 
-def _what_is_not_used(leftovers: list[Leftover]) -> list[str]:
-    """The speech no line accounts for, so that nothing disappears unannounced."""
-    if not leftovers:
+def _what_was_said_off_script(regions: list[OffScript]) -> list[str]:
+    """Every region the script does not account for, and what became of it.
+
+    The ones that were cut are listed beside the ones that were kept, and both quote
+    what was said — in full, however long, because this section is the only record a
+    removed region ever existed, and a person who does not know it existed cannot go
+    looking for it. An excerpt would be the one place in the report where reading it
+    is not enough.
+    """
+    if not regions:
         return []
-    rows = ["", "Not used", ""]
-    for leftover in leftovers:
-        when = f"{_duration(leftover.start_seconds)}–{_duration(leftover.end_seconds)}"
-        rows.append(f"  {when}  {OFF_SCRIPT.ljust(REASON_WIDTH)}{_excerpt(leftover.text)}")
+    rows = [
+        "",
+        "Off-script material",
+        "",
+        f"  {'At'.ljust(TIME_WIDTH)}{'Duration'.ljust(TIME_WIDTH)}"
+        f"{'Outcome'.ljust(OUTCOME_WIDTH)}What was said",
+    ]
+    for region in regions:
+        rows.append(
+            f"  {_duration(region.start_seconds).ljust(TIME_WIDTH)}"
+            f"{_duration(region.duration_seconds).ljust(TIME_WIDTH)}"
+            f"{region.reason.ljust(OUTCOME_WIDTH)}{region.text}"
+        )
     return rows
-
-
-def _excerpt(text: str) -> str:
-    if len(text) <= EXCERPT_LENGTH:
-        return text
-    return text[:EXCERPT_LENGTH].rstrip() + "…"
 
 
 def _label(label: str, value: object) -> str:

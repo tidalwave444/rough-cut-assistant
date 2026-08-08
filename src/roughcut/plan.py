@@ -7,14 +7,21 @@ seconds as floats throughout; conversion to frames happens only in the renderer.
 
 from dataclasses import dataclass, field
 
-from roughcut.align import Leftover, SpokenLine, align
+from roughcut.align import SpokenLine, align
 from roughcut.analysis import Analysis, SourceMedia
+from roughcut.offscript import OffScript, OffScriptSettings, judge
 from roughcut.pauses import Pause, PauseSettings, Tightened, pauses_to_shorten, tighten
 from roughcut.script import ScriptLine, beats
 from roughcut.takes import Chosen, Take, choose
 
 ROUGH_CUT = "RoughCut"
 ALTERNATES = "RoughCut_Alternates"
+
+OFF_SCRIPT = "Off-script"
+"""What a marker over kept off-script material is called on the timeline."""
+
+BEFORE_EVERY_LINE = -1
+"""Where an off-script region said before the first located line belongs."""
 
 
 @dataclass(frozen=True)
@@ -85,6 +92,29 @@ class PlacedLine:
 
 
 @dataclass(frozen=True)
+class PlacedOffScript:
+    """One kept off-script region: what was said, and where it now sits.
+
+    It plays between the same two lines it was said between, which is what "in place"
+    means once the cut is assembled in the order the script is written rather than in
+    the order it was recorded.
+    """
+
+    off_script: OffScript
+    tightened: Tightened
+    """The stretch it was said in, with its long pauses shortened."""
+    timeline_start_seconds: float
+
+    def timeline_of(self, source_seconds: float) -> float:
+        """Where a moment of the stretch it was said in lands on the timeline."""
+        return self.timeline_start_seconds + self.tightened.offset_of(source_seconds)
+
+
+Placed = PlacedLine | PlacedOffScript
+"""Anything the rough cut plays, in the order it plays: lines, and what was kept between them."""
+
+
+@dataclass(frozen=True)
 class Plan:
     """Everything one import should produce — the rough cut and its alternates."""
 
@@ -93,8 +123,8 @@ class Plan:
     """The script lines that made it into the cut, in script order."""
     missing: list[ScriptLine] = field(default_factory=list)
     """The lines the recording does not contain, skipped rather than fabricated."""
-    leftovers: list[Leftover] = field(default_factory=list)
-    """Speech no line accounts for: material off the script."""
+    off_script: list[OffScript] = field(default_factory=list)
+    """Everything said that no line accounts for, kept or cut, in the order recorded."""
     shortened: list[Pause] = field(default_factory=list)
     """The pauses the cut took time out of, in the order they were recorded."""
 
@@ -103,9 +133,22 @@ class Plan:
         """The lines whose every take was disqualified — the ones worth re-recording."""
         return [line for line in self.lines if line.chosen.flagged]
 
+    @property
+    def kept(self) -> list[OffScript]:
+        """The off-script regions the cut plays rather than removes."""
+        return [region for region in self.off_script if region.kept]
+
+    @property
+    def cut(self) -> list[OffScript]:
+        """The off-script regions the cut removes — restarts, mutters, stop phrases."""
+        return [region for region in self.off_script if not region.kept]
+
 
 def build_plan(
-    analysis: Analysis, script: list[ScriptLine], settings: PauseSettings = PauseSettings()
+    analysis: Analysis,
+    script: list[ScriptLine],
+    pauses: PauseSettings = PauseSettings(),
+    off_script: OffScriptSettings = OffScriptSettings(),
 ) -> Plan:
     """Decide the cut: one clip per script line, spliced in the order they are written.
 
@@ -118,15 +161,24 @@ def build_plan(
     long pause *inside* a line is shortened to a floor instead: it is speech the cut
     keeps, and a read with no pauses left in it is a read nobody wants.
 
+    Speech no line accounts for goes only where something says it should — it is short,
+    or it is an abandoned attempt at the line beside it, or it is on the stop-phrase
+    list. Anything else stays where it was said with a marker on it, because a line you
+    improvised and meant must never disappear without your seeing it.
+
     Every reading the cut passed over is laid end to end in a second sequence beside
     it, so that overruling a choice takes seconds. It is always emitted, even when
     nothing lost: one import gives both sequences, and an alternates timeline that is
     there and empty says "nothing was rejected" where a missing one says nothing.
     """
     alignment = align(analysis.words, script)
+    regions = judge(alignment.leftovers, off_script)
     placed = _placed(
-        alignment.spoken, pauses_to_shorten(analysis.words, analysis.silences, settings)
+        alignment.spoken,
+        [region for region in regions if region.kept],
+        pauses_to_shorten(analysis.words, analysis.silences, pauses),
     )
+    lines = [item for item in placed if isinstance(item, PlacedLine)]
     return Plan(
         sequences=[
             Sequence(
@@ -137,42 +189,94 @@ def build_plan(
                     Clip(
                         source_in_seconds=segment.start_seconds,
                         source_out_seconds=segment.end_seconds,
-                        timeline_start_seconds=line.timeline_of(segment.start_seconds),
+                        timeline_start_seconds=item.timeline_of(segment.start_seconds),
                     )
-                    for line in placed
-                    for segment in line.tightened.segments
+                    for item in placed
+                    for segment in item.tightened.segments
                 ],
-                markers=[marker for line in placed for marker in _markers(line)],
+                markers=[marker for item in placed for marker in _markers(item)],
             ),
-            _alternates_sequence(placed, analysis.source),
+            _alternates_sequence(lines, analysis.source),
         ],
-        lines=placed,
+        lines=lines,
         missing=alignment.missing,
-        leftovers=alignment.leftovers,
+        off_script=regions,
         shortened=sorted(
-            (pause for line in placed for pause in line.tightened.pauses),
+            (pause for item in placed for pause in item.tightened.pauses),
             key=lambda pause: pause.gap_start_seconds,
         ),
     )
 
 
-def _placed(spoken: list[SpokenLine], pauses: list[Pause]) -> list[PlacedLine]:
-    """Choose each line's take and lay the chosen ones end to end, in script order."""
-    placed = []
+def _placed(spoken: list[SpokenLine], kept: list[OffScript], pauses: list[Pause]) -> list[Placed]:
+    """Lay the cut out: the script in written order, each kept region where it was said."""
+    placed: list[Placed] = []
     timeline = 0.0
-    for line in spoken:
-        chosen = choose(line.takes)
-        tightened = tighten(chosen.take.start_seconds, chosen.take.end_seconds, pauses)
-        placed.append(
-            PlacedLine(
-                line=line.line,
-                chosen=chosen,
-                tightened=tightened,
-                timeline_start_seconds=timeline,
+    for item in _in_order([(line, choose(line.takes)) for line in spoken], kept):
+        if isinstance(item, OffScript):
+            tightened = tighten(item.start_seconds, item.end_seconds, pauses)
+            placed.append(
+                PlacedOffScript(
+                    off_script=item,
+                    tightened=tightened,
+                    timeline_start_seconds=timeline,
+                )
             )
-        )
+        else:
+            line, chosen = item
+            tightened = tighten(chosen.take.start_seconds, chosen.take.end_seconds, pauses)
+            placed.append(
+                PlacedLine(
+                    line=line.line,
+                    chosen=chosen,
+                    tightened=tightened,
+                    timeline_start_seconds=timeline,
+                )
+            )
         timeline += tightened.duration_seconds
     return placed
+
+
+_Reading = tuple[SpokenLine, Chosen]
+
+
+def _in_order(readings: list[_Reading], kept: list[OffScript]) -> list[_Reading | OffScript]:
+    """The script in written order, each kept region after the line it followed.
+
+    The cut is assembled in script order, so "in place" cannot mean "at the time it was
+    said" — it means between the same two lines it was said between. A region therefore
+    follows the last line read before it, which is where a listener would expect it and
+    is stable however far out of order the session was recorded.
+    """
+    after: dict[int, list[OffScript]] = {}
+    for region in kept:
+        after.setdefault(_line_before(readings, region), []).append(region)
+    ordered: list[_Reading | OffScript] = list(after.get(BEFORE_EVERY_LINE, []))
+    for index, reading in enumerate(readings):
+        ordered.append(reading)
+        ordered.extend(after.get(index, []))
+    return ordered
+
+
+def _line_before(readings: list[_Reading], region: OffScript) -> int:
+    """Which line this region follows: the last one heard before it began.
+
+    Every reading of every line counts, not only the one that plays. A retake is
+    usually introduced by a mutter, so a region said between two attempts at a line
+    belongs after that line — where using the chosen take alone would put it before,
+    because the reading that won is the one on the far side of it.
+
+    Compared by when a reading began rather than by where its line sits in the script,
+    so a session recorded out of order still puts a region after whatever was actually
+    said last before it.
+    """
+    heard = [
+        (take.start_seconds, index)
+        for index, (line, _) in enumerate(readings)
+        for take in line.takes
+        if take.start_seconds < region.start_seconds
+    ]
+    return max(heard, default=(0.0, BEFORE_EVERY_LINE))[1]
 
 
 def _alternates_sequence(placed: list[PlacedLine], source: SourceMedia) -> Sequence:
@@ -207,7 +311,19 @@ def _alternates_sequence(placed: list[PlacedLine], source: SourceMedia) -> Seque
     )
 
 
-def _markers(placed: PlacedLine) -> list[Marker]:
+def _markers(placed: Placed) -> list[Marker]:
+    """What the timeline says about this piece of it.
+
+    A line says which line it is; a kept off-script region says that is what it is and
+    quotes it, so that the one thing a person has to decide about — whether they meant
+    it — is legible from the timeline without replaying the audio.
+    """
+    if isinstance(placed, PlacedOffScript):
+        return [Marker(OFF_SCRIPT, placed.off_script.text, placed.timeline_start_seconds)]
+    return _line_markers(placed)
+
+
+def _line_markers(placed: PlacedLine) -> list[Marker]:
     """One marker per beat of the line, at the moment that beat was reached.
 
     Named for the line so the timeline reads in script terms, and numbered within it

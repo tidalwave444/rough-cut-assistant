@@ -10,12 +10,16 @@ Lines not found    0
 Takes considered   8
 Lines flagged      0
 Pauses shortened   1
+Off-script kept    0
+Off-script cut     1
 
 One clip per script line, spliced in the order the script writes them — so the
 dead air between lines is gone, while a long pause inside a line is shortened to
 a beat rather than closed. Where a line was read more than once the last complete
 reading plays, and every reading passed over is laid end to end in the alternates
-sequence beside the cut.
+sequence beside the cut. Anything said that the script does not account for goes
+only if it is short, an abandoned attempt at the line beside it, or on the
+stop-phrase list; anything else stays where it was said, marked as off-script.
 
 Where each line was found
 
@@ -46,6 +50,7 @@ What each pause gave up
   At             Was            Now            Removed
   00:00:06.300   00:00:01.760   00:00:00.672   00:00:01.088
 
-Not used
+Off-script material
 
-  00:01:26.120–00:01:26.220  off-script          we're going to go ahead and get started with the first step…
+  At             Duration       Outcome                                       What was said
+  00:01:26.120   00:00:00.100   cut — a fragment, under 2.5 s                 we're going to go ahead and get started with the first step we're going to go ahead and get started and get started with the first step we're going to go ahead and get started with the first step

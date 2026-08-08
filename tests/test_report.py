@@ -71,11 +71,11 @@ def test_a_line_the_recording_does_not_contain_is_flagged_rather_than_timed() ->
     assert "   2  not found      —              Today we are moving" in report
 
 
-def test_a_second_reading_of_a_line_is_a_take_of_it_rather_than_unused_speech() -> None:
+def test_a_second_reading_of_a_line_is_a_take_of_it_rather_than_off_script_material() -> None:
     report = report_for(CLEAN_READ + spoken(LINE_2, at=20.0))
 
     assert "Takes considered   4" in report
-    assert "Not used" not in report
+    assert "Off-script material" not in report
 
 
 def test_every_take_considered_is_listed_with_its_coverage_and_its_outcome() -> None:
@@ -118,7 +118,7 @@ def test_a_cut_whose_every_line_stands_flags_nothing() -> None:
     assert "Lines whose best take was poor" not in report
 
 
-def test_off_script_material_is_listed_as_such_with_what_was_said() -> None:
+def test_off_script_material_kept_is_listed_with_its_duration_and_what_was_said() -> None:
     report = report_for(
         spoken(LINE_1, at=0.0)
         + spoken("Sorry, my microphone was unplugged the whole time again.", at=6.0)
@@ -126,8 +126,21 @@ def test_off_script_material_is_listed_as_such_with_what_was_said() -> None:
         + spoken(LINE_3, at=20.0)
     )
 
-    assert "00:00:06.000–00:00:10.500  off-script" in report
+    assert "Off-script kept    1" in report
+    assert "Off-script cut     0" in report
+    assert "  00:00:06.000   00:00:04.500   kept — marked in place" in report
     assert "Sorry, my microphone was unplugged" in report
+
+
+def test_off_script_material_dropped_says_so_and_why_it_went() -> None:
+    # The section is the only record that a dropped region was ever there, so it says
+    # what was said as well as what became of it.
+    report = report_for(CLEAN_READ + spoken("Ugh", at=20.0))
+
+    assert "Off-script kept    0" in report
+    assert "Off-script cut     1" in report
+    assert "  00:00:20.000   00:00:00.500   cut — a fragment, under 2.5 s" in report
+    assert report.rstrip().endswith("Ugh")
 
 
 def test_the_report_counts_the_pauses_it_shortened() -> None:
@@ -148,8 +161,12 @@ def test_a_cut_with_no_pause_worth_shortening_says_so_and_tabulates_nothing() ->
     assert "What each pause gave up" not in report
 
 
-def test_a_cut_that_uses_all_of_the_recording_lists_nothing_as_unused() -> None:
-    assert "Not used" not in report_for(CLEAN_READ)
+def test_a_cut_with_nothing_said_off_the_script_tabulates_nothing() -> None:
+    report = report_for(CLEAN_READ)
+
+    assert "Off-script kept    0" in report
+    assert "Off-script cut     0" in report
+    assert "Off-script material" not in report
 
 
 def test_the_output_duration_is_the_cut_alone_not_the_alternates_beside_it() -> None:

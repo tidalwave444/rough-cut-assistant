@@ -1,8 +1,8 @@
 """What the plan decided, driven by hand-written recordings.
 
 Each fixture isolates one thing the cut has to get right: a clean read, a line
-recorded out of order, a line never recorded at all, a line that enumerates, and a
-line read several times over.
+recorded out of order, a line never recorded at all, a line that enumerates, a line
+read several times over, and something said that the script never asked for.
 """
 
 from conftest import (
@@ -18,8 +18,10 @@ from conftest import (
 )
 
 from roughcut.analysis import Analysis, Silence, SourceMedia, Word
+from roughcut.offscript import OffScriptSettings
 from roughcut.plan import (
     ALTERNATES,
+    OFF_SCRIPT,
     ROUGH_CUT,
     Clip,
     Marker,
@@ -104,15 +106,17 @@ def test_what_was_muttered_before_a_pickup_take_is_still_reported() -> None:
     plan = build_plan(analysis(session), SCRIPT)
 
     assert [line.source_in_seconds for line in plan.lines] == [0.0, 20.0, 6.0]
-    assert len(plan.leftovers) == 1
-    assert plan.leftovers[0].text.startswith("Ugh sorry")
+    assert len(plan.off_script) == 1
+    assert plan.off_script[0].text.startswith("Ugh sorry")
 
 
-def test_a_recording_with_no_script_to_compare_it_to_plans_nothing() -> None:
+def test_a_recording_with_no_script_to_compare_it_to_keeps_all_of_it_as_off_script() -> None:
+    # Nothing said can be shown to be a restart or a mutter without a script to read
+    # it against, so the asymmetry does the only thing it can: keep it and mark it.
     plan = build_plan(analysis(clean_read()), [])
 
-    assert rough_cut(plan).clips == []
-    assert len(plan.leftovers) == 1
+    assert [region.kept for region in plan.off_script] == [True]
+    assert [marker.name for marker in rough_cut(plan).markers] == [OFF_SCRIPT]
 
 
 def test_the_last_complete_reading_of_a_line_is_the_one_that_plays() -> None:
@@ -201,6 +205,153 @@ def test_every_take_of_a_line_is_recorded_with_what_became_of_it() -> None:
     assert [decision.take.start_seconds for decision in chosen.decisions] == [6.0, 13.0, 20.0]
     assert chosen.selected.take.number == 2
     assert chosen.summary == "take 2 of 3; take 3 truncated — stopped 3 words short"
+
+
+UNPLANNED = "Sorry, my microphone was unplugged the whole time again."
+"""Four and a half seconds of something not in the script, and meant."""
+
+
+def session_with(aside: str) -> list[Word]:
+    """The three lines read cleanly, with something else said between one and two."""
+    return (
+        spoken(LINE_1, at=0.0)
+        + spoken(aside, at=6.0)
+        + spoken(LINE_2, at=13.0)
+        + spoken(LINE_3, at=20.0)
+    )
+
+
+def test_a_short_off_script_fragment_is_dropped_from_the_cut() -> None:
+    # Half a second of speech after the last line: a mutter, not an idea.
+    plan = build_plan(analysis(clean_read() + spoken("Ugh", at=20.0)), SCRIPT)
+
+    assert timeline_duration_seconds(rough_cut(plan)) == 13.5
+    assert [region.kept for region in plan.off_script] == [False]
+
+
+def test_a_long_off_script_sentence_is_kept_where_it_was_said_and_marked() -> None:
+    # Deleting a kept line in Premiere is one keystroke; recovering a deleted one
+    # means knowing it existed. So it plays between the same two lines it was said
+    # between, with a marker on it.
+    plan = build_plan(analysis(session_with(UNPLANNED)), SCRIPT)
+
+    assert rough_cut(plan).clips == [
+        Clip(source_in_seconds=0.0, source_out_seconds=4.5, timeline_start_seconds=0.0),
+        Clip(source_in_seconds=6.0, source_out_seconds=10.5, timeline_start_seconds=4.5),
+        Clip(source_in_seconds=13.0, source_out_seconds=17.5, timeline_start_seconds=9.0),
+        Clip(source_in_seconds=20.0, source_out_seconds=24.5, timeline_start_seconds=13.5),
+    ]
+    assert rough_cut(plan).markers[1] == Marker(OFF_SCRIPT, UNPLANNED, 4.5)
+
+
+def test_a_kept_region_between_two_attempts_at_a_line_follows_that_line() -> None:
+    # The mutter that introduces a retake was said after the line, not before it —
+    # even though the reading that plays is the one on the far side of it.
+    plan = build_plan(
+        analysis(
+            spoken(LINE_1, at=0.0)
+            + spoken(UNPLANNED, at=6.0)
+            + spoken(LINE_1, at=13.0)
+            + spoken(LINE_2, at=20.0)
+            + spoken(LINE_3, at=27.0)
+        ),
+        SCRIPT,
+    )
+
+    assert [marker.name for marker in rough_cut(plan).markers] == [
+        "Line 1",
+        OFF_SCRIPT,
+        "Line 2",
+        "Line 3",
+    ]
+
+
+def test_a_kept_region_follows_whatever_was_read_last_before_it() -> None:
+    # Recorded 3, 2, an aside, 1. The aside was said after line 2, so it plays after
+    # line 2 — not at the end, where line 3 being read first would otherwise put it.
+    plan = build_plan(
+        analysis(
+            spoken(LINE_3, at=0.0)
+            + spoken(LINE_2, at=6.0)
+            + spoken(UNPLANNED, at=13.0)
+            + spoken(LINE_1, at=20.0)
+        ),
+        SCRIPT,
+    )
+
+    assert [marker.name for marker in rough_cut(plan).markers] == [
+        "Line 1",
+        "Line 2",
+        OFF_SCRIPT,
+        "Line 3",
+    ]
+
+
+def test_a_failed_restart_of_the_line_beside_it_is_dropped() -> None:
+    # Seven seconds in — far too long to be dropped for its length — but every word of
+    # it is the line's own, which is what an abandoned attempt sounds like.
+    script = [ScriptLine(1, "In the previous video we set up the project and got it running.")]
+    restarted = "In the previous video we set up"
+    words = spoken(restarted, at=0.0) + spoken(
+        f"{restarted} the project and got it running.", at=10.0
+    )
+
+    plan = build_plan(analysis(words), script)
+
+    assert rough_cut(plan).clips == [Clip(10.0, 16.5, 0.0)]
+    assert [region.kept for region in plan.off_script] == [False]
+    assert plan.off_script[0].reason == "cut — a restart of line 1"
+
+
+def test_an_off_script_region_on_the_stop_phrase_list_is_dropped() -> None:
+    plan = build_plan(
+        analysis(session_with("Let me try that again, I keep getting this line wrong.")),
+        SCRIPT,
+    )
+
+    assert [region.kept for region in plan.off_script] == [False]
+    assert plan.off_script[0].reason == 'cut — a stop phrase, "let me try that again"'
+
+
+def test_how_long_an_off_script_region_must_run_to_survive_is_an_option() -> None:
+    described = analysis(clean_read() + spoken("Well anyway.", at=20.0))
+
+    assert [region.kept for region in build_plan(described, SCRIPT).off_script] == [False]
+    assert [
+        region.kept
+        for region in build_plan(
+            described, SCRIPT, off_script=OffScriptSettings(keep_seconds=0.5)
+        ).off_script
+    ] == [True]
+
+
+def test_how_much_of_a_restart_has_to_be_the_line_is_an_option() -> None:
+    # Seven of its eight words are the line's, which the default calls a restart.
+    script = [ScriptLine(1, "In the previous video we set up the project and got it running.")]
+    described = analysis(
+        spoken("In the previous video we set up, sorry", at=0.0)
+        + spoken("In the previous video we set up the project and got it running.", at=10.0)
+    )
+
+    assert [region.kept for region in build_plan(described, script).off_script] == [False]
+    assert [
+        region.kept
+        for region in build_plan(
+            described, script, off_script=OffScriptSettings(restart_likeness=0.95)
+        ).off_script
+    ] == [True]
+
+
+def test_the_stop_phrase_list_is_an_option() -> None:
+    described = analysis(session_with("Honestly this whole section needs rewriting later."))
+
+    assert [region.kept for region in build_plan(described, SCRIPT).off_script] == [True]
+    assert [
+        region.kept
+        for region in build_plan(
+            described, SCRIPT, off_script=OffScriptSettings(stop_phrases=("needs rewriting",))
+        ).off_script
+    ] == [False]
 
 
 def test_the_rough_cut_is_named_for_the_project_panel() -> None:

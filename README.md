@@ -48,6 +48,17 @@ laid end to end in a second sequence, `RoughCut_Alternates`, each marked with it
 its take number and the reason it lost, so overruling a choice is a drag rather than a
 hunt. The report tabulates every take considered with its coverage and its outcome.
 
+Anything you said that the script does not account for is **kept in place and marked**
+unless something says it should go: it runs shorter than 2.5 s, or it is an abandoned
+attempt at the line beside it — nearly every word of it that line's own — or it is on
+the stop-phrase list. The asymmetry is deliberate: deleting a kept line in Premiere is
+one keystroke, while recovering a deleted one means knowing it was ever there. What
+survives plays between the same two lines it was said between, under an `Off-script`
+marker quoting it, and the report lists every region with its duration and whether it
+was kept or cut. `--off-script-keep-seconds`, `--off-script-restart-likeness` and
+`--stop-phrases` move those bars; each of them only ever removes more, and
+`--stop-phrases` with nothing after it turns that rule off.
+
 A long pause *inside* a line is shortened rather than removed: a gap over 0.7 s
 collapses to 0.3 s, and only as far as a detected silence corroborates it, so the read
 still breathes and the cut never lands inside a word. `--pause-threshold-seconds`,

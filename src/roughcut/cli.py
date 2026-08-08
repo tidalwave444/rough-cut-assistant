@@ -14,6 +14,7 @@ from pathlib import Path
 from roughcut.analysis import Analysis, load_analysis
 from roughcut.analyze import AnalysisRun, AnalysisSettings, analysis_for
 from roughcut.errors import RoughCutError
+from roughcut.offscript import OffScriptSettings
 from roughcut.pauses import PauseSettings
 from roughcut.plan import build_plan
 from roughcut.render import render_fcp7
@@ -48,14 +49,20 @@ def _cut(args: argparse.Namespace) -> int:
     script = read_script(Path(args.script))
     run = _analysis_run(args, recording)
     _report_analysis(run, _analysis_path(args, recording))
-    _write_cut(run.analysis, script, Path(args.out_dir), _pauses(args))
+    _write_cut(run.analysis, script, Path(args.out_dir), _pauses(args), _off_script(args))
     return 0
 
 
 def _render(args: argparse.Namespace) -> int:
     """Plan and render from an existing artifact, without opening the recording."""
     script = read_script(Path(args.script))
-    _write_cut(load_analysis(Path(args.analysis)), script, Path(args.out_dir), _pauses(args))
+    _write_cut(
+        load_analysis(Path(args.analysis)),
+        script,
+        Path(args.out_dir),
+        _pauses(args),
+        _off_script(args),
+    )
     return 0
 
 
@@ -92,15 +99,36 @@ def _pauses(args: argparse.Namespace) -> PauseSettings:
     )
 
 
+def _off_script(args: argparse.Namespace) -> OffScriptSettings:
+    """What this run removes without asking, as asked for on the command line.
+
+    Phrases given on the command line replace the built-in list rather than adding to
+    it, so what a run drops is exactly what was asked for — and `--stop-phrases` with
+    nothing after it turns the rule off.
+    """
+    defaults = OffScriptSettings()
+    return OffScriptSettings(
+        keep_seconds=args.off_script_keep_seconds,
+        restart_likeness=args.off_script_restart_likeness,
+        stop_phrases=(
+            defaults.stop_phrases if args.stop_phrases is None else tuple(args.stop_phrases)
+        ),
+    )
+
+
 def _report_analysis(run: AnalysisRun, artifact: Path) -> None:
     what = "Reused analysis" if run.reused else "Analyzed"
     print(f"{what}: {artifact} ({len(run.analysis.words)} words)")
 
 
 def _write_cut(
-    analysis: Analysis, script: list[ScriptLine], out_dir: Path, pauses: PauseSettings
+    analysis: Analysis,
+    script: list[ScriptLine],
+    out_dir: Path,
+    pauses: PauseSettings,
+    off_script: OffScriptSettings,
 ) -> None:
-    plan = build_plan(analysis, script, pauses)
+    plan = build_plan(analysis, script, pauses, off_script)
     stem = Path(analysis.source.filename).stem
     report = render_report(analysis, script, plan)
     _write(out_dir / f"{stem}.xml", render_fcp7(plan))
@@ -133,7 +161,12 @@ def _parser() -> argparse.ArgumentParser:
 
     cut = commands.add_parser(
         "cut",
-        parents=[_output_options(), _media_options(), _pause_options()],
+        parents=[
+            _output_options(),
+            _media_options(),
+            _pause_options(),
+            _off_script_options(),
+        ],
         help="Analyze, plan and render: the whole tool.",
     )
     cut.add_argument("recording", help="The MP4 to cut.")
@@ -142,7 +175,7 @@ def _parser() -> argparse.ArgumentParser:
 
     render = commands.add_parser(
         "render",
-        parents=[_output_options(), _pause_options()],
+        parents=[_output_options(), _pause_options(), _off_script_options()],
         help="Plan and render from an existing analysis, touching no media.",
     )
     render.add_argument("analysis", help="An analysis artifact written by `analyze` or `cut`.")
@@ -188,6 +221,42 @@ def _pause_options() -> argparse.ArgumentParser:
         type=float,
         default=defaults.padding_seconds,
         help="Quiet kept either side of a shortened pause, so that speech is not clipped.",
+    )
+    return options
+
+
+def _off_script_options() -> argparse.ArgumentParser:
+    """What the cut removes without asking, out of what the script does not account for.
+
+    Every one of them only ever removes more: leave them alone and anything that is not
+    plainly a restart or a mutter survives into the cut with a marker on it.
+    """
+    defaults = OffScriptSettings()
+    options = argparse.ArgumentParser(add_help=False)
+    options.add_argument(
+        "--off-script-keep-seconds",
+        type=float,
+        default=defaults.keep_seconds,
+        help="Speech off the script shorter than this is dropped as a mutter.",
+    )
+    options.add_argument(
+        "--off-script-restart-likeness",
+        type=float,
+        default=defaults.restart_likeness,
+        help=(
+            "How much of what was said has to be the words of the line beside it before "
+            "it is dropped as an abandoned attempt at that line, from 0 to 1."
+        ),
+    )
+    options.add_argument(
+        "--stop-phrases",
+        nargs="*",
+        default=None,
+        metavar="PHRASE",
+        help=(
+            "Phrases that mark a region as a restart. Replaces the built-in list; "
+            "give none to keep everything the other rules leave alone."
+        ),
     )
     return options
 
