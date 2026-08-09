@@ -17,6 +17,12 @@ Quiet at the head or the tail of a stretch that plays is not collapsed but remov
 full. A floor is a beat held between two words, which is not what sits on the outside
 of a splice. That is `splice.py`'s to do, because it decides where a clip's edges land
 and this decides what comes out from between them.
+
+A collapsed pause is not the only thing that comes out from between them: a false start
+inside a take does too (`falsestarts.py`). What is taken out and why are that module's
+business, but what a cut *does* — shorten the stretch and pull everything after it
+earlier — is one piece of arithmetic, and `Tightened` below is where both of them meet
+it. A moment covered by a pause and a removal at once is still only removed once.
 """
 
 from collections.abc import Sequence
@@ -49,6 +55,23 @@ class PauseSettings:
 
 
 @dataclass(frozen=True)
+class Cut:
+    """A stretch of something that plays, taken out from the middle of it.
+
+    A collapsed pause gives one up, and so does a false start removed from inside a
+    take. What is taken out and why differ entirely; what it does to the timeline does
+    not, so a tightened stretch reasons about the two together.
+    """
+
+    start_seconds: float
+    end_seconds: float
+
+    @property
+    def seconds(self) -> float:
+        return self.end_seconds - self.start_seconds
+
+
+@dataclass(frozen=True)
 class Pause:
     """A stretch of quiet, and the piece of it the cut takes out.
 
@@ -63,12 +86,17 @@ class Pause:
     cut_end_seconds: float
 
     @property
+    def cut(self) -> Cut:
+        """The piece of the recording this pause gives up."""
+        return Cut(self.cut_start_seconds, self.cut_end_seconds)
+
+    @property
     def quiet_seconds(self) -> float:
         return self.quiet_end_seconds - self.quiet_start_seconds
 
     @property
     def removed_seconds(self) -> float:
-        return self.cut_end_seconds - self.cut_start_seconds
+        return self.cut.seconds
 
     @property
     def remaining_seconds(self) -> float:
@@ -125,29 +153,45 @@ class Segment:
 
 @dataclass(frozen=True)
 class Tightened:
-    """A stretch of the recording with the long pauses inside it shortened.
+    """A stretch of the recording with everything the cut takes out of it gone.
 
-    Everything after a shortened pause plays earlier than it was recorded, so this is
-    also the map from a moment in the source to where that moment lands on the
-    timeline — which is what keeps a marker on the words it names.
+    The long pauses inside it, shortened to a floor, and whatever else was removed
+    from the middle of it — an abandoned attempt at the line.
+
+    Everything after a cut plays earlier than it was recorded, so this is also the map
+    from a moment in the source to where that moment lands on the timeline — which is
+    what keeps a marker on the words it names.
     """
 
     start_seconds: float
     end_seconds: float
     pauses: tuple[Pause, ...] = ()
+    """The quiet inside this stretch that was shortened rather than left as recorded."""
+    removed: tuple[Cut, ...] = ()
+    """What else came out of the middle of it — an abandoned attempt at the line."""
+
+    @property
+    def cuts(self) -> list[Cut]:
+        """Everything this stretch gives up, in order and never twice over.
+
+        Merged rather than listed, because a pause and a removal can cover the same
+        moment — a stumble the speaker paused in the middle of — and a second of the
+        recording removed by both is still only a second.
+        """
+        taken = [*(pause.cut for pause in self.pauses), *self.removed]
+        return _merged(sorted(taken, key=lambda cut: cut.start_seconds))
 
     @property
     def duration_seconds(self) -> float:
-        """How long the stretch runs once its pauses are shortened."""
-        removed = sum(pause.removed_seconds for pause in self.pauses)
-        return self.end_seconds - self.start_seconds - removed
+        """How long the stretch runs once everything cut out of it is gone."""
+        return self.end_seconds - self.start_seconds - sum(cut.seconds for cut in self.cuts)
 
     @property
     def segments(self) -> list[Segment]:
         """The pieces of source that survive, in order — one more than the cuts."""
         edges = [self.start_seconds]
-        for pause in self.pauses:
-            edges += [pause.cut_start_seconds, pause.cut_end_seconds]
+        for cut in self.cuts:
+            edges += [cut.start_seconds, cut.end_seconds]
         edges.append(self.end_seconds)
         return [Segment(edges[index], edges[index + 1]) for index in range(0, len(edges), 2)]
 
@@ -155,26 +199,58 @@ class Tightened:
         """Where a moment of the source falls, measured from the start of the stretch.
 
         A moment inside a cut lands on the splice rather than in the hole where the
-        silence used to be, so nothing is ever placed at a time that no longer exists.
-        A moment outside the stretch altogether lands on the nearer end of it, for the
-        same reason: a stretch begins where sound begins, which can be later than the
-        transcriber declared its first word to start.
+        removed piece used to be, so nothing is ever placed at a time that no longer
+        exists. A moment outside the stretch altogether lands on the nearer end of it,
+        for the same reason: a stretch begins where sound begins, which can be later
+        than the transcriber declared its first word to start.
         """
         offset = source_seconds - self.start_seconds
-        for pause in self.pauses:
-            if source_seconds >= pause.cut_end_seconds:
-                offset -= pause.removed_seconds
-            elif source_seconds > pause.cut_start_seconds:
-                offset -= source_seconds - pause.cut_start_seconds
+        for cut in self.cuts:
+            if source_seconds >= cut.end_seconds:
+                offset -= cut.seconds
+            elif source_seconds > cut.start_seconds:
+                offset -= source_seconds - cut.start_seconds
         return min(max(offset, 0.0), self.duration_seconds)
 
 
-def tighten(start_seconds: float, end_seconds: float, pauses: Sequence[Pause]) -> Tightened:
-    """The stretch between two times, minus whichever pauses fall wholly inside it.
+def _merged(cuts: Sequence[Cut]) -> list[Cut]:
+    """Cuts in order, with any that overlap or meet joined into one."""
+    merged: list[Cut] = []
+    for cut in cuts:
+        if merged and cut.start_seconds <= merged[-1].end_seconds:
+            merged[-1] = Cut(
+                merged[-1].start_seconds, max(merged[-1].end_seconds, cut.end_seconds)
+            )
+        else:
+            merged.append(cut)
+    return merged
+
+
+def tighten(
+    start_seconds: float,
+    end_seconds: float,
+    pauses: Sequence[Pause],
+    removed: Sequence[Cut] = (),
+) -> Tightened:
+    """The stretch between two times, minus the pauses and removals inside it.
 
     A pause straddling the ends belongs to the dead air between two stretches, which
     the splice removes in full — there is nothing left of it to collapse.
+
+    A pause a removal reaches into is dropped on the same reasoning: the removal owns
+    that stretch, and what is left of the quiet is against a splice rather than
+    between two words, which is not what a floor is held for. Dropping it wherever the
+    two so much as touch, rather than only where the removal swallows the quiet whole,
+    keeps the report honest — a pause and a removal that both claim the same second
+    would otherwise each report having taken it, while the cut takes it once. The cost
+    is a long pause beside a small removal going uncollapsed, which is a quiet cut
+    slightly loose rather than a cut described wrongly.
     """
+    inside = tuple(
+        cut
+        for cut in (_held(cut, start_seconds, end_seconds) for cut in removed)
+        if cut is not None
+    )
     return Tightened(
         start_seconds=start_seconds,
         end_seconds=end_seconds,
@@ -183,5 +259,22 @@ def tighten(start_seconds: float, end_seconds: float, pauses: Sequence[Pause]) -
             for pause in pauses
             if start_seconds <= pause.quiet_start_seconds
             and pause.quiet_end_seconds <= end_seconds
+            and not _reached_by(pause, inside)
         ),
+        removed=inside,
+    )
+
+
+def _held(cut: Cut, start_seconds: float, end_seconds: float) -> Cut | None:
+    """A cut bounded by the stretch it is taken from, or None if none of it is left."""
+    held = Cut(max(cut.start_seconds, start_seconds), min(cut.end_seconds, end_seconds))
+    return held if held.seconds > 0 else None
+
+
+def _reached_by(pause: Pause, removed: Sequence[Cut]) -> bool:
+    """Whether a removal has taken any of this pause's quiet with it."""
+    return any(
+        cut.start_seconds < pause.quiet_end_seconds
+        and pause.quiet_start_seconds < cut.end_seconds
+        for cut in removed
     )

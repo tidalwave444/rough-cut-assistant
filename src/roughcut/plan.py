@@ -9,11 +9,13 @@ from dataclasses import dataclass, field
 
 from roughcut.align import SpokenLine, align
 from roughcut.analysis import Analysis, SourceMedia
+from roughcut.falsestarts import FalseStart, false_starts
 from roughcut.offscript import OffScript, OffScriptSettings, judge
 from roughcut.pauses import Pause, PauseSettings, Tightened, pauses_to_shorten, tighten
 from roughcut.script import ScriptLine, beats
 from roughcut.splice import Span, SpliceSettings, trimmed_to_sound, widen
 from roughcut.takes import Chosen, Take, choose
+from roughcut.tokens import Transcript
 
 ROUGH_CUT = "RoughCut"
 ALTERNATES = "RoughCut_Alternates"
@@ -73,6 +75,8 @@ class PlacedLine:
     tightened: Tightened
     """The stretch the chosen take was read in, with its long pauses shortened."""
     timeline_start_seconds: float
+    removed: tuple[FalseStart, ...] = ()
+    """The abandoned attempts taken out from inside the reading that plays."""
 
     @property
     def take(self) -> Take:
@@ -128,6 +132,8 @@ class Plan:
     """Everything said that no line accounts for, kept or cut, in the order recorded."""
     shortened: list[Pause] = field(default_factory=list)
     """The pauses the cut took time out of, in the order they were recorded."""
+    removed: list[FalseStart] = field(default_factory=list)
+    """The false starts cut out from inside a take, in the order they were recorded."""
 
     @property
     def flagged(self) -> list[PlacedLine]:
@@ -165,6 +171,11 @@ def build_plan(
     it is speech the cut keeps, and a read with no pauses left in it is a read nobody
     wants.
 
+    An attempt abandoned in the middle of a line comes out of it, because the clip runs
+    from the line's first word to its last and the stumble between them would otherwise
+    play. Only that: a word the transcriber misheard was spoken perfectly well and
+    stays where it was said.
+
     Speech no line accounts for goes only where something says it should — it is short,
     or it is an abandoned attempt at the line beside it, or it is on the stop-phrase
     list. Anything else stays where it was said with a marker on it, because a line you
@@ -194,6 +205,7 @@ def build_plan(
             splice,
         ),
         pauses_to_shorten(analysis.silences, pauses),
+        alignment.heard,
     )
     lines = [item for item in placed if isinstance(item, PlacedLine)]
     return Plan(
@@ -222,6 +234,10 @@ def build_plan(
             (pause for item in placed for pause in item.tightened.pauses),
             key=lambda pause: pause.quiet_start_seconds,
         ),
+        removed=sorted(
+            (removal for line in lines for removal in line.removed),
+            key=lambda removal: removal.start_seconds,
+        ),
     )
 
 
@@ -230,7 +246,10 @@ _Reading = tuple[SpokenLine, Chosen]
 
 
 def _placed(
-    ordered: list[_Reading | OffScript], spans: list[Span], pauses: list[Pause]
+    ordered: list[_Reading | OffScript],
+    spans: list[Span],
+    pauses: list[Pause],
+    heard: Transcript,
 ) -> list[Placed]:
     """Lay the cut out: each piece on the end of the last, in the order it plays.
 
@@ -238,12 +257,16 @@ def _placed(
     where its sound begins and padded back, so they are what the pauses are then taken
     out of and what the timeline is measured from — both of those are part of the cut
     and not flourishes added to it afterwards.
+
+    A line gives up one more thing than an aside does: the stumble in the middle of it.
+    Nothing off the script can be read against a line to find one, and there is no line
+    there whose words would be lost by looking.
     """
     placed: list[Placed] = []
     timeline = 0.0
     for item, span in zip(ordered, spans, strict=True):
-        tightened = tighten(span.start_seconds, span.end_seconds, pauses)
         if isinstance(item, OffScript):
+            tightened = tighten(span.start_seconds, span.end_seconds, pauses)
             placed.append(
                 PlacedOffScript(
                     off_script=item,
@@ -253,12 +276,20 @@ def _placed(
             )
         else:
             line, chosen = item
+            removed = tuple(false_starts(chosen.take, heard))
+            tightened = tighten(
+                span.start_seconds,
+                span.end_seconds,
+                pauses,
+                [removal.cut for removal in removed],
+            )
             placed.append(
                 PlacedLine(
                     line=line.line,
                     chosen=chosen,
                     tightened=tightened,
                     timeline_start_seconds=timeline,
+                    removed=removed,
                 )
             )
         timeline += tightened.duration_seconds

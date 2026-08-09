@@ -10,6 +10,7 @@ did I say that the cut is not using.
 """
 
 from roughcut.analysis import Analysis
+from roughcut.falsestarts import FalseStart
 from roughcut.offscript import OffScript
 from roughcut.pauses import Pause
 from roughcut.plan import PlacedLine, Plan, rough_cut, timeline_duration_seconds
@@ -24,6 +25,10 @@ DISFLUENCY_WIDTH = 14
 # phrase quoted back: `cut — a stop phrase, "let me try that again"`.
 OUTCOME_WIDTH = 46
 
+# Wide enough for either reason a stretch comes out of the middle of a take, the longer
+# of them being `nothing of the line opposite it`.
+FAULT_WIDTH = 34
+
 NOT_FOUND = "not found"
 NOWHERE = "—"
 
@@ -34,10 +39,12 @@ HOW_THE_CUT_WAS_MADE = (
     "quiet is heard rather than read: it is where the room went silent, which is not\n"
     "where the transcript ran out of words. Where a line was read more than once the\n"
     "last complete reading plays, and every reading passed over is laid end to end in\n"
-    "the alternates sequence beside the cut. Anything said that the script does not\n"
-    "account for goes only if it is short, an abandoned attempt at the line beside it,\n"
-    "or on the stop-phrase list; anything else stays where it was said, marked as\n"
-    "off-script."
+    "the alternates sequence beside the cut. An attempt abandoned in the middle of a\n"
+    "line comes out of it, on the evidence of a word said twice and never at the cost\n"
+    "of one of the line's own words — a word the transcriber misheard was spoken and\n"
+    "stays. Anything said that the script does not account for goes only if it is\n"
+    "short, an abandoned attempt at the line beside it, or on the stop-phrase list;\n"
+    "anything else stays where it was said, marked as off-script."
 )
 
 
@@ -61,6 +68,7 @@ def render_report(analysis: Analysis, script: list[ScriptLine], plan: Plan) -> s
             _label("Takes considered", sum(len(line.chosen.decisions) for line in plan.lines)),
             _label("Lines flagged", len(plan.flagged)),
             _label("Pauses shortened", len(plan.shortened)),
+            _label("False starts cut", len(plan.removed)),
             _label("Off-script kept", len(plan.kept)),
             _label("Off-script cut", len(plan.cut)),
             "",
@@ -71,6 +79,7 @@ def render_report(analysis: Analysis, script: list[ScriptLine], plan: Plan) -> s
             *_which_take_was_used(plan.lines),
             *_which_lines_are_poor(plan.flagged),
             *_what_each_pause_gave_up(plan.shortened),
+            *_what_came_out_of_a_take(plan.removed),
             *_what_was_said_off_script(plan.off_script),
             "",
         ]
@@ -182,6 +191,32 @@ def _what_each_pause_gave_up(pauses: list[Pause]) -> list[str]:
             f"{_duration(pause.quiet_seconds).ljust(TIME_WIDTH)}"
             f"{_duration(pause.remaining_seconds).ljust(TIME_WIDTH)}"
             f"{_duration(pause.removed_seconds)}"
+        )
+    return rows
+
+
+def _what_came_out_of_a_take(removals: list[FalseStart]) -> list[str]:
+    """Every abandoned attempt taken out from inside a line that plays.
+
+    Quoted in full, for the reason the off-script section quotes what it removed: this
+    is the only record that the stretch was ever spoken. It matters more here, if
+    anything — a removed off-script region is at least a silence between two lines,
+    whereas this vanishes into the middle of a line that otherwise sounds untouched.
+    """
+    if not removals:
+        return []
+    rows = [
+        "",
+        "What came out from inside a take",
+        "",
+        f"Line  {'At'.ljust(TIME_WIDTH)}{'Duration'.ljust(TIME_WIDTH)}"
+        f"{'Why'.ljust(FAULT_WIDTH)}What was said",
+    ]
+    for removal in removals:
+        rows.append(
+            f"{removal.line.number:>4}  {_duration(removal.start_seconds).ljust(TIME_WIDTH)}"
+            f"{_duration(removal.duration_seconds).ljust(TIME_WIDTH)}"
+            f"{removal.fault.ljust(FAULT_WIDTH)}{removal.text}"
         )
     return rows
 

@@ -1,8 +1,8 @@
 Rough cut — sequence.mp4
 
 Source duration    00:01:26.250
-Output duration    00:01:12.758
-Removed            00:00:13.492
+Output duration    00:01:10.458
+Removed            00:00:15.792
 Words transcribed  163
 Script lines       8
 Lines found        8
@@ -10,6 +10,7 @@ Lines not found    0
 Takes considered   8
 Lines flagged      0
 Pauses shortened   7
+False starts cut   3
 Off-script kept    0
 Off-script cut     1
 
@@ -19,22 +20,24 @@ while a long silence inside a line is shortened to a beat rather than closed. Th
 quiet is heard rather than read: it is where the room went silent, which is not
 where the transcript ran out of words. Where a line was read more than once the
 last complete reading plays, and every reading passed over is laid end to end in
-the alternates sequence beside the cut. Anything said that the script does not
-account for goes only if it is short, an abandoned attempt at the line beside it,
-or on the stop-phrase list; anything else stays where it was said, marked as
-off-script.
+the alternates sequence beside the cut. An attempt abandoned in the middle of a
+line comes out of it, on the evidence of a word said twice and never at the cost
+of one of the line's own words — a word the transcriber misheard was spoken and
+stays. Anything said that the script does not account for goes only if it is
+short, an abandoned attempt at the line beside it, or on the stop-phrase list;
+anything else stays where it was said, marked as off-script.
 
 Where each line was found
 
 Line  Source         Timeline       Script
    1  00:00:00.000   00:00:00.000   Building a real project with vibe coding — Part 2.
    2  00:00:03.640   00:00:03.640   By the end, we’ll build a website like this.
-   3  00:00:12.280   00:00:10.901   In the previous video, we set up the project. Now, before we start the implementation, we’ll use a skill to fully analyze the website idea.
-   4  00:00:26.120   00:00:24.064   You can get useful resources like this, along with tools used by top engineers, for free on my Telegram channel.
-   5  00:00:39.560   00:00:37.504   Here, it asks us everything about the website: what it is about, who it is for, and which tech stack we need.
-   6  00:00:56.690   00:00:51.973   The best part of this skill is that it turns the interview results into a clear implementation plan.
-   7  00:01:10.000   00:01:04.845   Then, it starts building the project based on that plan.
-   8  00:01:15.080   00:01:09.925   The next part is coming soon.
+   3  00:00:12.280   00:00:10.601   In the previous video, we set up the project. Now, before we start the implementation, we’ll use a skill to fully analyze the website idea.
+   4  00:00:26.120   00:00:23.764   You can get useful resources like this, along with tools used by top engineers, for free on my Telegram channel.
+   5  00:00:39.560   00:00:35.744   Here, it asks us everything about the website: what it is about, who it is for, and which tech stack we need.
+   6  00:00:56.690   00:00:50.213   The best part of this skill is that it turns the interview results into a clear implementation plan.
+   7  00:01:10.000   00:01:02.545   Then, it starts building the project based on that plan.
+   8  00:01:15.080   00:01:07.625   The next part is coming soon.
 
 Every take considered
 
@@ -58,6 +61,13 @@ What each pause gave up
   00:00:47.019   00:00:00.861   00:00:00.300   00:00:00.561
   00:01:02.327   00:00:00.738   00:00:00.300   00:00:00.438
   00:01:15.304   00:00:01.057   00:00:00.300   00:00:00.757
+
+What came out from inside a take
+
+Line  At             Duration       Why                               What was said
+   2  00:00:09.180   00:00:00.300   nothing of the line opposite it   wipe
+   4  00:00:30.020   00:00:01.460   "along" said twice                along the
+   6  00:01:00.200   00:00:00.540   nothing of the line opposite it   skills
 
 Off-script material
 

@@ -167,6 +167,36 @@ def test_a_cut_with_no_pause_worth_shortening_says_so_and_tabulates_nothing() ->
     assert "What each pause gave up" not in report
 
 
+def report_with_a_false_start() -> str:
+    """Line 1 read with `part` said, abandoned and said again."""
+    words = spoken("Building a real project with vibe coding part no part two.", at=0.0)
+    described = analysis(words)
+    return render_report(described, SCRIPT[:1], build_plan(described, SCRIPT[:1]))
+
+
+def test_the_report_counts_the_false_starts_it_cut() -> None:
+    assert "False starts cut   1" in report_with_a_false_start()
+
+
+def test_each_removal_from_inside_a_take_says_when_it_was_why_it_went_and_what_was_said() -> None:
+    # The one thing in the cut that leaves no silence behind it, so the row is the only
+    # way of knowing the words were ever spoken.
+    report = report_with_a_false_start()
+
+    assert "Line  At             Duration       Why" in report
+    assert (
+        '   1  00:00:03.500   00:00:01.000   "part" said twice                 part no'
+        in report
+    )
+
+
+def test_a_cut_with_no_false_start_in_it_tabulates_nothing() -> None:
+    report = report_for(CLEAN_READ)
+
+    assert "False starts cut   0" in report
+    assert "What came out from inside a take" not in report
+
+
 def test_a_cut_with_nothing_said_off_the_script_tabulates_nothing() -> None:
     report = report_for(CLEAN_READ)
 

@@ -49,12 +49,27 @@ PASSED_OVER = "a later take was also complete"
 
 
 @dataclass(frozen=True)
+class Matched:
+    """One word of the line, and the transcript token it was heard as.
+
+    The way back from a reading to the recording it was heard in. It is what says
+    which of the words inside a take the line accounts for — and therefore which of
+    them it does not, which is the whole of what a false start is found by.
+    """
+
+    token: int
+    """Where the word sits in the transcript this reading was aligned against."""
+    offset: int
+    """Which word of the line it was heard as, counting from 0."""
+
+
+@dataclass(frozen=True)
 class Take:
     """One reading of a script line, as the recording holds it.
 
-    Everything here is a fact about what was heard — how much of the line it held,
-    where it stopped, how many stumbles are in it. What those facts *mean* is decided
-    below, so that the judgement lives in one place and can be re-tuned there.
+    Everything here is a fact about what was heard — which of the line's words it
+    held, where it stopped, how many stumbles are in it. What those facts *mean* is
+    decided below, so that the judgement lives in one place and can be re-tuned there.
     """
 
     line: ScriptLine
@@ -66,10 +81,8 @@ class Take:
     """When each of the line's tokens was reached — how a beat becomes a time."""
     tokens: int
     """How many words the line has to say."""
-    heard_tokens: int
-    """How many of them this reading was heard to say."""
-    unread_at_end: int
-    """How many of the line's closing words this reading never reached."""
+    matched: tuple[Matched, ...]
+    """Every word of the line this reading was heard to say, in the order heard."""
     disfluencies: int
     """How many ums and uhs were heard inside it."""
 
@@ -77,6 +90,16 @@ class Take:
     def name(self) -> str:
         """How a marker names this reading: its line, and which attempt it was."""
         return f"Line {self.line.number} take {self.number}"
+
+    @property
+    def heard_tokens(self) -> int:
+        """How many of the line's words this reading was heard to say."""
+        return len(self.matched)
+
+    @property
+    def unread_at_end(self) -> int:
+        """How many of the line's closing words this reading never reached."""
+        return self.tokens - 1 - max((word.offset for word in self.matched), default=-1)
 
     @property
     def coverage(self) -> float:

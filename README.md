@@ -70,6 +70,18 @@ and `--pause-padding-seconds` tighten or loosen the whole cut in one run. They d
 the plan rather than the analysis, so `render` takes them too and trying a different
 floor costs no transcription. The report says what each pause gave up.
 
+An attempt abandoned *inside* a line comes out of the middle of it. A line's clip runs
+from its first matched word to its last, so a stumble between the two would otherwise
+play, and it is the one thing the cut removes that leaves no silence where it was. Only
+a stumble goes: a word the transcriber merely misheard was spoken perfectly well, and
+it always has the script word it displaced sitting opposite it. What marks a false start
+is a **word said twice** — the speaker says it, abandons the sentence and says it again,
+so the stretch between the two utterances is what they threw away — or a run standing
+where the line has already been fully accounted for. Neither is a threshold and neither
+has a setting. The repeat is guarded by coverage: a removal that would cost the line one
+of its own words is refused, which is what stops the same test firing on "a" and "the"
+and eating half a sentence. The report names every removal and quotes it in full.
+
 Every splice keeps 0.15 s of the quiet either side of it, because a word goes on
 sounding after the transcriber has stopped recognising it and a cut on the timestamp
 lands on the last consonant. The pad is only ever taken from quiet the detector heard,

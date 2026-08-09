@@ -26,7 +26,7 @@ from difflib import SequenceMatcher
 
 from roughcut.analysis import Word
 from roughcut.script import ScriptLine
-from roughcut.takes import Take, disfluencies_in
+from roughcut.takes import Matched, Take, disfluencies_in
 from roughcut.tokens import Transcript, tokenize
 
 # How much of a line has to be heard in one stretch before that stretch counts as a
@@ -85,6 +85,13 @@ class Alignment:
     """The located lines, in script order — which is not always the order spoken."""
     missing: list[ScriptLine]
     leftovers: list[Leftover]
+    heard: Transcript
+    """The recording as tokens, which is what every take's matches index into.
+
+    Carried out of the alignment rather than reduced again downstream: a take says
+    which of the transcript's words it was heard to say, and those positions mean
+    nothing without the stream they were counted in.
+    """
 
 
 def align(words: Sequence[Word], script: Sequence[ScriptLine]) -> Alignment:
@@ -153,6 +160,7 @@ class _Aligner:
             ],
             missing=[line for line in self._script if line.number not in self._takes],
             leftovers=sorted(leftovers, key=lambda leftover: leftover.start_seconds),
+            heard=self._heard,
         )
 
     def _spine(self) -> dict[int, list[_Span]]:
@@ -186,9 +194,8 @@ class _Aligner:
                 owner.append(line)
                 offset.append(index)
 
-        matcher = _matcher(self._heard.texts, script_tokens)
         matched: dict[int, list[tuple[int, int]]] = {line.number: [] for line in self._script}
-        for heard, script_index in _pairs(matcher):
+        for heard, script_index in matched_pairs(self._heard.texts, script_tokens):
             matched[owner[script_index].number].append((heard, offset[script_index]))
         return matched
 
@@ -260,7 +267,7 @@ class _Aligner:
         nearest: ScriptLine | None = None
         likeness = 0.0
         for line in self._between(run.first):
-            share = len(_pairs(_matcher(heard, self._tokens[line.number]))) / len(heard)
+            share = len(matched_pairs(heard, self._tokens[line.number])) / len(heard)
             if share > likeness:
                 nearest, likeness = line, share
         return nearest, likeness
@@ -285,7 +292,7 @@ class _Aligner:
         best: _Match | None = None
         for line in candidates:
             tokens = self._tokens[line.number]
-            pairs = _pairs(_matcher(heard, tokens), offset=run.first)
+            pairs = matched_pairs(heard, tokens, offset=run.first)
             if not pairs:
                 continue
             span = _Span(pairs)
@@ -353,8 +360,7 @@ class _Aligner:
             end_seconds=end,
             token_seconds=self._token_seconds(span, tokens, end),
             tokens=tokens,
-            heard_tokens=len(span.pairs),
-            unread_at_end=tokens - 1 - max(offset for _, offset in span.pairs),
+            matched=tuple(Matched(token, offset) for token, offset in span.pairs),
             disfluencies=disfluencies_in(self._heard.texts[span.first : span.last + 1]),
         )
 
@@ -374,18 +380,23 @@ class _Aligner:
         return tuple(times)
 
 
-def _matcher(heard: list[str], written: list[str]) -> SequenceMatcher[str]:
-    """Compare two token streams.
+def matched_pairs(
+    heard: Sequence[str], written: Sequence[str], *, offset: int = 0
+) -> list[tuple[int, int]]:
+    """Every token two streams say in common, as a pair of positions, one in each.
+
+    The one measurement this module is built on, exposed because deciding what may be
+    taken out of a take asks it too: how much of a line a reading holds is the same
+    question before and after a stretch of that reading is dropped.
+
+    Monotonic, so a match can only ever move forward through both streams and a
+    repeated phrase cannot steal an earlier one's match.
 
     `autojunk` off: it discards any element appearing in more than 1% of a sequence
     longer than 200, which over a transcript means "the", "a", "we" — the connective
     tissue that holds a sentence match together.
     """
-    return SequenceMatcher(None, heard, written, autojunk=False)
-
-
-def _pairs(matcher: SequenceMatcher[str], *, offset: int = 0) -> list[tuple[int, int]]:
-    """Every matched token as a pair of positions, one in each stream."""
+    matcher = SequenceMatcher(None, list(heard), list(written), autojunk=False)
     return [
         (offset + block.a + step, block.b + step)
         for block in matcher.get_matching_blocks()
