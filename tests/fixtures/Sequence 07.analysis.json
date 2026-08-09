@@ -1,0 +1,2644 @@
+{
+  "source": {
+    "filename": "Sequence 07.mp4",
+    "duration_seconds": 142.566667,
+    "fps": 60.0,
+    "ntsc": false,
+    "audio_sample_rate": 48000,
+    "width": 1920,
+    "height": 1080,
+    "audio_channels": 2,
+    "audio_bit_depth": 16
+  },
+  "words": [
+    {
+      "text": "Building",
+      "start_seconds": 0.0,
+      "end_seconds": 0.8,
+      "confidence": 0.4148
+    },
+    {
+      "text": "a",
+      "start_seconds": 0.8,
+      "end_seconds": 1.0,
+      "confidence": 0.7983
+    },
+    {
+      "text": "rail",
+      "start_seconds": 1.0,
+      "end_seconds": 1.28,
+      "confidence": 0.6294
+    },
+    {
+      "text": "project",
+      "start_seconds": 1.28,
+      "end_seconds": 1.74,
+      "confidence": 0.9873
+    },
+    {
+      "text": "with",
+      "start_seconds": 1.74,
+      "end_seconds": 2.48,
+      "confidence": 0.8418
+    },
+    {
+      "text": "a",
+      "start_seconds": 2.48,
+      "end_seconds": 2.66,
+      "confidence": 0.3679
+    },
+    {
+      "text": "wipe",
+      "start_seconds": 2.66,
+      "end_seconds": 3.0,
+      "confidence": 0.4917
+    },
+    {
+      "text": "coating",
+      "start_seconds": 3.0,
+      "end_seconds": 3.48,
+      "confidence": 0.8306
+    },
+    {
+      "text": "part",
+      "start_seconds": 3.48,
+      "end_seconds": 8.64,
+      "confidence": 0.2225
+    },
+    {
+      "text": "1.",
+      "start_seconds": 8.64,
+      "end_seconds": 9.48,
+      "confidence": 0.2722
+    },
+    {
+      "text": "No,",
+      "start_seconds": 9.78,
+      "end_seconds": 10.24,
+      "confidence": 0.7178
+    },
+    {
+      "text": "no,",
+      "start_seconds": 10.32,
+      "end_seconds": 10.5,
+      "confidence": 0.7749
+    },
+    {
+      "text": "part",
+      "start_seconds": 10.5,
+      "end_seconds": 10.9,
+      "confidence": 0.8979
+    },
+    {
+      "text": "2.",
+      "start_seconds": 10.9,
+      "end_seconds": 11.44,
+      "confidence": 0.8965
+    },
+    {
+      "text": "Today",
+      "start_seconds": 12.56,
+      "end_seconds": 13.48,
+      "confidence": 0.9844
+    },
+    {
+      "text": "we",
+      "start_seconds": 13.48,
+      "end_seconds": 14.42,
+      "confidence": 0.8081
+    },
+    {
+      "text": "are",
+      "start_seconds": 14.42,
+      "end_seconds": 14.6,
+      "confidence": 0.9805
+    },
+    {
+      "text": "moving",
+      "start_seconds": 14.6,
+      "end_seconds": 14.96,
+      "confidence": 0.9976
+    },
+    {
+      "text": "from",
+      "start_seconds": 14.96,
+      "end_seconds": 15.6,
+      "confidence": 0.9946
+    },
+    {
+      "text": "setup",
+      "start_seconds": 15.6,
+      "end_seconds": 16.08,
+      "confidence": 0.9023
+    },
+    {
+      "text": "to",
+      "start_seconds": 16.08,
+      "end_seconds": 17.0,
+      "confidence": 0.9902
+    },
+    {
+      "text": "actual",
+      "start_seconds": 17.0,
+      "end_seconds": 17.44,
+      "confidence": 0.9048
+    },
+    {
+      "text": "development.",
+      "start_seconds": 17.44,
+      "end_seconds": 21.02,
+      "confidence": 0.7368
+    },
+    {
+      "text": "In",
+      "start_seconds": 21.02,
+      "end_seconds": 21.96,
+      "confidence": 0.3257
+    },
+    {
+      "text": "the",
+      "start_seconds": 21.96,
+      "end_seconds": 23.02,
+      "confidence": 0.9517
+    },
+    {
+      "text": "previous",
+      "start_seconds": 23.02,
+      "end_seconds": 23.38,
+      "confidence": 0.938
+    },
+    {
+      "text": "part,",
+      "start_seconds": 23.38,
+      "end_seconds": 23.8,
+      "confidence": 0.9468
+    },
+    {
+      "text": "we",
+      "start_seconds": 24.08,
+      "end_seconds": 24.88,
+      "confidence": 0.9536
+    },
+    {
+      "text": "prepared",
+      "start_seconds": 24.88,
+      "end_seconds": 25.38,
+      "confidence": 0.7456
+    },
+    {
+      "text": "the",
+      "start_seconds": 25.38,
+      "end_seconds": 26.1,
+      "confidence": 0.9399
+    },
+    {
+      "text": "project",
+      "start_seconds": 26.1,
+      "end_seconds": 26.56,
+      "confidence": 0.9395
+    },
+    {
+      "text": "and",
+      "start_seconds": 26.56,
+      "end_seconds": 27.28,
+      "confidence": 0.8789
+    },
+    {
+      "text": "claim",
+      "start_seconds": 27.28,
+      "end_seconds": 29.7,
+      "confidence": 0.3376
+    },
+    {
+      "text": "plan.",
+      "start_seconds": 29.7,
+      "end_seconds": 30.16,
+      "confidence": 0.6299
+    },
+    {
+      "text": "No,",
+      "start_seconds": 30.38,
+      "end_seconds": 31.12,
+      "confidence": 0.0197
+    },
+    {
+      "text": "and",
+      "start_seconds": 31.24,
+      "end_seconds": 32.28,
+      "confidence": 0.647
+    },
+    {
+      "text": "install",
+      "start_seconds": 32.28,
+      "end_seconds": 33.5,
+      "confidence": 0.6323
+    },
+    {
+      "text": "everything",
+      "start_seconds": 33.5,
+      "end_seconds": 35.42,
+      "confidence": 0.9312
+    },
+    {
+      "text": "we",
+      "start_seconds": 35.42,
+      "end_seconds": 36.68,
+      "confidence": 0.9478
+    },
+    {
+      "text": "needed.",
+      "start_seconds": 36.68,
+      "end_seconds": 37.02,
+      "confidence": 0.876
+    },
+    {
+      "text": "But",
+      "start_seconds": 37.16,
+      "end_seconds": 38.04,
+      "confidence": 0.9702
+    },
+    {
+      "text": "before",
+      "start_seconds": 38.04,
+      "end_seconds": 38.48,
+      "confidence": 0.9863
+    },
+    {
+      "text": "writing",
+      "start_seconds": 38.48,
+      "end_seconds": 39.48,
+      "confidence": 0.9507
+    },
+    {
+      "text": "any",
+      "start_seconds": 39.48,
+      "end_seconds": 40.0,
+      "confidence": 0.9722
+    },
+    {
+      "text": "code,",
+      "start_seconds": 40.0,
+      "end_seconds": 40.28,
+      "confidence": 0.9902
+    },
+    {
+      "text": "we",
+      "start_seconds": 40.46,
+      "end_seconds": 41.0,
+      "confidence": 0.9927
+    },
+    {
+      "text": "need",
+      "start_seconds": 41.0,
+      "end_seconds": 41.24,
+      "confidence": 0.9883
+    },
+    {
+      "text": "a",
+      "start_seconds": 41.24,
+      "end_seconds": 43.04,
+      "confidence": 0.7661
+    },
+    {
+      "text": "previous",
+      "start_seconds": 43.04,
+      "end_seconds": 43.94,
+      "confidence": 0.9521
+    },
+    {
+      "text": "part.",
+      "start_seconds": 43.94,
+      "end_seconds": 44.36,
+      "confidence": 0.9858
+    },
+    {
+      "text": "We",
+      "start_seconds": 45.92,
+      "end_seconds": 46.96,
+      "confidence": 0.9707
+    },
+    {
+      "text": "need",
+      "start_seconds": 46.96,
+      "end_seconds": 47.32,
+      "confidence": 0.9971
+    },
+    {
+      "text": "a",
+      "start_seconds": 47.32,
+      "end_seconds": 47.42,
+      "confidence": 0.2227
+    },
+    {
+      "text": "tool.",
+      "start_seconds": 47.42,
+      "end_seconds": 48.72,
+      "confidence": 0.7334
+    },
+    {
+      "text": "But",
+      "start_seconds": 48.98,
+      "end_seconds": 50.02,
+      "confidence": 0.9453
+    },
+    {
+      "text": "before",
+      "start_seconds": 50.02,
+      "end_seconds": 50.4,
+      "confidence": 0.9941
+    },
+    {
+      "text": "writing",
+      "start_seconds": 50.4,
+      "end_seconds": 51.0,
+      "confidence": 0.0856
+    },
+    {
+      "text": "any",
+      "start_seconds": 51.0,
+      "end_seconds": 51.0,
+      "confidence": 0.896
+    },
+    {
+      "text": "code,",
+      "start_seconds": 51.0,
+      "end_seconds": 51.0,
+      "confidence": 0.9941
+    },
+    {
+      "text": "we",
+      "start_seconds": 51.0,
+      "end_seconds": 51.0,
+      "confidence": 0.9932
+    },
+    {
+      "text": "need",
+      "start_seconds": 51.0,
+      "end_seconds": 51.0,
+      "confidence": 0.998
+    },
+    {
+      "text": "a",
+      "start_seconds": 51.0,
+      "end_seconds": 51.0,
+      "confidence": 0.9741
+    },
+    {
+      "text": "previous",
+      "start_seconds": 51.0,
+      "end_seconds": 51.0,
+      "confidence": 0.311
+    },
+    {
+      "text": "part.",
+      "start_seconds": 51.0,
+      "end_seconds": 51.0,
+      "confidence": 0.9946
+    },
+    {
+      "text": "We",
+      "start_seconds": 51.0,
+      "end_seconds": 51.0,
+      "confidence": 0.9507
+    },
+    {
+      "text": "need",
+      "start_seconds": 51.0,
+      "end_seconds": 51.0,
+      "confidence": 0.9995
+    },
+    {
+      "text": "a",
+      "start_seconds": 51.0,
+      "end_seconds": 51.0,
+      "confidence": 0.9741
+    },
+    {
+      "text": "tool.",
+      "start_seconds": 51.0,
+      "end_seconds": 51.0,
+      "confidence": 0.9956
+    },
+    {
+      "text": "But",
+      "start_seconds": 51.0,
+      "end_seconds": 51.36,
+      "confidence": 0.0068
+    },
+    {
+      "text": "before",
+      "start_seconds": 51.36,
+      "end_seconds": 51.36,
+      "confidence": 0.1174
+    },
+    {
+      "text": "writing",
+      "start_seconds": 51.36,
+      "end_seconds": 51.36,
+      "confidence": 0.8022
+    },
+    {
+      "text": "any",
+      "start_seconds": 51.36,
+      "end_seconds": 51.78,
+      "confidence": 0.9663
+    },
+    {
+      "text": "code,",
+      "start_seconds": 51.78,
+      "end_seconds": 52.06,
+      "confidence": 0.9893
+    },
+    {
+      "text": "we",
+      "start_seconds": 52.2,
+      "end_seconds": 52.4,
+      "confidence": 0.9663
+    },
+    {
+      "text": "need",
+      "start_seconds": 52.4,
+      "end_seconds": 52.62,
+      "confidence": 0.9917
+    },
+    {
+      "text": "a",
+      "start_seconds": 52.62,
+      "end_seconds": 52.96,
+      "confidence": 0.9619
+    },
+    {
+      "text": "previous",
+      "start_seconds": 52.96,
+      "end_seconds": 53.22,
+      "confidence": 0.0
+    },
+    {
+      "text": "part.",
+      "start_seconds": 53.22,
+      "end_seconds": 53.32,
+      "confidence": 0.0005
+    },
+    {
+      "text": "We",
+      "start_seconds": 53.32,
+      "end_seconds": 53.32,
+      "confidence": 0.0379
+    },
+    {
+      "text": "need",
+      "start_seconds": 53.32,
+      "end_seconds": 53.32,
+      "confidence": 0.8579
+    },
+    {
+      "text": "a",
+      "start_seconds": 53.32,
+      "end_seconds": 53.32,
+      "confidence": 0.6904
+    },
+    {
+      "text": "previous",
+      "start_seconds": 53.32,
+      "end_seconds": 53.32,
+      "confidence": 0.0009
+    },
+    {
+      "text": "part.",
+      "start_seconds": 53.32,
+      "end_seconds": 53.32,
+      "confidence": 0.3809
+    },
+    {
+      "text": "We",
+      "start_seconds": 53.32,
+      "end_seconds": 53.32,
+      "confidence": 0.0934
+    },
+    {
+      "text": "need",
+      "start_seconds": 53.32,
+      "end_seconds": 53.32,
+      "confidence": 0.9844
+    },
+    {
+      "text": "a",
+      "start_seconds": 53.32,
+      "end_seconds": 53.32,
+      "confidence": 0.9424
+    },
+    {
+      "text": "clear",
+      "start_seconds": 53.32,
+      "end_seconds": 53.32,
+      "confidence": 0.0869
+    },
+    {
+      "text": "plan.",
+      "start_seconds": 53.32,
+      "end_seconds": 53.7,
+      "confidence": 0.9419
+    },
+    {
+      "text": "But",
+      "start_seconds": 53.9,
+      "end_seconds": 53.9,
+      "confidence": 0.0004
+    },
+    {
+      "text": "before",
+      "start_seconds": 53.9,
+      "end_seconds": 53.9,
+      "confidence": 0.5298
+    },
+    {
+      "text": "writing",
+      "start_seconds": 53.9,
+      "end_seconds": 53.9,
+      "confidence": 0.8423
+    },
+    {
+      "text": "any",
+      "start_seconds": 53.9,
+      "end_seconds": 53.9,
+      "confidence": 0.9756
+    },
+    {
+      "text": "code,",
+      "start_seconds": 53.9,
+      "end_seconds": 53.9,
+      "confidence": 0.9937
+    },
+    {
+      "text": "we",
+      "start_seconds": 53.9,
+      "end_seconds": 53.9,
+      "confidence": 0.9912
+    },
+    {
+      "text": "need",
+      "start_seconds": 53.9,
+      "end_seconds": 53.9,
+      "confidence": 0.998
+    },
+    {
+      "text": "a",
+      "start_seconds": 53.9,
+      "end_seconds": 53.9,
+      "confidence": 0.9907
+    },
+    {
+      "text": "previous",
+      "start_seconds": 53.9,
+      "end_seconds": 53.9,
+      "confidence": 0.8755
+    },
+    {
+      "text": "part.",
+      "start_seconds": 53.9,
+      "end_seconds": 53.9,
+      "confidence": 0.9976
+    },
+    {
+      "text": "We",
+      "start_seconds": 54.4,
+      "end_seconds": 55.14,
+      "confidence": 0.9531
+    },
+    {
+      "text": "need",
+      "start_seconds": 55.14,
+      "end_seconds": 55.14,
+      "confidence": 0.9995
+    },
+    {
+      "text": "a",
+      "start_seconds": 55.14,
+      "end_seconds": 55.14,
+      "confidence": 0.9961
+    },
+    {
+      "text": "previous",
+      "start_seconds": 55.14,
+      "end_seconds": 55.14,
+      "confidence": 0.9561
+    },
+    {
+      "text": "part.",
+      "start_seconds": 55.14,
+      "end_seconds": 55.14,
+      "confidence": 0.9976
+    },
+    {
+      "text": "We",
+      "start_seconds": 55.14,
+      "end_seconds": 55.28,
+      "confidence": 0.5127
+    },
+    {
+      "text": "need",
+      "start_seconds": 55.28,
+      "end_seconds": 55.28,
+      "confidence": 0.9966
+    },
+    {
+      "text": "a",
+      "start_seconds": 55.28,
+      "end_seconds": 55.28,
+      "confidence": 0.9849
+    },
+    {
+      "text": "clear",
+      "start_seconds": 55.28,
+      "end_seconds": 55.38,
+      "confidence": 0.3467
+    },
+    {
+      "text": "plan.",
+      "start_seconds": 55.38,
+      "end_seconds": 55.98,
+      "confidence": 0.9946
+    },
+    {
+      "text": "That's",
+      "start_seconds": 56.86,
+      "end_seconds": 57.6,
+      "confidence": 0.7156
+    },
+    {
+      "text": "why",
+      "start_seconds": 57.6,
+      "end_seconds": 57.78,
+      "confidence": 0.9927
+    },
+    {
+      "text": "I'm",
+      "start_seconds": 57.78,
+      "end_seconds": 58.24,
+      "confidence": 0.804
+    },
+    {
+      "text": "using",
+      "start_seconds": 58.24,
+      "end_seconds": 58.54,
+      "confidence": 0.9937
+    },
+    {
+      "text": "a",
+      "start_seconds": 58.54,
+      "end_seconds": 58.84,
+      "confidence": 0.916
+    },
+    {
+      "text": "special",
+      "start_seconds": 58.84,
+      "end_seconds": 59.18,
+      "confidence": 0.9644
+    },
+    {
+      "text": "skill",
+      "start_seconds": 59.18,
+      "end_seconds": 59.62,
+      "confidence": 0.9712
+    },
+    {
+      "text": "that",
+      "start_seconds": 59.62,
+      "end_seconds": 59.82,
+      "confidence": 0.8081
+    },
+    {
+      "text": "works",
+      "start_seconds": 59.82,
+      "end_seconds": 60.18,
+      "confidence": 0.9702
+    },
+    {
+      "text": "like",
+      "start_seconds": 60.18,
+      "end_seconds": 60.64,
+      "confidence": 0.915
+    },
+    {
+      "text": "a",
+      "start_seconds": 60.64,
+      "end_seconds": 61.58,
+      "confidence": 0.8042
+    },
+    {
+      "text": "project",
+      "start_seconds": 61.58,
+      "end_seconds": 62.0,
+      "confidence": 0.9375
+    },
+    {
+      "text": "interview.",
+      "start_seconds": 62.0,
+      "end_seconds": 63.36,
+      "confidence": 0.98
+    },
+    {
+      "text": "It",
+      "start_seconds": 64.77,
+      "end_seconds": 65.14,
+      "confidence": 0.4329
+    },
+    {
+      "text": "asks",
+      "start_seconds": 65.14,
+      "end_seconds": 65.52,
+      "confidence": 0.9165
+    },
+    {
+      "text": "important",
+      "start_seconds": 65.52,
+      "end_seconds": 65.98,
+      "confidence": 0.9268
+    },
+    {
+      "text": "questions.",
+      "start_seconds": 65.98,
+      "end_seconds": 66.72,
+      "confidence": 0.98
+    },
+    {
+      "text": "What",
+      "start_seconds": 67.04,
+      "end_seconds": 67.68,
+      "confidence": 0.8062
+    },
+    {
+      "text": "problem",
+      "start_seconds": 67.68,
+      "end_seconds": 68.2,
+      "confidence": 0.7168
+    },
+    {
+      "text": "does",
+      "start_seconds": 68.2,
+      "end_seconds": 69.74,
+      "confidence": 0.9448
+    },
+    {
+      "text": "the",
+      "start_seconds": 69.74,
+      "end_seconds": 69.84,
+      "confidence": 0.542
+    },
+    {
+      "text": "website",
+      "start_seconds": 69.84,
+      "end_seconds": 70.12,
+      "confidence": 0.9648
+    },
+    {
+      "text": "solve?",
+      "start_seconds": 70.12,
+      "end_seconds": 70.84,
+      "confidence": 0.9434
+    },
+    {
+      "text": "Who",
+      "start_seconds": 71.24,
+      "end_seconds": 71.88,
+      "confidence": 0.6543
+    },
+    {
+      "text": "is",
+      "start_seconds": 71.88,
+      "end_seconds": 72.06,
+      "confidence": 0.9482
+    },
+    {
+      "text": "it",
+      "start_seconds": 72.06,
+      "end_seconds": 73.12,
+      "confidence": 0.9209
+    },
+    {
+      "text": "for?",
+      "start_seconds": 73.12,
+      "end_seconds": 73.58,
+      "confidence": 0.9883
+    },
+    {
+      "text": "What",
+      "start_seconds": 73.9,
+      "end_seconds": 74.64,
+      "confidence": 0.9717
+    },
+    {
+      "text": "features",
+      "start_seconds": 74.64,
+      "end_seconds": 75.16,
+      "confidence": 0.9692
+    },
+    {
+      "text": "do",
+      "start_seconds": 75.16,
+      "end_seconds": 75.88,
+      "confidence": 0.9844
+    },
+    {
+      "text": "we",
+      "start_seconds": 75.88,
+      "end_seconds": 76.04,
+      "confidence": 0.9868
+    },
+    {
+      "text": "need?",
+      "start_seconds": 76.04,
+      "end_seconds": 76.28,
+      "confidence": 0.9976
+    },
+    {
+      "text": "And",
+      "start_seconds": 76.58,
+      "end_seconds": 76.82,
+      "confidence": 0.6553
+    },
+    {
+      "text": "which",
+      "start_seconds": 76.82,
+      "end_seconds": 77.62,
+      "confidence": 0.8867
+    },
+    {
+      "text": "technologies",
+      "start_seconds": 77.62,
+      "end_seconds": 78.68,
+      "confidence": 0.874
+    },
+    {
+      "text": "should",
+      "start_seconds": 78.68,
+      "end_seconds": 80.04,
+      "confidence": 0.6982
+    },
+    {
+      "text": "we",
+      "start_seconds": 80.04,
+      "end_seconds": 80.24,
+      "confidence": 0.9917
+    },
+    {
+      "text": "use?",
+      "start_seconds": 80.24,
+      "end_seconds": 80.54,
+      "confidence": 0.9927
+    },
+    {
+      "text": "You",
+      "start_seconds": 81.0,
+      "end_seconds": 82.76,
+      "confidence": 0.4807
+    },
+    {
+      "text": "can",
+      "start_seconds": 82.76,
+      "end_seconds": 83.1,
+      "confidence": 0.9897
+    },
+    {
+      "text": "find",
+      "start_seconds": 83.1,
+      "end_seconds": 83.94,
+      "confidence": 0.9546
+    },
+    {
+      "text": "this",
+      "start_seconds": 83.94,
+      "end_seconds": 88.14,
+      "confidence": 0.6567
+    },
+    {
+      "text": "skill",
+      "start_seconds": 88.14,
+      "end_seconds": 89.34,
+      "confidence": 0.9702
+    },
+    {
+      "text": "and",
+      "start_seconds": 89.34,
+      "end_seconds": 89.64,
+      "confidence": 0.9741
+    },
+    {
+      "text": "other",
+      "start_seconds": 89.64,
+      "end_seconds": 90.42,
+      "confidence": 0.9883
+    },
+    {
+      "text": "useful",
+      "start_seconds": 90.42,
+      "end_seconds": 90.98,
+      "confidence": 0.9897
+    },
+    {
+      "text": "tools",
+      "start_seconds": 90.98,
+      "end_seconds": 91.68,
+      "confidence": 0.9785
+    },
+    {
+      "text": "used",
+      "start_seconds": 91.68,
+      "end_seconds": 92.32,
+      "confidence": 0.7354
+    },
+    {
+      "text": "by",
+      "start_seconds": 92.32,
+      "end_seconds": 92.68,
+      "confidence": 0.999
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 92.68,
+      "end_seconds": 94.4,
+      "confidence": 0.9419
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 94.4,
+      "end_seconds": 96.12,
+      "confidence": 0.9741
+    },
+    {
+      "text": "for",
+      "start_seconds": 96.12,
+      "end_seconds": 97.4,
+      "confidence": 0.9619
+    },
+    {
+      "text": "free",
+      "start_seconds": 97.4,
+      "end_seconds": 98.44,
+      "confidence": 0.9292
+    },
+    {
+      "text": "on",
+      "start_seconds": 98.44,
+      "end_seconds": 99.2,
+      "confidence": 0.9873
+    },
+    {
+      "text": "my",
+      "start_seconds": 99.2,
+      "end_seconds": 99.42,
+      "confidence": 0.9917
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 99.42,
+      "end_seconds": 100.44,
+      "confidence": 0.7537
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 100.44,
+      "end_seconds": 101.02,
+      "confidence": 0.9678
+    },
+    {
+      "text": "You",
+      "start_seconds": 102.62,
+      "end_seconds": 103.76,
+      "confidence": 0.0006
+    },
+    {
+      "text": "can",
+      "start_seconds": 103.76,
+      "end_seconds": 104.52,
+      "confidence": 0.9834
+    },
+    {
+      "text": "find",
+      "start_seconds": 104.52,
+      "end_seconds": 104.66,
+      "confidence": 0.9019
+    },
+    {
+      "text": "this",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.9561
+    },
+    {
+      "text": "skill",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.998
+    },
+    {
+      "text": "and",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.9893
+    },
+    {
+      "text": "other",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.9995
+    },
+    {
+      "text": "useful",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.999
+    },
+    {
+      "text": "tools",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.999
+    },
+    {
+      "text": "used",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.9985
+    },
+    {
+      "text": "by",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.999
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.9956
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.999
+    },
+    {
+      "text": "for",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.998
+    },
+    {
+      "text": "free",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.9976
+    },
+    {
+      "text": "on",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.9951
+    },
+    {
+      "text": "my",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.9946
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.9973
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.9995
+    },
+    {
+      "text": "You",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.4954
+    },
+    {
+      "text": "can",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.9995
+    },
+    {
+      "text": "find",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.998
+    },
+    {
+      "text": "this",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.999
+    },
+    {
+      "text": "skill",
+      "start_seconds": 104.66,
+      "end_seconds": 104.66,
+      "confidence": 0.9995
+    },
+    {
+      "text": "and",
+      "start_seconds": 104.66,
+      "end_seconds": 104.7,
+      "confidence": 0.999
+    },
+    {
+      "text": "other",
+      "start_seconds": 104.7,
+      "end_seconds": 104.7,
+      "confidence": 1.0
+    },
+    {
+      "text": "useful",
+      "start_seconds": 104.7,
+      "end_seconds": 104.7,
+      "confidence": 0.9995
+    },
+    {
+      "text": "tools",
+      "start_seconds": 104.7,
+      "end_seconds": 104.72,
+      "confidence": 0.9995
+    },
+    {
+      "text": "used",
+      "start_seconds": 104.72,
+      "end_seconds": 104.72,
+      "confidence": 0.999
+    },
+    {
+      "text": "by",
+      "start_seconds": 104.72,
+      "end_seconds": 104.72,
+      "confidence": 0.9995
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 104.72,
+      "end_seconds": 104.72,
+      "confidence": 0.9985
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 104.72,
+      "end_seconds": 104.72,
+      "confidence": 0.9995
+    },
+    {
+      "text": "for",
+      "start_seconds": 104.72,
+      "end_seconds": 104.72,
+      "confidence": 0.9995
+    },
+    {
+      "text": "free",
+      "start_seconds": 104.72,
+      "end_seconds": 104.72,
+      "confidence": 0.9995
+    },
+    {
+      "text": "on",
+      "start_seconds": 104.72,
+      "end_seconds": 104.72,
+      "confidence": 0.9995
+    },
+    {
+      "text": "my",
+      "start_seconds": 104.72,
+      "end_seconds": 104.72,
+      "confidence": 1.0
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 104.72,
+      "end_seconds": 104.72,
+      "confidence": 0.9995
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 104.72,
+      "end_seconds": 104.72,
+      "confidence": 1.0
+    },
+    {
+      "text": "You",
+      "start_seconds": 104.72,
+      "end_seconds": 104.72,
+      "confidence": 0.6445
+    },
+    {
+      "text": "can",
+      "start_seconds": 104.72,
+      "end_seconds": 104.72,
+      "confidence": 0.9995
+    },
+    {
+      "text": "find",
+      "start_seconds": 104.72,
+      "end_seconds": 105.22,
+      "confidence": 0.999
+    },
+    {
+      "text": "this",
+      "start_seconds": 105.22,
+      "end_seconds": 105.28,
+      "confidence": 0.999
+    },
+    {
+      "text": "skill",
+      "start_seconds": 105.28,
+      "end_seconds": 105.28,
+      "confidence": 0.9995
+    },
+    {
+      "text": "and",
+      "start_seconds": 105.28,
+      "end_seconds": 105.36,
+      "confidence": 0.9985
+    },
+    {
+      "text": "other",
+      "start_seconds": 105.36,
+      "end_seconds": 105.76,
+      "confidence": 1.0
+    },
+    {
+      "text": "useful",
+      "start_seconds": 105.76,
+      "end_seconds": 105.92,
+      "confidence": 0.9995
+    },
+    {
+      "text": "tools",
+      "start_seconds": 105.92,
+      "end_seconds": 106.26,
+      "confidence": 0.9995
+    },
+    {
+      "text": "used",
+      "start_seconds": 106.26,
+      "end_seconds": 106.62,
+      "confidence": 0.999
+    },
+    {
+      "text": "by",
+      "start_seconds": 106.62,
+      "end_seconds": 107.1,
+      "confidence": 0.9995
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 107.1,
+      "end_seconds": 107.58,
+      "confidence": 0.9985
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 107.58,
+      "end_seconds": 108.38,
+      "confidence": 0.9995
+    },
+    {
+      "text": "for",
+      "start_seconds": 108.38,
+      "end_seconds": 109.54,
+      "confidence": 0.9995
+    },
+    {
+      "text": "free",
+      "start_seconds": 109.54,
+      "end_seconds": 109.54,
+      "confidence": 0.9995
+    },
+    {
+      "text": "on",
+      "start_seconds": 109.54,
+      "end_seconds": 109.54,
+      "confidence": 0.9995
+    },
+    {
+      "text": "my",
+      "start_seconds": 109.54,
+      "end_seconds": 109.54,
+      "confidence": 1.0
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 109.54,
+      "end_seconds": 110.92,
+      "confidence": 0.9993
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 110.92,
+      "end_seconds": 110.98,
+      "confidence": 1.0
+    },
+    {
+      "text": "You",
+      "start_seconds": 111.0,
+      "end_seconds": 111.26,
+      "confidence": 0.0028
+    },
+    {
+      "text": "can",
+      "start_seconds": 111.26,
+      "end_seconds": 111.58,
+      "confidence": 0.6152
+    },
+    {
+      "text": "find",
+      "start_seconds": 111.58,
+      "end_seconds": 112.32,
+      "confidence": 0.0027
+    },
+    {
+      "text": "this",
+      "start_seconds": 112.32,
+      "end_seconds": 112.32,
+      "confidence": 0.0659
+    },
+    {
+      "text": "skill",
+      "start_seconds": 112.32,
+      "end_seconds": 112.46,
+      "confidence": 0.0006
+    },
+    {
+      "text": "and",
+      "start_seconds": 112.46,
+      "end_seconds": 112.46,
+      "confidence": 0.0352
+    },
+    {
+      "text": "other",
+      "start_seconds": 112.46,
+      "end_seconds": 112.46,
+      "confidence": 0.012
+    },
+    {
+      "text": "useful",
+      "start_seconds": 112.46,
+      "end_seconds": 112.8,
+      "confidence": 0.0362
+    },
+    {
+      "text": "tools",
+      "start_seconds": 112.8,
+      "end_seconds": 112.8,
+      "confidence": 0.0829
+    },
+    {
+      "text": "used",
+      "start_seconds": 112.8,
+      "end_seconds": 112.8,
+      "confidence": 0.0016
+    },
+    {
+      "text": "by",
+      "start_seconds": 112.8,
+      "end_seconds": 112.8,
+      "confidence": 0.0715
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 112.8,
+      "end_seconds": 112.8,
+      "confidence": 0.0005
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 112.8,
+      "end_seconds": 112.8,
+      "confidence": 0.0005
+    },
+    {
+      "text": "for",
+      "start_seconds": 112.8,
+      "end_seconds": 112.8,
+      "confidence": 0.0101
+    },
+    {
+      "text": "free",
+      "start_seconds": 112.8,
+      "end_seconds": 112.8,
+      "confidence": 0.006
+    },
+    {
+      "text": "on",
+      "start_seconds": 112.8,
+      "end_seconds": 112.8,
+      "confidence": 0.0745
+    },
+    {
+      "text": "my",
+      "start_seconds": 112.8,
+      "end_seconds": 112.8,
+      "confidence": 0.0249
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 112.8,
+      "end_seconds": 113.56,
+      "confidence": 0.3967
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 113.56,
+      "end_seconds": 113.8,
+      "confidence": 0.0654
+    },
+    {
+      "text": "You",
+      "start_seconds": 114.6,
+      "end_seconds": 115.24,
+      "confidence": 0.0817
+    },
+    {
+      "text": "can",
+      "start_seconds": 115.24,
+      "end_seconds": 115.62,
+      "confidence": 0.8398
+    },
+    {
+      "text": "find",
+      "start_seconds": 115.62,
+      "end_seconds": 116.86,
+      "confidence": 0.0723
+    },
+    {
+      "text": "this",
+      "start_seconds": 116.86,
+      "end_seconds": 117.5,
+      "confidence": 0.3975
+    },
+    {
+      "text": "skill",
+      "start_seconds": 117.5,
+      "end_seconds": 117.82,
+      "confidence": 0.8989
+    },
+    {
+      "text": "and",
+      "start_seconds": 117.82,
+      "end_seconds": 118.86,
+      "confidence": 0.9722
+    },
+    {
+      "text": "other",
+      "start_seconds": 118.86,
+      "end_seconds": 119.1,
+      "confidence": 0.9985
+    },
+    {
+      "text": "useful",
+      "start_seconds": 119.1,
+      "end_seconds": 119.3,
+      "confidence": 0.9795
+    },
+    {
+      "text": "tools",
+      "start_seconds": 119.3,
+      "end_seconds": 119.3,
+      "confidence": 0.9946
+    },
+    {
+      "text": "used",
+      "start_seconds": 119.3,
+      "end_seconds": 119.5,
+      "confidence": 0.9902
+    },
+    {
+      "text": "by",
+      "start_seconds": 119.5,
+      "end_seconds": 119.86,
+      "confidence": 0.9941
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 119.86,
+      "end_seconds": 119.86,
+      "confidence": 0.9692
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 119.86,
+      "end_seconds": 119.86,
+      "confidence": 0.9976
+    },
+    {
+      "text": "for",
+      "start_seconds": 119.86,
+      "end_seconds": 119.86,
+      "confidence": 0.9976
+    },
+    {
+      "text": "free",
+      "start_seconds": 119.86,
+      "end_seconds": 119.86,
+      "confidence": 0.9995
+    },
+    {
+      "text": "on",
+      "start_seconds": 119.86,
+      "end_seconds": 119.92,
+      "confidence": 0.999
+    },
+    {
+      "text": "my",
+      "start_seconds": 119.92,
+      "end_seconds": 121.42,
+      "confidence": 0.999
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 121.42,
+      "end_seconds": 121.46,
+      "confidence": 0.9988
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 121.46,
+      "end_seconds": 121.46,
+      "confidence": 1.0
+    },
+    {
+      "text": "You",
+      "start_seconds": 121.46,
+      "end_seconds": 121.52,
+      "confidence": 0.6675
+    },
+    {
+      "text": "can",
+      "start_seconds": 121.52,
+      "end_seconds": 121.78,
+      "confidence": 0.998
+    },
+    {
+      "text": "find",
+      "start_seconds": 121.78,
+      "end_seconds": 122.0,
+      "confidence": 0.9868
+    },
+    {
+      "text": "this",
+      "start_seconds": 122.0,
+      "end_seconds": 122.0,
+      "confidence": 0.9995
+    },
+    {
+      "text": "skill",
+      "start_seconds": 122.0,
+      "end_seconds": 122.16,
+      "confidence": 0.9985
+    },
+    {
+      "text": "and",
+      "start_seconds": 122.16,
+      "end_seconds": 122.3,
+      "confidence": 0.999
+    },
+    {
+      "text": "other",
+      "start_seconds": 122.3,
+      "end_seconds": 122.98,
+      "confidence": 1.0
+    },
+    {
+      "text": "useful",
+      "start_seconds": 122.98,
+      "end_seconds": 123.84,
+      "confidence": 0.9961
+    },
+    {
+      "text": "tools",
+      "start_seconds": 123.84,
+      "end_seconds": 124.2,
+      "confidence": 0.9985
+    },
+    {
+      "text": "used",
+      "start_seconds": 124.2,
+      "end_seconds": 124.44,
+      "confidence": 0.9985
+    },
+    {
+      "text": "by",
+      "start_seconds": 124.44,
+      "end_seconds": 124.7,
+      "confidence": 0.9985
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 124.7,
+      "end_seconds": 124.7,
+      "confidence": 0.9756
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 124.7,
+      "end_seconds": 124.7,
+      "confidence": 0.9976
+    },
+    {
+      "text": "for",
+      "start_seconds": 124.7,
+      "end_seconds": 124.7,
+      "confidence": 0.9995
+    },
+    {
+      "text": "free",
+      "start_seconds": 124.7,
+      "end_seconds": 124.7,
+      "confidence": 0.9995
+    },
+    {
+      "text": "on",
+      "start_seconds": 124.7,
+      "end_seconds": 125.34,
+      "confidence": 1.0
+    },
+    {
+      "text": "my",
+      "start_seconds": 125.34,
+      "end_seconds": 125.92,
+      "confidence": 0.9995
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 125.92,
+      "end_seconds": 126.42,
+      "confidence": 0.9993
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 1.0
+    },
+    {
+      "text": "You",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.731
+    },
+    {
+      "text": "can",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.9937
+    },
+    {
+      "text": "find",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.9492
+    },
+    {
+      "text": "this",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.9995
+    },
+    {
+      "text": "skill",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.998
+    },
+    {
+      "text": "and",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.999
+    },
+    {
+      "text": "other",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 1.0
+    },
+    {
+      "text": "useful",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.9956
+    },
+    {
+      "text": "tools",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.999
+    },
+    {
+      "text": "used",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.998
+    },
+    {
+      "text": "by",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.999
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.9858
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.9971
+    },
+    {
+      "text": "for",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 1.0
+    },
+    {
+      "text": "free",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.9995
+    },
+    {
+      "text": "on",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 1.0
+    },
+    {
+      "text": "my",
+      "start_seconds": 126.42,
+      "end_seconds": 126.42,
+      "confidence": 0.9995
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 126.42,
+      "end_seconds": 128.3,
+      "confidence": 0.9995
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 128.3,
+      "end_seconds": 128.3,
+      "confidence": 1.0
+    },
+    {
+      "text": "You",
+      "start_seconds": 128.94,
+      "end_seconds": 129.58,
+      "confidence": 0.8896
+    },
+    {
+      "text": "can",
+      "start_seconds": 129.58,
+      "end_seconds": 129.82,
+      "confidence": 0.9971
+    },
+    {
+      "text": "find",
+      "start_seconds": 129.82,
+      "end_seconds": 129.92,
+      "confidence": 0.9663
+    },
+    {
+      "text": "this",
+      "start_seconds": 129.92,
+      "end_seconds": 129.92,
+      "confidence": 0.9995
+    },
+    {
+      "text": "skill",
+      "start_seconds": 129.92,
+      "end_seconds": 130.36,
+      "confidence": 0.998
+    },
+    {
+      "text": "and",
+      "start_seconds": 130.36,
+      "end_seconds": 130.58,
+      "confidence": 0.9985
+    },
+    {
+      "text": "other",
+      "start_seconds": 130.58,
+      "end_seconds": 130.58,
+      "confidence": 1.0
+    },
+    {
+      "text": "useful",
+      "start_seconds": 130.58,
+      "end_seconds": 130.58,
+      "confidence": 0.9946
+    },
+    {
+      "text": "tools",
+      "start_seconds": 130.58,
+      "end_seconds": 130.58,
+      "confidence": 0.999
+    },
+    {
+      "text": "used",
+      "start_seconds": 130.58,
+      "end_seconds": 130.98,
+      "confidence": 0.9966
+    },
+    {
+      "text": "by",
+      "start_seconds": 130.98,
+      "end_seconds": 131.3,
+      "confidence": 0.999
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 131.3,
+      "end_seconds": 131.3,
+      "confidence": 0.9888
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 131.3,
+      "end_seconds": 131.3,
+      "confidence": 0.9976
+    },
+    {
+      "text": "for",
+      "start_seconds": 131.3,
+      "end_seconds": 131.3,
+      "confidence": 0.9995
+    },
+    {
+      "text": "free",
+      "start_seconds": 131.3,
+      "end_seconds": 131.3,
+      "confidence": 0.9995
+    },
+    {
+      "text": "on",
+      "start_seconds": 131.3,
+      "end_seconds": 131.3,
+      "confidence": 1.0
+    },
+    {
+      "text": "my",
+      "start_seconds": 131.3,
+      "end_seconds": 131.3,
+      "confidence": 1.0
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 131.3,
+      "end_seconds": 131.3,
+      "confidence": 0.9995
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 131.3,
+      "end_seconds": 131.3,
+      "confidence": 0.9995
+    },
+    {
+      "text": "You",
+      "start_seconds": 131.3,
+      "end_seconds": 131.3,
+      "confidence": 0.9536
+    },
+    {
+      "text": "can",
+      "start_seconds": 131.3,
+      "end_seconds": 131.76,
+      "confidence": 0.999
+    },
+    {
+      "text": "find",
+      "start_seconds": 131.76,
+      "end_seconds": 131.76,
+      "confidence": 0.9917
+    },
+    {
+      "text": "this",
+      "start_seconds": 131.76,
+      "end_seconds": 131.82,
+      "confidence": 1.0
+    },
+    {
+      "text": "skill",
+      "start_seconds": 131.82,
+      "end_seconds": 131.82,
+      "confidence": 0.9985
+    },
+    {
+      "text": "and",
+      "start_seconds": 131.82,
+      "end_seconds": 131.82,
+      "confidence": 0.9985
+    },
+    {
+      "text": "other",
+      "start_seconds": 131.82,
+      "end_seconds": 131.84,
+      "confidence": 1.0
+    },
+    {
+      "text": "useful",
+      "start_seconds": 131.84,
+      "end_seconds": 131.84,
+      "confidence": 0.9956
+    },
+    {
+      "text": "tools",
+      "start_seconds": 131.84,
+      "end_seconds": 131.84,
+      "confidence": 0.9985
+    },
+    {
+      "text": "used",
+      "start_seconds": 131.84,
+      "end_seconds": 131.84,
+      "confidence": 0.9956
+    },
+    {
+      "text": "by",
+      "start_seconds": 131.84,
+      "end_seconds": 131.84,
+      "confidence": 0.9995
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 131.84,
+      "end_seconds": 133.02,
+      "confidence": 0.9893
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9971
+    },
+    {
+      "text": "for",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 1.0
+    },
+    {
+      "text": "free",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9995
+    },
+    {
+      "text": "on",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 1.0
+    },
+    {
+      "text": "my",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 1.0
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9995
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9995
+    },
+    {
+      "text": "You",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9761
+    },
+    {
+      "text": "can",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9995
+    },
+    {
+      "text": "find",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9971
+    },
+    {
+      "text": "this",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 1.0
+    },
+    {
+      "text": "skill",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.999
+    },
+    {
+      "text": "and",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9985
+    },
+    {
+      "text": "other",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 1.0
+    },
+    {
+      "text": "useful",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9956
+    },
+    {
+      "text": "tools",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9985
+    },
+    {
+      "text": "used",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9932
+    },
+    {
+      "text": "by",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.999
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9858
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.998
+    },
+    {
+      "text": "for",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9995
+    },
+    {
+      "text": "free",
+      "start_seconds": 133.02,
+      "end_seconds": 133.02,
+      "confidence": 0.9995
+    },
+    {
+      "text": "on",
+      "start_seconds": 133.02,
+      "end_seconds": 133.8,
+      "confidence": 1.0
+    },
+    {
+      "text": "my",
+      "start_seconds": 133.8,
+      "end_seconds": 133.8,
+      "confidence": 1.0
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 133.8,
+      "end_seconds": 134.94,
+      "confidence": 0.9995
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 134.94,
+      "end_seconds": 135.22,
+      "confidence": 0.9995
+    },
+    {
+      "text": "You",
+      "start_seconds": 135.7,
+      "end_seconds": 136.12,
+      "confidence": 0.979
+    },
+    {
+      "text": "can",
+      "start_seconds": 136.12,
+      "end_seconds": 137.7,
+      "confidence": 0.9995
+    },
+    {
+      "text": "find",
+      "start_seconds": 137.7,
+      "end_seconds": 137.7,
+      "confidence": 0.9985
+    },
+    {
+      "text": "this",
+      "start_seconds": 137.7,
+      "end_seconds": 137.7,
+      "confidence": 1.0
+    },
+    {
+      "text": "skill",
+      "start_seconds": 137.7,
+      "end_seconds": 137.94,
+      "confidence": 0.999
+    },
+    {
+      "text": "and",
+      "start_seconds": 137.94,
+      "end_seconds": 137.94,
+      "confidence": 0.9985
+    },
+    {
+      "text": "other",
+      "start_seconds": 137.94,
+      "end_seconds": 137.94,
+      "confidence": 1.0
+    },
+    {
+      "text": "useful",
+      "start_seconds": 137.94,
+      "end_seconds": 137.94,
+      "confidence": 0.9961
+    },
+    {
+      "text": "tools",
+      "start_seconds": 137.94,
+      "end_seconds": 138.06,
+      "confidence": 0.9985
+    },
+    {
+      "text": "used",
+      "start_seconds": 138.06,
+      "end_seconds": 138.44,
+      "confidence": 0.9941
+    },
+    {
+      "text": "by",
+      "start_seconds": 138.44,
+      "end_seconds": 138.7,
+      "confidence": 0.999
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 138.7,
+      "end_seconds": 138.9,
+      "confidence": 0.9844
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 138.9,
+      "end_seconds": 138.98,
+      "confidence": 0.9985
+    },
+    {
+      "text": "for",
+      "start_seconds": 138.98,
+      "end_seconds": 138.98,
+      "confidence": 0.9995
+    },
+    {
+      "text": "free",
+      "start_seconds": 138.98,
+      "end_seconds": 138.98,
+      "confidence": 0.9995
+    },
+    {
+      "text": "on",
+      "start_seconds": 138.98,
+      "end_seconds": 138.98,
+      "confidence": 1.0
+    },
+    {
+      "text": "my",
+      "start_seconds": 138.98,
+      "end_seconds": 139.16,
+      "confidence": 0.9995
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 139.16,
+      "end_seconds": 139.5,
+      "confidence": 0.9993
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 139.5,
+      "end_seconds": 139.86,
+      "confidence": 0.9995
+    },
+    {
+      "text": "You",
+      "start_seconds": 139.86,
+      "end_seconds": 142.54,
+      "confidence": 0.0159
+    },
+    {
+      "text": "can",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.1337
+    },
+    {
+      "text": "find",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.019
+    },
+    {
+      "text": "this",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.103
+    },
+    {
+      "text": "skill",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.0001
+    },
+    {
+      "text": "and",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.0621
+    },
+    {
+      "text": "other",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.1974
+    },
+    {
+      "text": "useful",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.0065
+    },
+    {
+      "text": "tools",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.098
+    },
+    {
+      "text": "used",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.001
+    },
+    {
+      "text": "by",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.037
+    },
+    {
+      "text": "experienced",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.0076
+    },
+    {
+      "text": "engineers",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.0015
+    },
+    {
+      "text": "for",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.0044
+    },
+    {
+      "text": "free",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.0277
+    },
+    {
+      "text": "on",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.1561
+    },
+    {
+      "text": "my",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.0067
+    },
+    {
+      "text": "Telegram",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.2683
+    },
+    {
+      "text": "channel.",
+      "start_seconds": 142.54,
+      "end_seconds": 142.54,
+      "confidence": 0.1398
+    }
+  ],
+  "silences": [
+    {
+      "start_seconds": 0.0,
+      "end_seconds": 0.580854
+    },
+    {
+      "start_seconds": 1.878437,
+      "end_seconds": 2.443208
+    },
+    {
+      "start_seconds": 3.515687,
+      "end_seconds": 4.949708
+    },
+    {
+      "start_seconds": 6.634896,
+      "end_seconds": 7.136417
+    },
+    {
+      "start_seconds": 7.948708,
+      "end_seconds": 8.658729
+    },
+    {
+      "start_seconds": 8.896229,
+      "end_seconds": 9.457833
+    },
+    {
+      "start_seconds": 11.591792,
+      "end_seconds": 13.395333
+    },
+    {
+      "start_seconds": 13.908083,
+      "end_seconds": 14.414833
+    },
+    {
+      "start_seconds": 16.295896,
+      "end_seconds": 17.001896
+    },
+    {
+      "start_seconds": 17.732563,
+      "end_seconds": 18.311583
+    },
+    {
+      "start_seconds": 18.780167,
+      "end_seconds": 19.441042
+    },
+    {
+      "start_seconds": 19.772833,
+      "end_seconds": 20.524354
+    },
+    {
+      "start_seconds": 21.797792,
+      "end_seconds": 22.966271
+    },
+    {
+      "start_seconds": 24.011792,
+      "end_seconds": 24.930083
+    },
+    {
+      "start_seconds": 25.511021,
+      "end_seconds": 26.142563
+    },
+    {
+      "start_seconds": 26.676312,
+      "end_seconds": 27.217271
+    },
+    {
+      "start_seconds": 27.461792,
+      "end_seconds": 29.604604
+    },
+    {
+      "start_seconds": 30.35,
+      "end_seconds": 31.095208
+    },
+    {
+      "start_seconds": 31.309417,
+      "end_seconds": 32.247187
+    },
+    {
+      "start_seconds": 32.634917,
+      "end_seconds": 33.183896
+    },
+    {
+      "start_seconds": 33.766104,
+      "end_seconds": 35.363917
+    },
+    {
+      "start_seconds": 35.995396,
+      "end_seconds": 36.651354
+    },
+    {
+      "start_seconds": 37.09975,
+      "end_seconds": 38.060625
+    },
+    {
+      "start_seconds": 38.812646,
+      "end_seconds": 39.356146
+    },
+    {
+      "start_seconds": 40.350875,
+      "end_seconds": 40.999646
+    },
+    {
+      "start_seconds": 41.282875,
+      "end_seconds": 42.983125
+    },
+    {
+      "start_seconds": 44.380562,
+      "end_seconds": 46.938396
+    },
+    {
+      "start_seconds": 47.418958,
+      "end_seconds": 48.194208
+    },
+    {
+      "start_seconds": 48.843792,
+      "end_seconds": 50.031542
+    },
+    {
+      "start_seconds": 53.778375,
+      "end_seconds": 55.235625
+    },
+    {
+      "start_seconds": 56.247875,
+      "end_seconds": 57.510104
+    },
+    {
+      "start_seconds": 60.761,
+      "end_seconds": 61.632292
+    },
+    {
+      "start_seconds": 62.15675,
+      "end_seconds": 63.221562
+    },
+    {
+      "start_seconds": 63.716542,
+      "end_seconds": 65.188167
+    },
+    {
+      "start_seconds": 66.875187,
+      "end_seconds": 67.699771
+    },
+    {
+      "start_seconds": 68.489125,
+      "end_seconds": 69.728813
+    },
+    {
+      "start_seconds": 71.057896,
+      "end_seconds": 71.9165
+    },
+    {
+      "start_seconds": 72.203688,
+      "end_seconds": 72.749792
+    },
+    {
+      "start_seconds": 73.938583,
+      "end_seconds": 74.665896
+    },
+    {
+      "start_seconds": 76.956354,
+      "end_seconds": 77.560917
+    },
+    {
+      "start_seconds": 77.838208,
+      "end_seconds": 78.401687
+    },
+    {
+      "start_seconds": 79.082792,
+      "end_seconds": 79.978854
+    },
+    {
+      "start_seconds": 80.713,
+      "end_seconds": 82.690167
+    },
+    {
+      "start_seconds": 86.189646,
+      "end_seconds": 86.835562
+    },
+    {
+      "start_seconds": 87.662333,
+      "end_seconds": 88.176333
+    },
+    {
+      "start_seconds": 88.344562,
+      "end_seconds": 89.215042
+    },
+    {
+      "start_seconds": 89.719562,
+      "end_seconds": 90.231062
+    },
+    {
+      "start_seconds": 91.595375,
+      "end_seconds": 92.2225
+    },
+    {
+      "start_seconds": 92.910083,
+      "end_seconds": 93.658312
+    },
+    {
+      "start_seconds": 94.741333,
+      "end_seconds": 95.712312
+    },
+    {
+      "start_seconds": 96.303458,
+      "end_seconds": 97.353062
+    },
+    {
+      "start_seconds": 97.546354,
+      "end_seconds": 98.250979
+    },
+    {
+      "start_seconds": 98.571937,
+      "end_seconds": 99.111271
+    },
+    {
+      "start_seconds": 99.488104,
+      "end_seconds": 100.069542
+    },
+    {
+      "start_seconds": 101.128292,
+      "end_seconds": 103.279417
+    },
+    {
+      "start_seconds": 103.894271,
+      "end_seconds": 104.998167
+    },
+    {
+      "start_seconds": 106.587688,
+      "end_seconds": 107.166333
+    },
+    {
+      "start_seconds": 110.726562,
+      "end_seconds": 111.328583
+    },
+    {
+      "start_seconds": 113.916438,
+      "end_seconds": 115.107812
+    },
+    {
+      "start_seconds": 120.216938,
+      "end_seconds": 121.718437
+    },
+    {
+      "start_seconds": 124.382458,
+      "end_seconds": 125.642437
+    },
+    {
+      "start_seconds": 126.321292,
+      "end_seconds": 128.347062
+    },
+    {
+      "start_seconds": 128.835208,
+      "end_seconds": 129.758542
+    },
+    {
+      "start_seconds": 130.765854,
+      "end_seconds": 131.374542
+    },
+    {
+      "start_seconds": 132.679958,
+      "end_seconds": 134.632104
+    },
+    {
+      "start_seconds": 135.87875,
+      "end_seconds": 137.469896
+    },
+    {
+      "start_seconds": 139.921771,
+      "end_seconds": 142.570667
+    }
+  ],
+  "fingerprint": "0f5d1ee9bbe2f6d97d6b1d5e73c4dc645b61a2908db0387efe3c089d53474d2c"
+}
