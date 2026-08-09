@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Windows bridge for the agent: exposes exactly two Windows folders to WSL.
+#
+# The paths are fixed in this file on purpose. The script takes no path argument,
+# so the NOPASSWD sudoers rule that allows it cannot be bent into mounting
+# anything else on the Windows drive.
+#
+# Installed as root:root 0755 — writable only by root, otherwise anyone able to
+# edit it would inherit the NOPASSWD rule.
+
+set -euo pipefail
+
+RAW_WIN='C:\raw'
+XML_WIN='C:\xml'
+RAW_DIR=/mnt/win-raw
+XML_DIR=/mnt/win-xml
+
+# The account the agent runs as; drvfs has no real ownership of its own.
+OWNER_UID=1000
+OWNER_GID=1000
+
+die() { echo "win-bridge: $*" >&2; exit 1; }
+
+do_mount() {
+	mkdir -p "$RAW_DIR" "$XML_DIR"
+
+	# Raw footage is read-only: the agent reads .mp4/.txt from here and can
+	# never write back over the originals.
+	findmnt -M "$RAW_DIR" >/dev/null ||
+		mount -t drvfs "$RAW_WIN" "$RAW_DIR" -o ro,uid="$OWNER_UID",gid="$OWNER_GID",noatime
+
+	# The XML folder is where results go back to Windows, so it is writable.
+	findmnt -M "$XML_DIR" >/dev/null ||
+		mount -t drvfs "$XML_WIN" "$XML_DIR" -o rw,uid="$OWNER_UID",gid="$OWNER_GID",noatime
+
+	do_status
+}
+
+do_umount() {
+	# cd out first, or a shell sitting inside the mount makes it busy.
+	findmnt -M "$RAW_DIR" >/dev/null && umount "$RAW_DIR"
+	findmnt -M "$XML_DIR" >/dev/null && umount "$XML_DIR"
+	echo "win-bridge: down"
+}
+
+do_status() {
+	findmnt -no TARGET,SOURCE,OPTIONS "$RAW_DIR" || echo "$RAW_DIR: not mounted"
+	findmnt -no TARGET,SOURCE,OPTIONS "$XML_DIR" || echo "$XML_DIR: not mounted"
+}
+
+case "${1-}" in
+	mount) do_mount ;;
+	umount | down) do_umount ;;
+	status) do_status ;;
+	*) die "usage: win-bridge {mount|umount|status}" ;;
+esac
