@@ -20,6 +20,7 @@ from roughcut.plan import build_plan
 from roughcut.render import render_fcp7
 from roughcut.report import render_report
 from roughcut.script import ScriptLine, read_script
+from roughcut.splice import SpliceSettings
 
 DEFAULT_OUT_DIR = Path("out")
 ANALYSIS_SUFFIX = ".analysis.json"
@@ -49,7 +50,14 @@ def _cut(args: argparse.Namespace) -> int:
     script = read_script(Path(args.script))
     run = _analysis_run(args, recording)
     _report_analysis(run, _analysis_path(args, recording))
-    _write_cut(run.analysis, script, Path(args.out_dir), _pauses(args), _off_script(args))
+    _write_cut(
+        run.analysis,
+        script,
+        Path(args.out_dir),
+        _pauses(args),
+        _off_script(args),
+        _splice(args),
+    )
     return 0
 
 
@@ -62,6 +70,7 @@ def _render(args: argparse.Namespace) -> int:
         Path(args.out_dir),
         _pauses(args),
         _off_script(args),
+        _splice(args),
     )
     return 0
 
@@ -99,6 +108,11 @@ def _pauses(args: argparse.Namespace) -> PauseSettings:
     )
 
 
+def _splice(args: argparse.Namespace) -> SpliceSettings:
+    """How much of the quiet either side of a splice this run keeps."""
+    return SpliceSettings(padding_seconds=args.splice_padding_seconds)
+
+
 def _off_script(args: argparse.Namespace) -> OffScriptSettings:
     """What this run removes without asking, as asked for on the command line.
 
@@ -127,8 +141,9 @@ def _write_cut(
     out_dir: Path,
     pauses: PauseSettings,
     off_script: OffScriptSettings,
+    splice: SpliceSettings,
 ) -> None:
-    plan = build_plan(analysis, script, pauses, off_script)
+    plan = build_plan(analysis, script, pauses, off_script, splice)
     stem = Path(analysis.source.filename).stem
     report = render_report(analysis, script, plan)
     _write(out_dir / f"{stem}.xml", render_fcp7(plan))
@@ -165,6 +180,7 @@ def _parser() -> argparse.ArgumentParser:
             _output_options(),
             _media_options(),
             _pause_options(),
+            _splice_options(),
             _off_script_options(),
         ],
         help="Analyze, plan and render: the whole tool.",
@@ -175,7 +191,12 @@ def _parser() -> argparse.ArgumentParser:
 
     render = commands.add_parser(
         "render",
-        parents=[_output_options(), _pause_options(), _off_script_options()],
+        parents=[
+            _output_options(),
+            _pause_options(),
+            _splice_options(),
+            _off_script_options(),
+        ],
         help="Plan and render from an existing analysis, touching no media.",
     )
     render.add_argument("analysis", help="An analysis artifact written by `analyze` or `cut`.")
@@ -221,6 +242,27 @@ def _pause_options() -> argparse.ArgumentParser:
         type=float,
         default=defaults.padding_seconds,
         help="Quiet kept either side of a shortened pause, so that speech is not clipped.",
+    )
+    return options
+
+
+def _splice_options() -> argparse.ArgumentParser:
+    """How much of the quiet either side of every splice the cut keeps.
+
+    Its own option rather than a second use of `--pause-padding-seconds`: that one
+    holds a cut *inside* the quiet and this one extends a clip *into* it, so one number
+    meaning both could be tuned for neither.
+    """
+    defaults = SpliceSettings()
+    options = argparse.ArgumentParser(add_help=False)
+    options.add_argument(
+        "--splice-padding-seconds",
+        type=float,
+        default=defaults.padding_seconds,
+        help=(
+            "Quiet kept either side of every splice, so that a word's last consonant "
+            "still plays. Only ever taken from quiet the detector heard."
+        ),
     )
     return options
 

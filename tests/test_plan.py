@@ -17,7 +17,7 @@ from conftest import (
     spoken,
 )
 
-from roughcut.analysis import Analysis, Silence, SourceMedia, Word
+from roughcut.analysis import Analysis, SourceMedia, Word
 from roughcut.offscript import OffScriptSettings
 from roughcut.plan import (
     ALTERNATES,
@@ -35,7 +35,14 @@ from roughcut.script import ScriptLine
 
 
 def analysis(words: list[Word], source: SourceMedia = FIXTURE_SOURCE) -> Analysis:
-    return Analysis(source=source, words=words, silences=[Silence(4.5, 6.0)])
+    """A recording the detector heard no quiet in.
+
+    Not because a real one is like that, but because quiet is what moves a splice: a
+    fixture with silence between its lines pads every clip in the file, and each
+    assertion below would then be about two things at once. Where the quiet goes is
+    `test_splice.py`'s subject, and shortening it is `test_pauses.py`'s.
+    """
+    return Analysis(source=source, words=words, silences=[])
 
 
 def cut_of(words: list[Word], script: list[ScriptLine] | None = None) -> Sequence:

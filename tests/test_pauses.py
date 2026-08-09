@@ -8,7 +8,7 @@ The gaps between lines are a different thing entirely and are already gone: the 
 is butt-spliced, so only a pause *inside* a kept line has anything to shorten.
 """
 
-from conftest import FIXTURE_SOURCE, LINE_1, LINE_2, SCRIPT, spoken
+from conftest import FIXTURE_SOURCE, LINE_1, LINE_2, SCRIPT, cut_times, spoken
 
 from roughcut.analysis import Analysis, Silence, Word
 from roughcut.pauses import PauseSettings
@@ -38,18 +38,6 @@ def plan_for(
 ) -> Plan:
     analysis = Analysis(source=FIXTURE_SOURCE, words=words, silences=silences)
     return build_plan(analysis, script or ONE_LINE, settings or PauseSettings())
-
-
-def cut_times(plan: Plan) -> list[tuple[float, float, float]]:
-    """Every clip as source in, source out and timeline start, to the millisecond."""
-    return [
-        (
-            round(clip.source_in_seconds, 3),
-            round(clip.source_out_seconds, 3),
-            round(clip.timeline_start_seconds, 3),
-        )
-        for clip in rough_cut(plan).clips
-    ]
 
 
 def test_a_long_pause_is_shortened_to_the_floor_rather_than_closed() -> None:
@@ -121,11 +109,11 @@ def test_a_pause_before_the_very_last_word_is_shortened_like_any_other() -> None
 
 
 def test_quiet_before_the_first_word_and_after_the_last_is_not_a_pause_to_shorten() -> None:
-    # There are no two words either side of it, so there is no gap — and the clip
-    # starts at the line's first word and ends at its last in any case.
+    # There are no two words either side of it, so there is no gap to collapse. What
+    # happens to that quiet instead is the splice pad taking a tenth and a half of it.
     plan = plan_for(spoken(LINE_1, at=2.0), [Silence(0.0, 2.0), Silence(6.5, 10.0)])
 
-    assert cut_times(plan) == [(2.0, 6.5, 0.0)]
+    assert cut_times(plan) == [(1.85, 6.65, 0.0)]
     assert plan.shortened == []
 
 
@@ -165,12 +153,13 @@ def test_a_marker_after_a_shortened_pause_moves_with_the_words_it_names() -> Non
 
 
 def test_a_pause_in_the_dead_air_between_two_lines_is_not_shortened_but_removed() -> None:
-    # Nothing to collapse: the splice already takes the whole of it out.
+    # Nothing to collapse: the splice already takes the whole of it out, bar the pad
+    # each line keeps of the quiet on its own side.
     plan = plan_for(
         spoken(LINE_1, at=0.0) + spoken(LINE_2, at=8.0),
         [Silence(4.5, 8.0)],
         script=SCRIPT[:2],
     )
 
-    assert cut_times(plan) == [(0.0, 4.5, 0.0), (8.0, 12.5, 4.5)]
+    assert cut_times(plan) == [(0.0, 4.65, 0.0), (7.85, 12.5, 4.65)]
     assert plan.shortened == []

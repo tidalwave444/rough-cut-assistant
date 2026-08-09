@@ -1,6 +1,7 @@
 import pytest
 
 from roughcut.analysis import SourceMedia, Word
+from roughcut.plan import Plan, rough_cut
 from roughcut.script import ScriptLine
 
 WORD_SECONDS = 0.5
@@ -59,6 +60,23 @@ def retakes(*attempts: str) -> list[Word]:
     for index, attempt in enumerate(attempts):
         words += spoken(attempt, at=6.0 + index * 7.0)
     return words + spoken(LINE_3, at=6.0 + len(attempts) * 7.0)
+
+
+def cut_times(plan: Plan) -> list[tuple[float, float, float]]:
+    """Every clip as source in, source out and timeline start, to the millisecond.
+
+    The whole of what a cut *is*, said in one line per clip: which piece of the
+    recording plays, and when. Rounded because the arithmetic that placed a clip is
+    free to reach the same time by a different route.
+    """
+    return [
+        (
+            round(clip.source_in_seconds, 3),
+            round(clip.source_out_seconds, 3),
+            round(clip.timeline_start_seconds, 3),
+        )
+        for clip in rough_cut(plan).clips
+    ]
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:

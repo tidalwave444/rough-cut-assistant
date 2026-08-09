@@ -1,8 +1,8 @@
 Rough cut — sequence.mp4
 
 Source duration    00:01:26.250
-Output duration    00:01:15.712
-Removed            00:00:10.538
+Output duration    00:01:16.162
+Removed            00:00:10.088
 Words transcribed  163
 Script lines       8
 Lines found        8
@@ -29,9 +29,9 @@ Line  Source         Timeline       Script
    3  00:00:12.280   00:00:11.192   In the previous video, we set up the project. Now, before we start the implementation, we’ll use a skill to fully analyze the website idea.
    4  00:00:26.120   00:00:25.032   You can get useful resources like this, along with tools used by top engineers, for free on my Telegram channel.
    5  00:00:39.560   00:00:38.472   Here, it asks us everything about the website: what it is about, who it is for, and which tech stack we need.
-   6  00:00:56.840   00:00:54.032   The best part of this skill is that it turns the interview results into a clear implementation plan.
-   7  00:01:10.000   00:01:07.192   Then, it starts building the project based on that plan.
-   8  00:01:15.080   00:01:12.272   The next part is coming soon.
+   6  00:00:56.690   00:00:54.182   The best part of this skill is that it turns the interview results into a clear implementation plan.
+   7  00:01:10.000   00:01:07.492   Then, it starts building the project based on that plan.
+   8  00:01:15.080   00:01:12.572   The next part is coming soon.
 
 Every take considered
 

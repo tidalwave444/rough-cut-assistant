@@ -12,6 +12,7 @@ from roughcut.analysis import Analysis, SourceMedia
 from roughcut.offscript import OffScript, OffScriptSettings, judge
 from roughcut.pauses import Pause, PauseSettings, Tightened, pauses_to_shorten, tighten
 from roughcut.script import ScriptLine, beats
+from roughcut.splice import Span, SpliceSettings, widen
 from roughcut.takes import Chosen, Take, choose
 
 ROUGH_CUT = "RoughCut"
@@ -149,6 +150,7 @@ def build_plan(
     script: list[ScriptLine],
     pauses: PauseSettings = PauseSettings(),
     off_script: OffScriptSettings = OffScriptSettings(),
+    splice: SpliceSettings = SpliceSettings(),
 ) -> Plan:
     """Decide the cut: one clip per script line, spliced in the order they are written.
 
@@ -166,6 +168,10 @@ def build_plan(
     list. Anything else stays where it was said with a marker on it, because a line you
     improvised and meant must never disappear without your seeing it.
 
+    Everything that plays is widened into the quiet either side of it before it becomes
+    a clip, because a word goes on sounding after the transcriber has stopped
+    recognising it and a splice on the timestamp lands on top of the last consonant.
+
     Every reading the cut passed over is laid end to end in a second sequence beside
     it, so that overruling a choice takes seconds. It is always emitted, even when
     nothing lost: one import gives both sequences, and an alternates timeline that is
@@ -173,9 +179,18 @@ def build_plan(
     """
     alignment = align(analysis.words, script)
     regions = judge(alignment.leftovers, off_script)
-    placed = _placed(
-        alignment.spoken,
+    ordered = _in_order(
+        [(line, choose(line.takes)) for line in alignment.spoken],
         [region for region in regions if region.kept],
+    )
+    placed = _placed(
+        ordered,
+        widen(
+            [_span_of(item) for item in ordered],
+            analysis.silences,
+            analysis.source.duration_seconds,
+            splice,
+        ),
         pauses_to_shorten(analysis.words, analysis.silences, pauses),
     )
     lines = [item for item in placed if isinstance(item, PlacedLine)]
@@ -208,13 +223,24 @@ def build_plan(
     )
 
 
-def _placed(spoken: list[SpokenLine], kept: list[OffScript], pauses: list[Pause]) -> list[Placed]:
-    """Lay the cut out: the script in written order, each kept region where it was said."""
+_Reading = tuple[SpokenLine, Chosen]
+"""One script line and the decision about which reading of it plays."""
+
+
+def _placed(
+    ordered: list[_Reading | OffScript], spans: list[Span], pauses: list[Pause]
+) -> list[Placed]:
+    """Lay the cut out: each piece on the end of the last, in the order it plays.
+
+    The spans are what each piece takes from the recording once it has been padded, so
+    they are what the pauses are then taken out of and what the timeline is measured
+    from — the padding is part of the cut and not a flourish added to it afterwards.
+    """
     placed: list[Placed] = []
     timeline = 0.0
-    for item in _in_order([(line, choose(line.takes)) for line in spoken], kept):
+    for item, span in zip(ordered, spans, strict=True):
+        tightened = tighten(span.start_seconds, span.end_seconds, pauses)
         if isinstance(item, OffScript):
-            tightened = tighten(item.start_seconds, item.end_seconds, pauses)
             placed.append(
                 PlacedOffScript(
                     off_script=item,
@@ -224,7 +250,6 @@ def _placed(spoken: list[SpokenLine], kept: list[OffScript], pauses: list[Pause]
             )
         else:
             line, chosen = item
-            tightened = tighten(chosen.take.start_seconds, chosen.take.end_seconds, pauses)
             placed.append(
                 PlacedLine(
                     line=line.line,
@@ -237,7 +262,12 @@ def _placed(spoken: list[SpokenLine], kept: list[OffScript], pauses: list[Pause]
     return placed
 
 
-_Reading = tuple[SpokenLine, Chosen]
+def _span_of(item: _Reading | OffScript) -> Span:
+    """The stretch of the recording a piece was spoken in, before any padding."""
+    if isinstance(item, OffScript):
+        return Span(item.start_seconds, item.end_seconds)
+    _, chosen = item
+    return Span(chosen.take.start_seconds, chosen.take.end_seconds)
 
 
 def _in_order(readings: list[_Reading], kept: list[OffScript]) -> list[_Reading | OffScript]:

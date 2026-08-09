@@ -3,7 +3,7 @@
 <xmeml version="4">
   <sequence id="sequence-1">
     <name>RoughCut</name>
-    <duration>4543</duration>
+    <duration>4570</duration>
     <rate>
       <timebase>60</timebase>
       <ntsc>FALSE</ntsc>
@@ -211,9 +211,9 @@
               <ntsc>FALSE</ntsc>
             </rate>
             <start>2308</start>
-            <end>3242</end>
+            <end>3251</end>
             <in>2374</in>
-            <out>3308</out>
+            <out>3317</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -229,9 +229,9 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>3242</start>
-            <end>4031</end>
-            <in>3410</in>
+            <start>3251</start>
+            <end>4049</end>
+            <in>3401</in>
             <out>4199</out>
             <file id="file-1"/>
             <sourcetrack>
@@ -248,8 +248,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>4031</start>
-            <end>4336</end>
+            <start>4049</start>
+            <end>4354</end>
             <in>4200</in>
             <out>4505</out>
             <file id="file-1"/>
@@ -267,10 +267,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>4336</start>
-            <end>4543</end>
+            <start>4354</start>
+            <end>4570</end>
             <in>4505</in>
-            <out>4712</out>
+            <out>4721</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -325,19 +325,19 @@
     <marker>
       <name>Line 6</name>
       <comment>The best part of this skill is that it turns the interview results into a clear implementation plan.</comment>
-      <in>3242</in>
+      <in>3260</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 7</name>
       <comment>Then, it starts building the project based on that plan.</comment>
-      <in>4031</in>
+      <in>4049</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 8</name>
       <comment>The next part is coming soon.</comment>
-      <in>4336</in>
+      <in>4354</in>
       <out>-1</out>
     </marker>
   </sequence>

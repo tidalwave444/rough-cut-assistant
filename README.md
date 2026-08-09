@@ -67,6 +67,13 @@ in one run. They decide the plan rather than the analysis, so `render` takes the
 and trying a different floor costs no transcription. The report says what each pause
 gave up.
 
+Every splice keeps 0.15 s of the quiet either side of it, because a word goes on
+sounding after the transcriber has stopped recognising it and a cut on the timestamp
+lands on the last consonant. The pad is only ever taken from quiet the detector heard,
+and two pieces either side of one gap split it rather than both claiming it, so nothing
+is played twice. `--splice-padding-seconds` sets it — its own number rather than the
+pause pad's, which does the opposite job of holding a cut inside the quiet.
+
 Import the XML into Premiere and relink the clip once when prompted — the XML
 references the recording by bare filename, so it arrives offline by design.
 

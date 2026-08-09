@@ -18,7 +18,13 @@ CLEAN_READ = clean_read()
 
 
 def analysis(words: list[Word]) -> Analysis:
-    return Analysis(source=FIXTURE_SOURCE, words=words, silences=[Silence(4.5, 6.0)])
+    """A recording the detector heard no quiet in — so no clip is padded or shortened.
+
+    The report is a pure function of the plan, so what it says about a cut is the same
+    whatever moved the cut's edges. Leaving the quiet out keeps the times below the
+    round numbers the fixtures were written with.
+    """
+    return Analysis(source=FIXTURE_SOURCE, words=words, silences=[])
 
 
 def report_for(words: list[Word]) -> str:

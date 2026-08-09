@@ -87,8 +87,9 @@ def test_rendering_an_analysis_writes_a_sequence_and_a_report(
     sequence = ET.parse(out / "sequence.xml").getroot().find("sequence")
     assert sequence is not None
     assert sequence.findtext("name") == "RoughCut"
-    # Two lines, 1.5s and 0.6s of speech, spliced: 2.1s is 126 frames at 60fps.
-    assert sequence.findtext("duration") == "126"
+    # Two lines, 1.5s and 0.6s of speech, spliced, with 0.15s of the quiet between them
+    # kept either side of the splice: 2.4s is 144 frames at 60fps.
+    assert sequence.findtext("duration") == "144"
     assert [marker.findtext("name") for marker in sequence.findall("marker")] == [
         "Line 1",
         "Line 2",
@@ -195,6 +196,18 @@ def test_the_pause_padding_is_a_command_line_option(
     assert padded == "210"
 
 
+def test_the_splice_padding_is_a_command_line_option(
+    analysis: Path, script: Path, tmp_path: Path
+) -> None:
+    # Two seconds of quiet sit between the two lines, so the pad is never the thing
+    # that runs out: the cut grows by twice whatever is asked for.
+    default = rendered_frames(analysis, script, tmp_path / "a")
+    wider = rendered_frames(analysis, script, tmp_path / "b", "--splice-padding-seconds", "0.25")
+    none = rendered_frames(analysis, script, tmp_path / "c", "--splice-padding-seconds", "0")
+
+    assert (default, wider, none) == ("144", "156", "126")
+
+
 def test_how_long_an_off_script_region_must_run_to_survive_is_an_option(
     analysis: Path, one_line: Path, tmp_path: Path
 ) -> None:
@@ -205,7 +218,7 @@ def test_how_long_an_off_script_region_must_run_to_survive_is_an_option(
         analysis, one_line, tmp_path / "b", "--off-script-keep-seconds", "0.5"
     )
 
-    assert (dropped, kept) == ("90", "126")
+    assert (dropped, kept) == ("99", "144")
 
 
 def test_the_stop_phrase_list_is_a_command_line_option(
@@ -223,7 +236,7 @@ def test_the_stop_phrase_list_is_a_command_line_option(
         "the end",
     )
 
-    assert silenced == "90"
+    assert silenced == "99"
 
 
 def test_the_report_is_printed_as_well_as_written(
