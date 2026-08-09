@@ -1,37 +1,40 @@
 Rough cut — sequence.mp4
 
 Source duration    00:01:26.250
-Output duration    00:01:16.162
-Removed            00:00:10.088
+Output duration    00:01:12.758
+Removed            00:00:13.492
 Words transcribed  163
 Script lines       8
 Lines found        8
 Lines not found    0
 Takes considered   8
 Lines flagged      0
-Pauses shortened   1
+Pauses shortened   7
 Off-script kept    0
 Off-script cut     1
 
 One clip per script line, spliced in the order the script writes them — so the
-dead air between lines is gone, while a long pause inside a line is shortened to
-a beat rather than closed. Where a line was read more than once the last complete
-reading plays, and every reading passed over is laid end to end in the alternates
-sequence beside the cut. Anything said that the script does not account for goes
-only if it is short, an abandoned attempt at the line beside it, or on the
-stop-phrase list; anything else stays where it was said, marked as off-script.
+dead air between lines is gone, and so is the quiet at either end of what plays,
+while a long silence inside a line is shortened to a beat rather than closed. The
+quiet is heard rather than read: it is where the room went silent, which is not
+where the transcript ran out of words. Where a line was read more than once the
+last complete reading plays, and every reading passed over is laid end to end in
+the alternates sequence beside the cut. Anything said that the script does not
+account for goes only if it is short, an abandoned attempt at the line beside it,
+or on the stop-phrase list; anything else stays where it was said, marked as
+off-script.
 
 Where each line was found
 
 Line  Source         Timeline       Script
    1  00:00:00.000   00:00:00.000   Building a real project with vibe coding — Part 2.
    2  00:00:03.640   00:00:03.640   By the end, we’ll build a website like this.
-   3  00:00:12.280   00:00:11.192   In the previous video, we set up the project. Now, before we start the implementation, we’ll use a skill to fully analyze the website idea.
-   4  00:00:26.120   00:00:25.032   You can get useful resources like this, along with tools used by top engineers, for free on my Telegram channel.
-   5  00:00:39.560   00:00:38.472   Here, it asks us everything about the website: what it is about, who it is for, and which tech stack we need.
-   6  00:00:56.690   00:00:54.182   The best part of this skill is that it turns the interview results into a clear implementation plan.
-   7  00:01:10.000   00:01:07.492   Then, it starts building the project based on that plan.
-   8  00:01:15.080   00:01:12.572   The next part is coming soon.
+   3  00:00:12.280   00:00:10.901   In the previous video, we set up the project. Now, before we start the implementation, we’ll use a skill to fully analyze the website idea.
+   4  00:00:26.120   00:00:24.064   You can get useful resources like this, along with tools used by top engineers, for free on my Telegram channel.
+   5  00:00:39.560   00:00:37.504   Here, it asks us everything about the website: what it is about, who it is for, and which tech stack we need.
+   6  00:00:56.690   00:00:51.973   The best part of this skill is that it turns the interview results into a clear implementation plan.
+   7  00:01:10.000   00:01:04.845   Then, it starts building the project based on that plan.
+   8  00:01:15.080   00:01:09.925   The next part is coming soon.
 
 Every take considered
 
@@ -48,7 +51,13 @@ Line  Take  Source         Coverage  Disfluencies  Outcome
 What each pause gave up
 
   At             Was            Now            Removed
-  00:00:06.300   00:00:01.760   00:00:00.672   00:00:01.088
+  00:00:03.838   00:00:00.790   00:00:00.300   00:00:00.490
+  00:00:06.497   00:00:01.188   00:00:00.300   00:00:00.888
+  00:00:18.466   00:00:00.977   00:00:00.300   00:00:00.677
+  00:00:42.676   00:00:00.980   00:00:00.300   00:00:00.680
+  00:00:47.019   00:00:00.861   00:00:00.300   00:00:00.561
+  00:01:02.327   00:00:00.738   00:00:00.300   00:00:00.438
+  00:01:15.304   00:00:01.057   00:00:00.300   00:00:00.757
 
 Off-script material
 

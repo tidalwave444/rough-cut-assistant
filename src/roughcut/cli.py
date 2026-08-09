@@ -229,7 +229,10 @@ def _pause_options() -> argparse.ArgumentParser:
         "--pause-threshold-seconds",
         type=float,
         default=defaults.threshold_seconds,
-        help="A gap between words longer than this is shortened. Shorter ones are kept.",
+        help=(
+            "A stretch of detected quiet longer than this is shortened. Shorter ones "
+            "are kept as they were recorded."
+        ),
     )
     options.add_argument(
         "--pause-floor-seconds",
@@ -241,7 +244,11 @@ def _pause_options() -> argparse.ArgumentParser:
         "--pause-padding-seconds",
         type=float,
         default=defaults.padding_seconds,
-        help="Quiet kept either side of a shortened pause, so that speech is not clipped.",
+        help=(
+            "Quiet kept either side of a collapse, inside the region it takes time "
+            "out of. What is left of a region is whichever is longer, the floor or "
+            "twice this."
+        ),
     )
     return options
 

@@ -29,12 +29,15 @@ NOWHERE = "—"
 
 HOW_THE_CUT_WAS_MADE = (
     "One clip per script line, spliced in the order the script writes them — so the\n"
-    "dead air between lines is gone, while a long pause inside a line is shortened to\n"
-    "a beat rather than closed. Where a line was read more than once the last complete\n"
-    "reading plays, and every reading passed over is laid end to end in the alternates\n"
-    "sequence beside the cut. Anything said that the script does not account for goes\n"
-    "only if it is short, an abandoned attempt at the line beside it, or on the\n"
-    "stop-phrase list; anything else stays where it was said, marked as off-script."
+    "dead air between lines is gone, and so is the quiet at either end of what plays,\n"
+    "while a long silence inside a line is shortened to a beat rather than closed. The\n"
+    "quiet is heard rather than read: it is where the room went silent, which is not\n"
+    "where the transcript ran out of words. Where a line was read more than once the\n"
+    "last complete reading plays, and every reading passed over is laid end to end in\n"
+    "the alternates sequence beside the cut. Anything said that the script does not\n"
+    "account for goes only if it is short, an abandoned attempt at the line beside it,\n"
+    "or on the stop-phrase list; anything else stays where it was said, marked as\n"
+    "off-script."
 )
 
 
@@ -160,6 +163,8 @@ def _which_lines_are_poor(flagged: list[PlacedLine]) -> list[str]:
 def _what_each_pause_gave_up(pauses: list[Pause]) -> list[str]:
     """Every pause the cut took time out of — where it was, and how much came out.
 
+    A pause is a stretch of detected quiet, so that is what the row describes: where
+    the room went quiet, how long it stayed quiet, and how long it stays quiet now.
     Both the old length and the new one, because the question this answers is whether
     the cut is too tight, and "1.7 s removed" does not say what is left.
     """
@@ -173,8 +178,8 @@ def _what_each_pause_gave_up(pauses: list[Pause]) -> list[str]:
     ]
     for pause in pauses:
         rows.append(
-            f"  {_duration(pause.gap_start_seconds).ljust(TIME_WIDTH)}"
-            f"{_duration(pause.gap_seconds).ljust(TIME_WIDTH)}"
+            f"  {_duration(pause.quiet_start_seconds).ljust(TIME_WIDTH)}"
+            f"{_duration(pause.quiet_seconds).ljust(TIME_WIDTH)}"
             f"{_duration(pause.remaining_seconds).ljust(TIME_WIDTH)}"
             f"{_duration(pause.removed_seconds)}"
         )

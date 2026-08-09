@@ -1,31 +1,41 @@
-"""Pause collapsing: a cut that is tighter than the recording without being breathless.
+"""Pause collapsing: a cut as tight as the room actually was.
 
-A long gap between two words is *shortened, never closed*. That is a product decision
-rather than an implementation shortcut: a read with every pause removed sounds
-machine-gunned, and putting the pacing back afterwards means re-trimming every edit
-point by hand — far more work than trimming a little further.
+A long stretch of quiet is *shortened, never closed*. That is a product decision rather
+than an implementation shortcut: a read with every pause removed sounds machine-gunned,
+and putting the pacing back afterwards means re-trimming every edit point by hand — far
+more work than trimming a little further.
 
-Where the cut lands is decided by the audio, not by the transcript. A transcript gap
-says roughly where nothing was said; a silence region says where nothing was heard.
-So an eligible gap gives up only the part of it a silence corroborates, padded away
-from the words either side and centred in the quiet, which leaves a breath on both
-sides of the splice. A gap no silence corroborates is left exactly as it was spoken.
+Where the quiet is, is the detector's question and not the transcriber's. A pause is a
+detected silence region, and the words are not consulted at all: the transcriber leaves
+almost no gap between two words, stretching a word over the pause that follows it
+instead, so the quiet sits *underneath* the words rather than between them. A cut may
+therefore fall inside a word's declared span — see ADR-0001, which is also why the pad
+below matters: it is what keeps a collapse off audible sound, since the word claiming
+that time no longer says anything about where sound is.
+
+Quiet at the head or the tail of a stretch that plays is not collapsed but removed in
+full. A floor is a beat held between two words, which is not what sits on the outside
+of a splice. That is `splice.py`'s to do, because it decides where a clip's edges land
+and this decides what comes out from between them.
 """
 
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from roughcut.analysis import Silence, Word
+from roughcut.analysis import Silence
 
 # Long enough that shortening it is worth an edit point; short enough that the dead
 # air between two attempts never survives. Tuned for a quiet room and a scripted read.
 DEFAULT_THRESHOLD_SECONDS = 0.7
 
-# What a shortened gap becomes. A beat, not nothing.
+# What a shortened pause becomes. A beat, not nothing.
 DEFAULT_FLOOR_SECONDS = 0.3
 
 # Kept either side of every cut, inside the silence. A word's first consonant starts
 # below the detector's threshold, so a cut placed at the edge of the quiet clips it.
+# The floor keeps more than this and so is what usually decides where the cut falls:
+# the pad is the rail underneath, and it binds only where the floor is set below twice
+# it — a cut that centres in the quiet is already half a floor from either edge.
 DEFAULT_PADDING_SECONDS = 0.05
 
 
@@ -40,21 +50,21 @@ class PauseSettings:
 
 @dataclass(frozen=True)
 class Pause:
-    """A gap between two words, and the piece of it the cut takes out.
+    """A stretch of quiet, and the piece of it the cut takes out.
 
-    The gap is what was spoken; the cut is what is removed from inside the silence
-    that corroborates it. They differ by the floor — plus whatever the quiet was too
-    short to give up.
+    What is left of the quiet is the floor, or twice the pad where that is longer —
+    the pad being the rail that stops a collapse reaching the edge of the region and
+    the sound waiting on the other side of it.
     """
 
-    gap_start_seconds: float
-    gap_end_seconds: float
+    quiet_start_seconds: float
+    quiet_end_seconds: float
     cut_start_seconds: float
     cut_end_seconds: float
 
     @property
-    def gap_seconds(self) -> float:
-        return self.gap_end_seconds - self.gap_start_seconds
+    def quiet_seconds(self) -> float:
+        return self.quiet_end_seconds - self.quiet_start_seconds
 
     @property
     def removed_seconds(self) -> float:
@@ -62,71 +72,46 @@ class Pause:
 
     @property
     def remaining_seconds(self) -> float:
-        """How long the pause still lasts in the cut — the floor, or more."""
-        return self.gap_seconds - self.removed_seconds
+        """How long the quiet still lasts in the cut — the floor, or more."""
+        return self.quiet_seconds - self.removed_seconds
 
 
 def pauses_to_shorten(
-    words: Sequence[Word],
     silences: Sequence[Silence],
     settings: PauseSettings = PauseSettings(),
 ) -> list[Pause]:
-    """Every gap in this recording that is both long enough and audibly quiet.
+    """Every stretch of quiet in this recording long enough to be worth an edit point.
 
-    Only gaps between consecutive words are considered, so the quiet before the first
-    word and after the last is not a pause: there is nothing on one side of it to
-    shorten towards.
+    Every region of the whole recording, including the dead air between attempts: what
+    survives to be collapsed is decided later, by which of them fall inside a stretch
+    the cut plays. Dead air between two takes needs no collapsing, because the splice
+    removes the whole of it.
     """
-    found = []
-    for before, after in zip(words, words[1:]):
-        pause = _shortened(before.end_seconds, after.start_seconds, silences, settings)
-        if pause is not None:
-            found.append(pause)
-    return found
+    found = (_shortened(silence, settings) for silence in silences)
+    return [pause for pause in found if pause is not None]
 
 
-def _shortened(
-    gap_start: float, gap_end: float, silences: Sequence[Silence], settings: PauseSettings
-) -> Pause | None:
-    """What this gap gives up, or None if it keeps all of it."""
-    if gap_end - gap_start <= settings.threshold_seconds:
+def _shortened(silence: Silence, settings: PauseSettings) -> Pause | None:
+    """What this stretch of quiet gives up, or None if it keeps all of it.
+
+    The cut is centred, so what is left sits half either side of the splice: the beat
+    is held where it was heard rather than shunted to one end of the region. Which is
+    also why the pad rarely decides anything — half the floor is already more than a
+    pad — so it is written as the second of two bars rather than as an inset.
+    """
+    quiet = silence.end_seconds - silence.start_seconds
+    if quiet <= settings.threshold_seconds:
         return None
-    quiet = _longest_quiet(gap_start, gap_end, silences, settings.padding_seconds)
-    if quiet is None:
-        return None
-    start, end = quiet
-    removed = min(gap_end - gap_start - settings.floor_seconds, end - start)
+    stays = max(settings.floor_seconds, 2 * settings.padding_seconds)
+    removed = quiet - stays
     if removed <= 0:
         return None
-    middle = (start + end) / 2
-    return Pause(gap_start, gap_end, middle - removed / 2, middle + removed / 2)
-
-
-def _longest_quiet(
-    gap_start: float, gap_end: float, silences: Sequence[Silence], padding: float
-) -> tuple[float, float] | None:
-    """The longest stretch of corroborated quiet within this gap, padded off the words.
-
-    Each silence is clipped to the gap before it is padded, so a region that runs into
-    the words either side — as one does, since a last consonant fades below the
-    detector's threshold — can never place a cut inside a word.
-
-    One region, even where several overlap the gap: a gap the detector heard as two
-    stretches of quiet with something audible between them can only give up one of
-    them, because taking both would cut away whatever was said in the middle. Such a
-    gap therefore lands short of the floor, which is the conservative direction.
-    """
-    windows = [
-        (
-            max(silence.start_seconds, gap_start) + padding,
-            min(silence.end_seconds, gap_end) - padding,
-        )
-        for silence in silences
-    ]
-    return max(
-        (window for window in windows if window[1] > window[0]),
-        key=lambda window: window[1] - window[0],
-        default=None,
+    middle = (silence.start_seconds + silence.end_seconds) / 2
+    return Pause(
+        quiet_start_seconds=silence.start_seconds,
+        quiet_end_seconds=silence.end_seconds,
+        cut_start_seconds=middle - removed / 2,
+        cut_end_seconds=middle + removed / 2,
     )
 
 
@@ -171,6 +156,9 @@ class Tightened:
 
         A moment inside a cut lands on the splice rather than in the hole where the
         silence used to be, so nothing is ever placed at a time that no longer exists.
+        A moment outside the stretch altogether lands on the nearer end of it, for the
+        same reason: a stretch begins where sound begins, which can be later than the
+        transcriber declared its first word to start.
         """
         offset = source_seconds - self.start_seconds
         for pause in self.pauses:
@@ -178,7 +166,7 @@ class Tightened:
                 offset -= pause.removed_seconds
             elif source_seconds > pause.cut_start_seconds:
                 offset -= source_seconds - pause.cut_start_seconds
-        return offset
+        return min(max(offset, 0.0), self.duration_seconds)
 
 
 def tighten(start_seconds: float, end_seconds: float, pauses: Sequence[Pause]) -> Tightened:
@@ -193,6 +181,7 @@ def tighten(start_seconds: float, end_seconds: float, pauses: Sequence[Pause]) -
         pauses=tuple(
             pause
             for pause in pauses
-            if start_seconds <= pause.gap_start_seconds and pause.gap_end_seconds <= end_seconds
+            if start_seconds <= pause.quiet_start_seconds
+            and pause.quiet_end_seconds <= end_seconds
         ),
     )

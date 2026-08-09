@@ -12,7 +12,7 @@ from roughcut.analysis import Analysis, SourceMedia
 from roughcut.offscript import OffScript, OffScriptSettings, judge
 from roughcut.pauses import Pause, PauseSettings, Tightened, pauses_to_shorten, tighten
 from roughcut.script import ScriptLine, beats
-from roughcut.splice import Span, SpliceSettings, widen
+from roughcut.splice import Span, SpliceSettings, trimmed_to_sound, widen
 from roughcut.takes import Chosen, Take, choose
 
 ROUGH_CUT = "RoughCut"
@@ -159,9 +159,11 @@ def build_plan(
     line the recording does not contain is skipped and reported; the cut is still
     usable without it.
 
-    The dead air between lines goes entirely, because nothing splices it back in. A
-    long pause *inside* a line is shortened to a floor instead: it is speech the cut
-    keeps, and a read with no pauses left in it is a read nobody wants.
+    The dead air between lines goes entirely, because nothing splices it back in, and
+    so does the quiet at either end of a stretch that plays: it begins where sound
+    begins. A long stretch of quiet *inside* a line is shortened to a floor instead —
+    it is speech the cut keeps, and a read with no pauses left in it is a read nobody
+    wants.
 
     Speech no line accounts for goes only where something says it should — it is short,
     or it is an abandoned attempt at the line beside it, or it is on the stop-phrase
@@ -186,12 +188,12 @@ def build_plan(
     placed = _placed(
         ordered,
         widen(
-            [_span_of(item) for item in ordered],
+            trimmed_to_sound([_span_of(item) for item in ordered], analysis.silences),
             analysis.silences,
             analysis.source.duration_seconds,
             splice,
         ),
-        pauses_to_shorten(analysis.words, analysis.silences, pauses),
+        pauses_to_shorten(analysis.silences, pauses),
     )
     lines = [item for item in placed if isinstance(item, PlacedLine)]
     return Plan(
@@ -218,7 +220,7 @@ def build_plan(
         off_script=regions,
         shortened=sorted(
             (pause for item in placed for pause in item.tightened.pauses),
-            key=lambda pause: pause.gap_start_seconds,
+            key=lambda pause: pause.quiet_start_seconds,
         ),
     )
 
@@ -232,9 +234,10 @@ def _placed(
 ) -> list[Placed]:
     """Lay the cut out: each piece on the end of the last, in the order it plays.
 
-    The spans are what each piece takes from the recording once it has been padded, so
-    they are what the pauses are then taken out of and what the timeline is measured
-    from — the padding is part of the cut and not a flourish added to it afterwards.
+    The spans are what each piece takes from the recording once it has been trimmed to
+    where its sound begins and padded back, so they are what the pauses are then taken
+    out of and what the timeline is measured from — both of those are part of the cut
+    and not flourishes added to it afterwards.
     """
     placed: list[Placed] = []
     timeline = 0.0

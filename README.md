@@ -59,13 +59,16 @@ was kept or cut. `--off-script-keep-seconds`, `--off-script-restart-likeness` an
 `--stop-phrases` move those bars; each of them only ever removes more, and
 `--stop-phrases` with nothing after it turns that rule off.
 
-A long pause *inside* a line is shortened rather than removed: a gap over 0.7 s
-collapses to 0.3 s, and only as far as a detected silence corroborates it, so the read
-still breathes and the cut never lands inside a word. `--pause-threshold-seconds`,
-`--pause-floor-seconds` and `--pause-padding-seconds` tighten or loosen the whole cut
-in one run. They decide the plan rather than the analysis, so `render` takes them too
-and trying a different floor costs no transcription. The report says what each pause
-gave up.
+A long pause *inside* a line is shortened rather than removed: a stretch of detected
+quiet running over 0.7 s collapses to 0.3 s, so the read still breathes. A pause is
+what the detector heard, not what the transcript shows — the transcriber stretches a
+word over the pause that follows it rather than leaving a gap, so the quiet sits
+underneath the words and a cut may land inside a word's declared span (ADR-0001). At
+the head or the tail of a take that quiet is removed in full instead of collapsed: a
+take begins where sound begins. `--pause-threshold-seconds`, `--pause-floor-seconds`
+and `--pause-padding-seconds` tighten or loosen the whole cut in one run. They decide
+the plan rather than the analysis, so `render` takes them too and trying a different
+floor costs no transcription. The report says what each pause gave up.
 
 Every splice keeps 0.15 s of the quiet either side of it, because a word goes on
 sounding after the transcriber has stopped recognising it and a cut on the timestamp

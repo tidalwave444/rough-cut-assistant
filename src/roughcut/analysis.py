@@ -66,9 +66,10 @@ class Word:
 class Silence:
     """A region the audio was quiet through, as heard by the detector.
 
-    Cuts are placed against these rather than against word timings alone: a gap in the
-    transcript says roughly where nothing was said, a silence says where nothing was
-    heard.
+    Cuts are placed against these rather than against the word timings: a gap in the
+    transcript says roughly where nothing was said — and hardly ever appears, since a
+    word is stretched over the pause that follows it — while a silence says where
+    nothing was heard. Where the two disagree the detector wins (ADR-0001).
     """
 
     start_seconds: float

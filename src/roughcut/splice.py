@@ -1,10 +1,17 @@
-"""Padding around every splice: a cut that does not bite the ends off words.
+"""Where every splice lands: a cut that holds the sound and nothing either side of it.
 
-A transcriber's word-end timestamp lands where the word stops being *recognisable*,
-which is earlier than it stops being *audible*: a final consonant fades below the
-threshold and a cut placed on the timestamp lands on top of it. So every piece of the
-recording that plays is widened at both ends before it reaches a clip, and a splice
-sounds like a join rather than a word cut short.
+Each piece of the recording that plays arrives here bounded by word timestamps, and
+leaves bounded by the audio, in two steps. First it is trimmed to where its own sound
+begins and ends, because the transcriber will run a word over the quiet that follows
+it and a take begins where sound begins. Then both ends are widened by a pad, because
+a word-end timestamp lands where the word stops being *recognisable*, which is earlier
+than it stops being *audible*: a final consonant fades below the threshold and a cut
+placed on the timestamp lands on top of it.
+
+The two are one decision made in that order, and only in that order — a pad measured
+from an untrimmed boundary and a trim would be moving the same in-point against each
+other. Trimmed first, the pad is a small step back into quiet from a boundary that is
+already right, and a splice sounds like a join rather than a word cut short.
 
 This is the mirror of a pause cut and asks the audio the same question. Collapsing a
 pause holds the cut **inside** the corroborated quiet; padding a splice extends a clip
@@ -37,11 +44,12 @@ exists to fix. The cost is the other side of the same coin: where the sound besi
 clip belongs to something the cut dropped rather than to its own word, up to a pad's
 width of it plays. The pad is small because that is the bound on how wrong it can be.
 
-And it pads the head and tail of a take, which ADR-0001 says of pause collapsing it
-must not: "a take begins where sound begins", so quiet there is removed in full rather
-than collapsed to a floor. That still holds — a floor is a beat held between two words
-and nothing here restores one. A pad is the same hundredths the ADR already keeps
-around every cut it makes, for the same reason.
+And it pads the head and tail of a take, having just trimmed them — which ADR-0001 says
+of pause collapsing it must not: "a take begins where sound begins", so quiet there is
+removed in full rather than collapsed to a floor. That still holds. The trim is what
+removes it in full; a floor is a beat held between two words and nothing here restores
+one. A pad is the same hundredths the ADR already keeps around every cut it makes, for
+the same reason.
 """
 
 from collections.abc import Sequence
@@ -72,6 +80,61 @@ class Span:
 
     start_seconds: float
     end_seconds: float
+
+
+def trimmed_to_sound(spans: Sequence[Span], silences: Sequence[Silence]) -> list[Span]:
+    """Every span begun where its sound begins and ended where its sound stops.
+
+    A take begins where sound begins (ADR-0001), so quiet at the head or the tail of
+    one comes out in full rather than collapsing to a floor — a floor is a beat held
+    between two words, and the outside of a splice is not that. Where the transcriber
+    declared a word to start before the room stopped being quiet, a span therefore
+    begins inside that word's declared span.
+
+    This runs before `widen` rather than after, so that the trim and the pad do not
+    move the same in-point in opposite directions: the pad is a small step back into
+    quiet, taken from a boundary that is already right.
+    """
+    return [_trimmed(span, silences) for span in spans]
+
+
+def _trimmed(span: Span, silences: Sequence[Silence]) -> Span:
+    """One span with the quiet at either end of it taken off.
+
+    Both ends are held inside the span they came from, so a stretch the detector heard
+    as quiet from end to end shrinks to nothing rather than turning inside out.
+    """
+    start = min(_quiet_runs_until(span.start_seconds, silences), span.end_seconds)
+    return Span(start, max(_quiet_set_in_at(span.end_seconds, silences), start))
+
+
+def _quiet_runs_until(moment: float, silences: Sequence[Silence]) -> float:
+    """Where the quiet covering this moment runs out — the moment itself if none does.
+
+    Quiet that begins exactly on the moment counts, since that is the transcriber and
+    the detector agreeing about where a take's silence starts; quiet that ends there
+    does not, since the sound is already back.
+    """
+    return max(
+        (
+            silence.end_seconds
+            for silence in silences
+            if silence.start_seconds <= moment < silence.end_seconds
+        ),
+        default=moment,
+    )
+
+
+def _quiet_set_in_at(moment: float, silences: Sequence[Silence]) -> float:
+    """Where the quiet covering this moment set in — the moment itself if none does."""
+    return min(
+        (
+            silence.start_seconds
+            for silence in silences
+            if silence.start_seconds < moment <= silence.end_seconds
+        ),
+        default=moment,
+    )
 
 
 def widen(
