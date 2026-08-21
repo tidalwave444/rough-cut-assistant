@@ -15,9 +15,9 @@ is where it is recovered. Anything else is off-script material.
 
 Alignment finds every reading of every line and measures each of them; it does not
 choose between them. What the measurements mean, and which reading therefore plays,
-belongs to `takes`. The same division holds for what is left over: alignment measures
-how much of a leftover is an adjacent line's own words, and `offscript` decides whether
-that makes it a restart worth removing.
+belongs to `takes`. The same division holds for what is left over: alignment names the
+adjacent line a leftover most reads like, and `offscript` measures how much of it is
+attempts at that line and decides whether that makes it a restart worth removing.
 """
 
 from collections.abc import Sequence
@@ -61,15 +61,12 @@ class Leftover:
     end_seconds: float
     text: str
     nearest: ScriptLine | None = None
-    """The adjacent script line this most reads like, if it reads like one at all."""
-    likeness: float = 0.0
-    """How much of what was said here is that line's own words, in order.
+    """The adjacent script line this most reads like, if it reads like one at all.
 
-    Containment, not coverage — the measurement the other way up. An attempt abandoned
-    four words into a twenty-word line holds a fifth of the line and would be nobody's
-    reading of it, but everything it said *was* the line, which is what an abandoned
-    attempt sounds like. Measuring that belongs here, beside the token streams; what it
-    means for a leftover belongs to `offscript`.
+    Naming it is as far as alignment goes. How much of what was said here is that
+    line's own words — containment, the measurement decision 0007 turns the other way
+    up — is asked by `offscript`, which owns the bar that answer is read against and
+    therefore the only place it can be taken at the right grain.
     """
 
     @property
@@ -238,22 +235,23 @@ class _Aligner:
 
     def _leftover(self, run: _Run) -> Leftover:
         """What was said across a run no line claimed, and what it most reads like."""
-        nearest, likeness = self._likeness(run)
         return Leftover(
             start_seconds=self._heard.start_of(run.first),
             end_seconds=self._heard.end_of(run.last),
             text=self._heard.said_between(run.first, run.last),
-            nearest=nearest,
-            likeness=likeness,
+            nearest=self._nearest(run),
         )
 
-    def _likeness(self, run: _Run) -> tuple[ScriptLine | None, float]:
-        """Which line beside this run it most reads like, and how much of it is that line.
+    def _nearest(self, run: _Run) -> ScriptLine | None:
+        """Which line beside this run it most reads like, if it reads like one at all.
 
-        The same matcher the retake pass used, with the fraction taken the other way
-        up: not how much of the line was said, but how much of what was said is the
-        line. That is the reading a run has already failed to be a take of, so it is
-        the only reading left that can name it.
+        Naming the line is alignment's half of the question decision 0007 settles;
+        `offscript` measures how much of the run is that line and decides. The two are
+        split because the measurement is read against a bar the user can move, and a
+        bar cannot reach in here without dragging every off-script setting with it.
+
+        The neighbour is picked on one pass of the same matcher the retake pass used —
+        enough to say which line is even in the running, which is all a name has to do.
 
         Only the lines the run sits *between* are asked — not, as the retake pass also
         asks, every line the spine placed nowhere. A line picked up at the far end of
@@ -263,14 +261,14 @@ class _Aligner:
         """
         heard = self._heard.texts[run.first : run.last + 1]
         if not heard:
-            return None, 0.0
+            return None
         nearest: ScriptLine | None = None
-        likeness = 0.0
+        best = 0.0
         for line in self._between(run.first):
             share = len(matched_pairs(heard, self._tokens[line.number])) / len(heard)
-            if share > likeness:
-                nearest, likeness = line, share
-        return nearest, likeness
+            if share > best:
+                nearest, best = line, share
+        return nearest
 
     def _best_match(self, run: _Run) -> _Match | None:
         """The line this leftover reads as, if it reads as one at all.

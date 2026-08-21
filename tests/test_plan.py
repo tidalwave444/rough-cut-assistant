@@ -310,6 +310,39 @@ def test_a_failed_restart_of_the_line_beside_it_is_dropped() -> None:
     assert plan.off_script[0].reason == "cut — a restart of line 1"
 
 
+def test_one_restart_said_over_and_over_is_still_one_restart() -> None:
+    # The same abandoned attempt three times over, in one region. Measured in a single
+    # pass it scores a third of what one attempt scores — the matcher is monotonic, so
+    # the line's words can be claimed once — and the plainer the restart, the surer it
+    # survived. Measured attempt by attempt it is what it sounds like. Decision 0009.
+    script = [ScriptLine(1, "In the previous video we set up the project and got it running.")]
+    restarted = "In the previous video we set up"
+    words = spoken(" ".join([restarted] * 3), at=0.0) + spoken(
+        f"{restarted} the project and got it running.", at=30.0
+    )
+
+    plan = build_plan(analysis(words), script)
+
+    assert [region.kept for region in plan.off_script] == [False]
+    assert plan.off_script[0].reason == "cut — a restart of line 1"
+
+
+def test_a_restart_with_a_sentence_after_it_is_kept_for_the_sake_of_the_sentence() -> None:
+    # What no attempt at the line accounts for counts against the region, so a restart
+    # someone talked their way out of stays: the sentence is the part that would be lost.
+    script = [ScriptLine(1, "In the previous video we set up the project and got it running.")]
+    words = spoken(
+        "In the previous video we set up, no, hold on, I want to say something else "
+        "here about where all of this is actually going.",
+        at=0.0,
+    ) + spoken("In the previous video we set up the project and got it running.", at=30.0)
+
+    plan = build_plan(analysis(words), script)
+
+    assert [region.kept for region in plan.off_script] == [True]
+    assert plan.off_script[0].reason == "kept — marked in place"
+
+
 def test_an_off_script_region_on_the_stop_phrase_list_is_dropped() -> None:
     plan = build_plan(
         analysis(session_with("Let me try that again, I keep getting this line wrong.")),
