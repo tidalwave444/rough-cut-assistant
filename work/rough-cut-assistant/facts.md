@@ -102,19 +102,69 @@ Note the actual filenames differ from the spec's examples: the recording is `seq
 
 At `-35dB` with a 0.5 s minimum, `ffmpeg silencedetect` finds **29 silent regions**, 8 of them longer than 1 s, the longest 1.91 s. There is substantial material to cut, so the fixture will genuinely exercise pause collapsing.
 
-## The transcription loop in `Sequence 07.mp4` — open, and not yet a ticket
+## The transcription loop in `Sequence 07.mp4` — diagnosed on the GPU, not yet fixed
 
-The committed analysis of the second recording has Whisper looping: from 01:42 to the end it emits "You can find this skill…" twelve times over ~21 s of real speech (10.9 words per second, which is not a rate a person talks at), and the last three script lines are nowhere in the transcript.
+The committed analysis of the second recording has Whisper looping: from 01:42 to the end it emits "You can find this skill…" twelve times over ~21 s of real speech (10.9 words per second, which is not a rate a person talks at), and the last three script lines are nowhere in it.
 
-Alignment behaves correctly on a transcript that is wrong — those three lines genuinely are not in it, and the loop is correctly reported as a retake of line 6. The consequences are visible downstream: 6 of 9 lines located on that recording, and line 6's take is seventeen words at confidence 0.01 hallucinated over 2.65 s of detected silence, which ticket 10's tail trim now cuts to 0.36 s.
+Alignment behaves correctly on a transcript that is wrong — those three lines are genuinely absent from *this transcript*, and the loop is correctly reported as a retake of line 6. The consequences are visible downstream: 6 of 9 lines located on that recording, and line 6's take is seventeen words at confidence 0.01 hallucinated over 2.65 s of detected silence, which ticket 10's tail trim now cuts to 0.36 s.
 
-This is the analysis stage, not alignment. The likely cause is `condition_on_previous_text`, which `faster-whisper` leaves on by default and which is the standard cause of repetition loops; `transcribe()` in `analyze.py` sets `temperature=0.0` and no fallback, which removes the escape hatch the loop would otherwise have. **Neither was diagnosed** — changing decoding settings needs the GPU and a re-run, and it would invalidate every committed analysis fingerprint.
+**The three lines are in the recording.** `condition_on_previous_text=False` alone recovers them: "After answering the questions, the skill turns everything into a detailed development plan. Now we can start building the website step by step without getting lost. In the next part we will begin the inflammation." The loop ate the last 21 s of the file, and with the loop gone the speech is simply there. Nothing about the recording was ever missing; the earlier reading of this section — that the lines were not spoken — was wrong.
 
 `sequence.mp4` has the same defect in miniature: its one off-script region is 0.1 s holding 150 characters of "we're going to go ahead and get started with the first step" three times over.
 
 **It also breaks take selection on that recording.** The loop produces 13 takes of line 6, all scoring 100% coverage because the transcript genuinely repeats the line thirteen times, so recency selects take 13 — a 2.68 s fragment — over take 1, the real 7 s reading. The report explains it and the alternates hold the good take, so overruling costs one drag. Selection is working as designed on a transcript that is wrong.
 
 **The consequence for tuning: no threshold about off-script material has met real material yet.** Both off-script regions across both recordings are loops rather than speech. The 0.1 s one is removed by the duration rule — the right answer for the wrong reason — and the 15.5 s one is line 3 attempted over and over: 61 of its 63 tokens are that line's own words. It was kept until ticket 12, not because it sits close to no adjacent line but because containment was taken across the whole region in one pass, which scored it 0.206 against a bar of 0.8. Measured attempt by attempt it scores 1.000 and goes. So both removal rules that matter are still carried entirely by fixtures, and their thresholds should be expected to move once a recording exists with real restarts in it. Fix the loop before tuning anything against real material.
+
+## What each decoding setting is worth
+
+Measured on `Sequence 07.mp4`, large-v3 / cuda / int8_float16, each row adding to the one above it. "Buried" is audible time inside a word's own declared span — its duration less the quiet the detector hears inside it — summed over words holding more than a second of it. It is the measure of speech the transcriber collapsed rather than wrote down.
+
+| what `transcribe()` was given | words | longest 4-gram repeat | buried | wall clock |
+| --- | --- | --- | --- | --- |
+| as shipped, `temperature=0.0` | 393 | ×13 | 11.8 s | 60 s |
+| `temperature=[0.0 … 1.0]` | 268 | ×6 | 10.8 s | 61 s |
+| `condition_on_previous_text=False` | 162 | ×2 | 12.4 s | 19 s |
+| `chunk_length=10` | 177 | ×2 | 6.2 s | 35 s |
+| the script as `initial_prompt` | 183 | ×2 | 4.9 s | 36 s |
+
+`temperature=0.0` is a single value where `faster-whisper` defaults to a ladder, and passing one disables the fallback loop entirely (`transcribe.py:1432`). `compression_ratio_threshold` and `log_prob_threshold` still fire; there is no higher temperature to retry at, so the bad decode is kept. Every safety net in the library is wired to a re-decode that cannot happen. Separately, at `transcribe.py:1226` a window whose `no_speech_prob` exceeds 0.6 with `avg_logprob` under −1.0 is skipped by `seek += segment_size`, silently — a whole 30 s discarded with nothing recorded to say so.
+
+The artifact keeps none of the evidence. `Word` holds text, start, end and confidence; the segment's `avg_logprob`, `compression_ratio`, `no_speech_prob` and the temperature it settled at are all dropped at `analyze.py:333-340`, so a collapsed segment cannot be told from a real one after the fact. It has to be inferred from word span against detected silence, which is how the table above was built. `confidence` is stored and read by nothing.
+
+## The speech that reaches no word
+
+`Sequence 07` line 1: the word `part` is declared at 3.48–8.64 — 5.16 s for one syllable at confidence 0.22 — and the detector hears 2.63 s of that as quiet, leaving **2.53 s of audible speech with no word against it**.
+
+Cut that stretch out and hand it to the same model on its own, with `language="en"` and nothing else — no prompt, no vocabulary:
+
+| what was transcribed | result |
+| --- | --- |
+| the whole file | `part` |
+| 3.3–9.2 s alone | `oh no white coating part` |
+| 3.3–9.2 s alone, script line as prompt | `Oh, no, vibe coding, part 2.` |
+
+The speech was always recoverable. Whisper cannot see it inside a 30 s window that is mostly silence, and the word-timestamp DTW then stretches the neighbouring word over the gap. **This span survives every decoding setting**, `chunk_length=10` included, where it still reads 3.52–8.34 with 2.50 s buried. Shortening the window halves the buried total across the recording without touching this one.
+
+The operator hears `with vibe co… tuu… oh no… vibe coding` here. The cut keeps the failed attempt and loses the good one, because the stumble rule reads `part` said twice and takes 3.480–10.500 out — and the retake is inside that span, in the part of it no word was ever written for.
+
+## Levers that were tried and did nothing
+
+Each measured against the fixed decoding settings, so that a later run does not pay for them again.
+
+- **`vad_filter=True`** — line 1 vanished from the transcript entirely. Note that `False` is already the library default in `faster-whisper` 1.2.1, so passing it documents intent rather than changing behaviour.
+- **`compute_type="float16"`** — the same transcript to the word on both recordings, at 4.5–5× the wall clock: `sequence.mp4` 24 s → 107 s, `Sequence 07` 34 s → 173 s. The GTX 1650 Ti has 4 GB and large-v3 in fp16 spills. Quantisation was costing nothing.
+- **`loudnorm=I=-16:TP=-1.5:LRA=11`** — `Sequence 07` gains 10.7 dB (mean −31.3 → −20.6). It clears three of the four stretched words but not `part`, which stays 3.48–8.32 with 2.53 s buried at confidence 0.36 rather than 0.24. On `sequence.mp4` buried time gets worse, 7.4 → 8.4 s, and the text is flat to slightly worse. If it is ever adopted anyway, silence detection must keep running on the original: normalisation lifts the noise floor and the −35 dB threshold would no longer mean what it means today.
+- **`highpass=f=80` before `loudnorm`** — identical to the raw file, benefit cancelled.
+- **a generic vocabulary** as `hotwords` or as `initial_prompt` (`"vibe coding, Telegram, tech stack, skill"`) — does not recover `vibe coding`. Only the script line itself did.
+
+So recognition accuracy is not the bottleneck. The model decodes this audio about as well as it can; what it lacks is the phrase, and no amount of precision or level supplies one.
+
+## `vibe` against `wipe` is a matching problem
+
+Both recordings hear `vibe coding` as `wipe coating` or `wipe coding`, and `Sequence 07` hears `real` as `rail`. Alignment compares exactly-equal tokens — `difflib.SequenceMatcher` over the normalised streams from `tokens.py` — so a one-character difference is a total miss. `Sequence 07` line 1 therefore holds 6 of its 9 words, reports 67% coverage and is flagged `least bad — incomplete`, for a take that was read correctly start to finish.
+
+Decision 0002 already says a mishearing stays, and it is right: the audio in the cut is correct today. What the wrong transcript costs is the coverage figure, the false flag, and — on this line — which attempt the stumble rule removes. That is an alignment problem wearing a transcription problem's clothes. See decision 0010.
 
 ## Where the quiet actually sits
 
