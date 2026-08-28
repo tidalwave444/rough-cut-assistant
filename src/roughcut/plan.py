@@ -5,15 +5,22 @@ what the markers say — without knowing anything about the output format. Times
 seconds as floats throughout; conversion to frames happens only in the renderer.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from roughcut.align import SpokenLine, align
-from roughcut.analysis import Analysis, SourceMedia
+from roughcut.analysis import Analysis, Silence, SourceMedia
 from roughcut.stumbles import Stumble, stumbles
 from roughcut.offscript import OffScript, OffScriptSettings, judge
-from roughcut.pauses import Pause, PauseSettings, Tightened, pauses_to_shorten, tighten
+from roughcut.pauses import (
+    Pause,
+    PauseSettings,
+    Tightened,
+    pauses_to_shorten,
+    quiet_left_whole,
+    tighten,
+)
 from roughcut.script import ScriptLine, beats
-from roughcut.splice import Span, SpliceSettings, trimmed_to_sound, widen
+from roughcut.splice import Span, SpliceSettings, bounded_by_sound, trimmed_to_sound, widen
 from roughcut.takes import Chosen, Take, choose
 from roughcut.tokens import Transcript
 
@@ -206,6 +213,8 @@ def build_plan(
         ),
         pauses_to_shorten(analysis.silences, pauses),
         alignment.heard,
+        quiet_left_whole(analysis.silences, pauses),
+        splice,
     )
     lines = [item for item in placed if isinstance(item, PlacedLine)]
     return Plan(
@@ -250,6 +259,8 @@ def _placed(
     spans: list[Span],
     pauses: list[Pause],
     heard: Transcript,
+    left_whole: list[Silence],
+    splice: SpliceSettings,
 ) -> list[Placed]:
     """Lay the cut out: each piece on the end of the last, in the order it plays.
 
@@ -260,7 +271,9 @@ def _placed(
 
     A line gives up one more thing than an aside does: the stumble in the middle of it.
     Nothing off the script can be read against a line to find one, and there is no line
-    there whose words would be lost by looking.
+    there whose words would be lost by looking. A removal opens a splice like any
+    other, so where its two edges fall is asked of the sound here and not left to the
+    word timestamps the stumble was found by.
     """
     placed: list[Placed] = []
     timeline = 0.0
@@ -276,7 +289,10 @@ def _placed(
             )
         else:
             line, chosen = item
-            removed = tuple(stumbles(chosen.take, heard))
+            removed = tuple(
+                replace(removal, cut=bounded_by_sound(removal.cut, left_whole, splice))
+                for removal in stumbles(chosen.take, heard)
+            )
             tightened = tighten(
                 span.start_seconds,
                 span.end_seconds,

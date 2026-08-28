@@ -50,12 +50,18 @@ removed in full rather than collapsed to a floor. That still holds. The trim is 
 removes it in full; a floor is a beat held between two words and nothing here restores
 one. A pad is the same hundredths decision 0001 already keeps around every cut it makes,
 the same reason.
+
+A splice is not always between two spans. Taking a stumble out of the middle of a take
+opens one inside it, and its two edges are word timestamps like any other, so they are
+placed here too — `bounded_by_sound` at the bottom, which is the same two steps read
+against what lies either side of a removal rather than either side of a gap.
 """
 
 from collections.abc import Sequence
 from dataclasses import dataclass
 
 from roughcut.analysis import Silence
+from roughcut.pauses import Cut
 
 # Long enough for a final consonant to play out, short enough that it disappears under
 # any gap a person leaves between two attempts. Its own number rather than the pause
@@ -183,10 +189,7 @@ def _padded_start(
 ) -> float:
     """How early this span may begin: the pad, or as far back as the quiet runs."""
     floor = _shared(before.end_seconds, span.start_seconds) if before else THE_RECORDING_BEGINS
-    quiet = _quiet_before(floor, span.start_seconds, silences)
-    if quiet is None:
-        return span.start_seconds
-    return min(span.start_seconds, max(span.start_seconds - padding, quiet))
+    return _grown_back(span.start_seconds, floor, silences, padding)
 
 
 def _padded_end(
@@ -198,10 +201,67 @@ def _padded_end(
 ) -> float:
     """How late this span may end: the pad, or as far on as the quiet runs."""
     ceiling = _shared(span.end_seconds, after.start_seconds) if after else recording_seconds
-    quiet = _quiet_after(span.end_seconds, ceiling, silences)
+    return _grown_forward(span.end_seconds, ceiling, silences, padding)
+
+
+def _grown_back(start: float, floor: float, silences: Sequence[Silence], padding: float) -> float:
+    """A boundary stepped back into the quiet behind it, no further than the floor."""
+    quiet = _quiet_before(floor, start, silences)
     if quiet is None:
-        return span.end_seconds
-    return max(span.end_seconds, min(span.end_seconds + padding, quiet))
+        return start
+    return min(start, max(start - padding, quiet))
+
+
+def _grown_forward(
+    end: float, ceiling: float, silences: Sequence[Silence], padding: float
+) -> float:
+    """A boundary stepped on into the quiet ahead of it, no further than the ceiling."""
+    quiet = _quiet_after(end, ceiling, silences)
+    if quiet is None:
+        return end
+    return max(end, min(end + padding, quiet))
+
+
+def bounded_by_sound(
+    cut: Cut,
+    silences: Sequence[Silence],
+    settings: SpliceSettings = SpliceSettings(),
+) -> Cut:
+    """A removal's two edges placed where every other splice's are.
+
+    A removal is a gap the cut opens in the middle of a take, so its two edges are the
+    tail of one piece that plays and the head of the next — and they arrive here as
+    word timestamps, which say nothing about where the sound is (decision 0001). Each
+    is therefore trimmed to the sound and then padded back, the same two steps in the
+    same order as every span above.
+
+    The quiet handed in is the quiet no pause claims. A stretch long enough to be worth
+    an edit point is already somebody's business — the removal's where it lies inside
+    one, the pause rule's where it does not — and an edge moved into it would be two
+    rules cutting the same stretch of recording between them. That bound is worth
+    saying out loud: with the threshold down at a beat, nearly every stretch the
+    detector records is a pause, so an edge moves here only where the bar sits above
+    the quiet beside it. What is left of the fault elsewhere is a pause's to answer for.
+
+    The pad is not symmetric here, and the reason is what lies beside each edge. Ahead
+    of the first edge is the fading tail of the word the cut keeps, which is exactly
+    what decision 0006's pad is for, so it crosses that and stops at the far edge of the
+    quiet beyond. Behind the second edge is the removed speech itself — a pad that
+    crossed *that* would play back the stumble — so it only steps into quiet the trim
+    moved it out of, and where the edge was already on sound it does not move at all.
+    """
+    padding = settings.padding_seconds
+    trimmed_tail = _quiet_set_in_at(cut.start_seconds, silences)
+    trimmed_head = _quiet_runs_until(cut.end_seconds, silences)
+    tail_ends = _grown_forward(
+        trimmed_tail, _shared(trimmed_tail, trimmed_head), silences, padding
+    )
+    head_begins = (
+        max(cut.end_seconds, trimmed_head - padding)
+        if trimmed_head > cut.end_seconds
+        else cut.end_seconds
+    )
+    return Cut(min(tail_ends, head_begins), head_begins)
 
 
 def _shared(start: float, end: float) -> float:

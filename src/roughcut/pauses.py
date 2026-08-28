@@ -130,6 +130,20 @@ def pauses_to_shorten(
     return [pause for pause in found if pause is not None]
 
 
+def quiet_left_whole(
+    silences: Sequence[Silence],
+    settings: PauseSettings = PauseSettings(),
+) -> list[Silence]:
+    """Every stretch of quiet this rule takes nothing out of — the other half of above.
+
+    Quiet under the bar plays exactly as it was recorded wherever it falls inside
+    something the cut keeps. That is the read's own pacing in the middle of a line, and
+    a blank section anywhere a splice lands — so it is what `splice.py` is given to
+    place an edge against, and the stretches this rule does collapse are not.
+    """
+    return [silence for silence in silences if _shortened(silence, settings) is None]
+
+
 def _shortened(silence: Silence, settings: PauseSettings) -> Pause | None:
     """What this stretch of quiet gives up, or None if it keeps all of it.
 
