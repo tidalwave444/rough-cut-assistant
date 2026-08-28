@@ -9,6 +9,7 @@ only thing that moves it is where the detector says the room was quiet.
 from conftest import FIXTURE_SOURCE, LINE_1, LINE_2, LINE_3, SCRIPT, cut_times, retakes, spoken
 
 from roughcut.analysis import Analysis, Silence, Word
+from roughcut.pauses import PauseSettings
 from roughcut.plan import Clip, Plan, alternates, build_plan, rough_cut
 from roughcut.script import ScriptLine
 from roughcut.splice import SpliceSettings
@@ -26,9 +27,15 @@ def plan_for(
     *,
     settings: SpliceSettings | None = None,
     script: list[ScriptLine] | None = None,
+    pauses: PauseSettings | None = None,
 ) -> Plan:
     analysis = Analysis(source=FIXTURE_SOURCE, words=words, silences=silences)
-    return build_plan(analysis, script or ONE_LINE, splice=settings or SpliceSettings())
+    return build_plan(
+        analysis,
+        script or ONE_LINE,
+        pauses=pauses or PauseSettings(),
+        splice=settings or SpliceSettings(),
+    )
 
 
 def test_a_take_with_quiet_either_side_is_widened_into_both() -> None:
@@ -99,6 +106,9 @@ def test_a_pad_stops_where_the_room_stops_being_quiet() -> None:
         [Silence(4.5, 5.0), Silence(6.0, 9.0)],
         settings=SpliceSettings(padding_seconds=1.0),
         script=SCRIPT[:2],
+        # Half a second of quiet, and the subject here is the pad that stops in it
+        # rather than anything collapsed out of it.
+        pauses=PauseSettings(threshold_seconds=0.7),
     )
 
     assert cut_times(plan) == [(0.0, 5.0, 0.0), (8.0, 13.5, 5.0)]

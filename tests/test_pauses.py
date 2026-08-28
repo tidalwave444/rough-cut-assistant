@@ -12,6 +12,7 @@ The gaps between lines are a different thing entirely and are already gone: the 
 is butt-spliced, so only quiet *inside* a kept stretch has anything to shorten.
 """
 
+import pytest
 from conftest import FIXTURE_SOURCE, LINE_1, LINE_2, SCRIPT, cut_times, spoken
 
 from roughcut.analysis import Analysis, Silence, Word
@@ -26,6 +27,24 @@ OPENING = "Building a real project with vibe"
 CLOSING = "coding, part two."
 OPENING_ENDS = 3.0
 """Six words at half a second each: the first half of line 1 runs out here."""
+
+AS_THE_BAR_STOOD = PauseSettings(threshold_seconds=0.7, floor_seconds=0.3)
+"""Where the threshold and the floor stood when the fixtures below were written.
+
+Given to them explicitly so that each stays a test of *how* a stretch of quiet is
+shortened. Where the bar belongs is a separate question, and the only evidence that
+moves it is a listen (decision 0003) — which is what the last two tests in this file
+are, and they are read against the defaults.
+"""
+
+A_BEAT_AT_MOST_SECONDS = 0.2
+"""The longest quiet the listen of 28 August let pass inside a line.
+
+Its evidence, read off the `Sequence 07` cut it was made on: the two stretches it said
+nothing about were 0.148 s and 0.145 s, and the shortest one it called a blank section
+was 0.302 s. The bar is somewhere between them, and it is a listen that put it there
+rather than a distribution.
+"""
 
 
 def paused_read(gap: float) -> list[Word]:
@@ -52,7 +71,7 @@ def plan_for(
 def test_a_long_pause_is_shortened_to_the_floor_rather_than_closed() -> None:
     # Two seconds of quiet: 1.7 s comes out and the 0.3 s floor is left behind, so the
     # line still breathes where it was read to.
-    plan = plan_for(paused_read(gap=2.0), [Silence(3.0, 5.0)])
+    plan = plan_for(paused_read(gap=2.0), [Silence(3.0, 5.0)], settings=AS_THE_BAR_STOOD)
 
     assert cut_times(plan) == [(0.0, 3.15, 0.0), (4.85, 6.5, 3.15)]
     assert [round(pause.remaining_seconds, 3) for pause in plan.shortened] == [0.3]
@@ -60,7 +79,7 @@ def test_a_long_pause_is_shortened_to_the_floor_rather_than_closed() -> None:
 
 
 def test_a_pause_below_the_threshold_is_left_exactly_as_it_was_spoken() -> None:
-    plan = plan_for(paused_read(gap=0.6), [Silence(3.0, 3.6)])
+    plan = plan_for(paused_read(gap=0.6), [Silence(3.0, 3.6)], settings=AS_THE_BAR_STOOD)
 
     assert cut_times(plan) == [(0.0, 5.1, 0.0)]
     assert plan.shortened == []
@@ -86,7 +105,7 @@ def test_a_silence_lying_wholly_under_one_word_is_collapsed_all_the_same() -> No
         Word("two.", 6.0, 6.5, 0.9),
     ]
 
-    plan = plan_for(words, [Silence(3.7, 5.7)])
+    plan = plan_for(words, [Silence(3.7, 5.7)], settings=AS_THE_BAR_STOOD)
 
     assert cut_times(plan) == [(0.0, 3.85, 0.0), (5.55, 6.5, 3.85)]
     assert [round(pause.remaining_seconds, 3) for pause in plan.shortened] == [0.3]
@@ -95,7 +114,7 @@ def test_a_silence_lying_wholly_under_one_word_is_collapsed_all_the_same() -> No
 def test_only_the_quiet_gives_up_time_and_not_the_gap_around_it() -> None:
     # Two seconds of gap, but the room was only quiet through one of them. What is
     # measured is that one: it keeps the floor, and the rest of the gap plays on.
-    plan = plan_for(paused_read(gap=2.0), [Silence(3.5, 4.5)])
+    plan = plan_for(paused_read(gap=2.0), [Silence(3.5, 4.5)], settings=AS_THE_BAR_STOOD)
 
     assert cut_times(plan) == [(0.0, 3.65, 0.0), (4.35, 6.5, 3.65)]
     assert [round(pause.remaining_seconds, 3) for pause in plan.shortened] == [0.3]
@@ -117,7 +136,7 @@ def test_a_pause_after_the_very_first_word_is_shortened_like_any_other() -> None
         "a real project with vibe coding, part two.", at=2.5
     )
 
-    plan = plan_for(words, [Silence(0.5, 2.5)])
+    plan = plan_for(words, [Silence(0.5, 2.5)], settings=AS_THE_BAR_STOOD)
 
     assert cut_times(plan) == [(0.0, 0.65, 0.0), (2.35, 6.5, 0.65)]
 
@@ -127,7 +146,7 @@ def test_a_pause_before_the_very_last_word_is_shortened_like_any_other() -> None
         "two.", at=6.0
     )
 
-    plan = plan_for(words, [Silence(4.0, 6.0)])
+    plan = plan_for(words, [Silence(4.0, 6.0)], settings=AS_THE_BAR_STOOD)
 
     assert cut_times(plan) == [(0.0, 4.15, 0.0), (5.85, 6.5, 4.15)]
 
@@ -190,7 +209,7 @@ def test_a_marker_after_a_shortened_pause_moves_with_the_words_it_names() -> Non
         "who it is for, and which stack we need.", at=5.0
     )
 
-    plan = plan_for(words, [Silence(3.0, 5.0)], script=script)
+    plan = plan_for(words, [Silence(3.0, 5.0)], settings=AS_THE_BAR_STOOD, script=script)
 
     # Without the pause the beats fall at 0.0, 5.0 and 7.0; 1.7 s came out before them.
     assert [
@@ -207,7 +226,7 @@ def test_a_marker_whose_word_begins_inside_a_collapsed_region_lands_on_the_splic
         "who it is for, and which stack we need.", at=5.0
     )
 
-    plan = plan_for(words, [Silence(3.0, 5.5)], script=script)
+    plan = plan_for(words, [Silence(3.0, 5.5)], settings=AS_THE_BAR_STOOD, script=script)
 
     assert cut_times(plan) == [(0.0, 3.15, 0.0), (5.35, 9.5, 3.15)]
     assert [
@@ -222,6 +241,7 @@ def test_a_kept_off_script_region_collapses_its_own_quiet_on_the_same_rule() -> 
     plan = plan_for(
         spoken(LINE_1, at=0.0) + spoken(aside, at=6.0) + spoken(LINE_2, at=13.0),
         [Silence(7.0, 9.0)],
+        settings=AS_THE_BAR_STOOD,
         script=SCRIPT[:2],
     )
 
@@ -245,3 +265,50 @@ def test_a_pause_in_the_dead_air_between_two_lines_is_not_shortened_but_removed(
 
     assert cut_times(plan) == [(0.0, 4.65, 0.0), (7.85, 12.5, 4.65)]
     assert plan.shortened == []
+
+
+def quiet_that_still_plays(plan: Plan, quiet: Silence) -> float:
+    """How much of a stretch of quiet is still inside something the cut plays.
+
+    The one thing a person hears about a pause, said as one number: not whether it was
+    shortened, or by how much, but how long the cut goes on being silent there.
+    """
+    return round(
+        sum(
+            max(0.0, min(out_seconds, quiet.end_seconds) - max(in_seconds, quiet.start_seconds))
+            for in_seconds, out_seconds, _ in cut_times(plan)
+        ),
+        3,
+    )
+
+
+# The two below are the listen of 28 August on `Sequence 07`, which reported five blank
+# sections in the first fifteen seconds of the cut. Every one of them fell in the middle
+# of a phrase rather than at a break in one, and `paused_read` is read the same way: line
+# 1 is a single beat, so its gap is mid-phrase wherever it is put.
+
+
+@pytest.mark.parametrize("quiet_seconds", [0.507, 0.565, 0.632])
+def test_quiet_the_detector_heard_inside_a_line_does_not_play_as_recorded(
+    quiet_seconds: float,
+) -> None:
+    # Heard at 01:42, 04:47 and 14:05 of the cut: half a second of nothing in the middle
+    # of a phrase, playing exactly as recorded because it sits under the threshold. The
+    # three lengths are the three the listen named, to the millisecond.
+    quiet = Silence(OPENING_ENDS, OPENING_ENDS + quiet_seconds)
+
+    plan = plan_for(paused_read(gap=quiet_seconds), [quiet])
+
+    assert quiet_that_still_plays(plan, quiet) <= A_BEAT_AT_MOST_SECONDS
+
+
+def test_what_a_shortened_pause_leaves_behind_is_not_heard_as_a_hole() -> None:
+    # Heard at 11:52: a second of quiet inside a phrase, collapsed as the rule says and
+    # a blank section afterwards all the same. Shortening a pause is not the whole of
+    # the job — what is left has to be short enough to read as a beat and not as a hole.
+    quiet = Silence(OPENING_ENDS, OPENING_ENDS + 1.168)
+
+    plan = plan_for(paused_read(gap=1.168), [quiet])
+
+    assert plan.shortened != []
+    assert quiet_that_still_plays(plan, quiet) <= A_BEAT_AT_MOST_SECONDS

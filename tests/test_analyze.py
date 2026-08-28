@@ -21,6 +21,7 @@ from roughcut.analyze import (
     parse_silences,
 )
 from roughcut.errors import RoughCutError
+from roughcut.pauses import PauseSettings
 
 AUDIO_STREAM = {
     "codec_type": "audio",
@@ -294,3 +295,72 @@ def test_a_model_that_cannot_be_loaded_names_the_model() -> None:
     )
 
     assert "large-v3" in str(error)
+
+
+# The three below are the listen of 28 August on `Sequence 07`, and all three are about
+# the same thing: what the media stage never wrote down, the rest of the tool cannot act
+# on. Everything here is pure — words and detected silences in, a judgement out — so none
+# of it needs the model, but none of it reaches the operator's XML until `analyze` is run
+# again and both committed artifacts are re-recorded. See ticket 14.
+
+STRETCHED_OVER_SPEECH = [
+    # `part`, line 1: declared 3.48–8.64, and the detector heard the room go quiet three
+    # times underneath it. 2.53 s of what was said is speech no word was written for,
+    # and the reading the operator wanted is inside it.
+    (5.16, [(0.036, 1.470), (3.155, 3.656), (4.469, 5.160)]),
+    # `development.`, line 2: declared 17.44–21.02, four runs of sound under it holding
+    # 1.59 s of speech. The last of them is the reading that should have played; the
+    # three before it are the junk section heard from 07:13.
+    (3.58, [(0.293, 0.872), (1.340, 2.001), (2.333, 3.084)]),
+]
+
+WORD_SECONDS = 0.5
+"""How long an ordinary word runs in the fixture below."""
+
+
+def a_reading_with_one_long_word(
+    declared_seconds: float, quiet_inside: list[tuple[float, float]]
+) -> tuple[list[Word], list[Silence]]:
+    """A reading holding the three shapes a long word comes in.
+
+    One word stretched over the stretch in question, one stretched over quiet and
+    nothing else — which decision 0001 says is the ordinary case and which nothing may
+    hand back to the model — and ordinary words either side of both.
+    """
+    stretched_at = WORD_SECONDS
+    over_quiet_at = stretched_at + declared_seconds + WORD_SECONDS
+    words = [
+        Word("Building", 0.0, stretched_at, 0.9),
+        Word("part", stretched_at, stretched_at + declared_seconds, 0.22),
+        Word("two.", over_quiet_at - WORD_SECONDS, over_quiet_at, 0.9),
+        Word("coding,", over_quiet_at, over_quiet_at + 3.0, 0.31),
+        Word("with", over_quiet_at + 3.0, over_quiet_at + 3.0 + WORD_SECONDS, 0.9),
+    ]
+    silences = [
+        *(Silence(stretched_at + start, stretched_at + end) for start, end in quiet_inside),
+        Silence(over_quiet_at + 0.1, over_quiet_at + 2.9),
+    ]
+    return words, silences
+
+
+@pytest.mark.parametrize(("declared_seconds", "quiet_inside"), STRETCHED_OVER_SPEECH)
+def test_a_word_stretched_over_speech_is_handed_back_to_the_model(
+    declared_seconds: float, quiet_inside: list[tuple[float, float]]
+) -> None:
+    # Heard at 02:24 and 07:13: the reading that plays is the abandoned one, because the
+    # finished one is under a word the transcriber ran across the whole attempt. What
+    # separates it from an ordinary long word is not its length but how much of it is
+    # audible: a word stretched over quiet is what decision 0001 is about and stays.
+    from roughcut.analyze import stretched_over_speech
+
+    words, silences = a_reading_with_one_long_word(declared_seconds, quiet_inside)
+
+    assert stretched_over_speech(words, silences, AnalysisSettings()) == [words[1]]
+
+
+def test_the_detector_hears_quiet_as_short_as_the_cut_may_leave_behind() -> None:
+    # The other half of the blank section heard at 03:04: 0.38 s of quiet the artifact
+    # has no record of, because the detector was asked for half a second and up. Quiet
+    # the cut is willing to leave behind is quiet it has to be able to see — anything
+    # shorter than its own floor is a stretch it can neither find nor take off a splice.
+    assert AnalysisSettings().silence_min_seconds <= PauseSettings().floor_seconds

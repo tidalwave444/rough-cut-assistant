@@ -15,6 +15,7 @@ pause and a removal would otherwise both claim to have taken.
 from conftest import FIXTURE_SOURCE, LINE_1, SCRIPT, cut_times, spoken
 
 from roughcut.analysis import Analysis, Silence, Word
+from roughcut.pauses import PauseSettings
 from roughcut.plan import Plan, build_plan, rough_cut, timeline_duration_seconds
 from roughcut.script import ScriptLine
 
@@ -25,20 +26,35 @@ STUMBLED = "Building a real project with vibe coding part no part two."
 """Line 1 with `part` said, abandoned and said again — `part no` is what comes out."""
 
 
+NO_PAUSE_IS_LONG_ENOUGH = PauseSettings(threshold_seconds=1.0)
+"""A bar no stretch of quiet in this file reaches.
+
+The two fixtures at the bottom describe quiet beside a removal, and the subject there
+is where the removal's edges fall — not what is collapsed between them. Held above
+everything they describe so that the answer cannot come from the pause rule instead.
+"""
+
+
 def plan_for(
     words: list[Word],
     script: list[ScriptLine] | None = None,
     silences: list[Silence] | None = None,
+    pauses: PauseSettings | None = None,
 ) -> Plan:
     return build_plan(
         Analysis(source=FIXTURE_SOURCE, words=words, silences=silences or []),
         script or ONE_LINE,
+        pauses=pauses or PauseSettings(),
     )
 
 
-def read(text: str, silences: list[Silence] | None = None) -> Plan:
+def read(
+    text: str,
+    silences: list[Silence] | None = None,
+    pauses: PauseSettings | None = None,
+) -> Plan:
     """One reading of line 1, as the transcriber heard it, from the top of the file."""
-    return plan_for(spoken(text, at=0.0), silences=silences)
+    return plan_for(spoken(text, at=0.0), silences=silences, pauses=pauses)
 
 
 def test_a_stumble_that_repeats_a_word_of_the_line_comes_out() -> None:
@@ -161,3 +177,32 @@ def test_a_take_the_cut_passed_over_reaches_the_alternates_exactly_as_recorded()
     assert cut_times(plan) == [(8.0, 12.5, 0.0)]
     assert plan.removed == []
     assert timeline_duration_seconds(rough_cut(plan)) == 4.5
+
+
+# The two below are the listen of 28 August on `Sequence 07`. Both are about the same
+# thing from opposite ends: a removal's edges are word timestamps, and a word timestamp
+# says nothing about where the sound is (decision 0001). Every other splice the cut makes
+# is trimmed to the sound and then padded back into the quiet (decision 0006); the two
+# edges of a removal are the only ones that are not.
+
+
+def test_a_word_beside_a_removal_keeps_the_tail_the_transcriber_stopped_short_of() -> None:
+    # Heard at 14:37: `we prepared the project` played as `the proj`. The removal begins
+    # on the timestamp that ended the word before it, and a word goes on sounding after
+    # the transcriber has stopped recognising it — so the cut lands on the last
+    # consonant. The quiet a tenth of a second later is where it may fall instead.
+    plan = read(STUMBLED, [Silence(3.6, 4.1)], pauses=NO_PAUSE_IS_LONG_ENOUGH)
+
+    assert cut_times(plan) == [(0.0, 3.65, 0.0), (4.5, 5.5, 3.65)]
+    assert [removal.text for removal in plan.removed] == ["part no"]
+
+
+def test_the_quiet_a_removal_ends_in_does_not_play_after_the_splice() -> None:
+    # Heard at 03:04: a blank section at the head of what plays after a removal. The
+    # removal stops where the transcriber declared the next word to start, which is
+    # before the room stopped being quiet, so four tenths of nothing ride into the cut
+    # and the word arrives late.
+    plan = read(STUMBLED, [Silence(4.5, 4.9)], pauses=NO_PAUSE_IS_LONG_ENOUGH)
+
+    assert cut_times(plan) == [(0.0, 3.5, 0.0), (4.75, 5.5, 3.5)]
+    assert [removal.text for removal in plan.removed] == ["part no"]

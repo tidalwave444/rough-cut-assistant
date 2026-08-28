@@ -177,10 +177,13 @@ def rendered_frames(analysis: Path, script: Path, out: Path, *flags: str) -> str
 def test_the_pause_floor_and_threshold_are_command_line_options(
     paused: Path, one_line: Path, tmp_path: Path
 ) -> None:
-    # 3.5s of line with a 2s pause in it, at 60fps: 1.8s by default as the pause
-    # collapses to the 0.3s floor, 2.5s with the floor raised to a second, and the
-    # whole 3.5s once the threshold is lifted past the gap.
-    default = rendered_frames(paused, one_line, tmp_path / "a")
+    # 3.5s of line with a 2s pause in it, at 60fps: 1.8s with the pause collapsing to
+    # a 0.3s floor, 2.5s with the floor raised to a second, and the whole 3.5s once the
+    # threshold is lifted past the gap. Every one of them names the bar it was cut at,
+    # because what these three prove is that the options reach the plan.
+    default = rendered_frames(
+        paused, one_line, tmp_path / "a", "--pause-floor-seconds", "0.3"
+    )
     floored = rendered_frames(paused, one_line, tmp_path / "b", "--pause-floor-seconds", "1.0")
     kept = rendered_frames(paused, one_line, tmp_path / "c", "--pause-threshold-seconds", "3")
 

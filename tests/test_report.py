@@ -11,6 +11,7 @@ from conftest import (
 )
 
 from roughcut.analysis import Analysis, Silence, Word
+from roughcut.pauses import PauseSettings
 from roughcut.plan import Clip, Plan, Sequence, build_plan
 from roughcut.report import render_report
 
@@ -33,12 +34,20 @@ def report_for(words: list[Word]) -> str:
 
 
 def report_with_a_pause() -> str:
-    """Line 1 read with two seconds of quiet in the middle of it."""
+    """Line 1 read with two seconds of quiet in the middle of it.
+
+    Shortened against a threshold and a floor named here rather than defaulted: the
+    table below is a test of what the report prints about a pause, and the numbers it
+    prints stay legible only if the fixture says where the bar was.
+    """
     words = spoken("Building a real project with vibe", at=0.0) + spoken(
         "coding, part two.", at=5.0
     )
     described = Analysis(source=FIXTURE_SOURCE, words=words, silences=[Silence(3.0, 5.0)])
-    return render_report(described, SCRIPT[:1], build_plan(described, SCRIPT[:1]))
+    bar = PauseSettings(threshold_seconds=0.7, floor_seconds=0.3)
+    return render_report(
+        described, SCRIPT[:1], build_plan(described, SCRIPT[:1], pauses=bar)
+    )
 
 
 def test_the_report_names_the_recording_it_describes() -> None:

@@ -439,3 +439,20 @@ def test_the_output_duration_is_the_end_of_the_last_clip() -> None:
 
 def test_a_sequence_with_no_clips_lasts_no_time() -> None:
     assert timeline_duration_seconds(Sequence("seq-1", "RoughCut", FIXTURE_SOURCE)) == 0.0
+
+
+def test_only_the_last_attempt_at_a_line_s_ending_reaches_the_cut() -> None:
+    # Green on purpose, and the one thing the listen of 28 August asked for that the
+    # tool already does: the ending of line 2 tried three times inside one reading, and
+    # only the third reaching the timeline. What the listen heard at 07:13–11:02 is this
+    # rule never firing, because the transcriber wrote one long word where the three
+    # attempts were and there was nothing for it to find. Pinned here so that giving it
+    # the words back is the whole of that fix.
+    words = spoken(
+        "Today we are moving from setup to actual to actual to actual development.", at=0.0
+    )
+
+    assert cut_of(words, [SCRIPT[1]]).clips == [
+        Clip(source_in_seconds=0.0, source_out_seconds=3.0, timeline_start_seconds=0.0),
+        Clip(source_in_seconds=5.0, source_out_seconds=6.5, timeline_start_seconds=3.0),
+    ]
