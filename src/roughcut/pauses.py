@@ -30,12 +30,23 @@ from dataclasses import dataclass
 
 from roughcut.analysis import Silence
 
-# Long enough that shortening it is worth an edit point; short enough that the dead
-# air between two attempts never survives. Tuned for a quiet room and a scripted read.
-DEFAULT_THRESHOLD_SECONDS = 0.7
+# The longest quiet that reads as a beat inside a line rather than as a blank section.
+# One bar, and both defaults below are it: the listen of 28 August on `Sequence 07`
+# heard 0.30 s as a hole and passed over 0.15 s, so anything longer than this is
+# shortened, and what it is shortened to is this same length. Anything longer left
+# behind would be the fault the listen reported, only shorter.
+#
+# That listen is the evidence decision 0003 named and it went the other way to the one
+# 0003 expected — not breathless, still loose. 0003 still states 0.7 s and 0.3 s in its
+# text, so it trails this and a person has to bring it forward.
+A_BEAT_AT_MOST_SECONDS = 0.2
+
+# Above a beat, the quiet is worth an edit point; at or under it, the read is left
+# alone. Below the bar the cut has nothing to gain and a splice to pay for.
+DEFAULT_THRESHOLD_SECONDS = A_BEAT_AT_MOST_SECONDS
 
 # What a shortened pause becomes. A beat, not nothing.
-DEFAULT_FLOOR_SECONDS = 0.3
+DEFAULT_FLOOR_SECONDS = A_BEAT_AT_MOST_SECONDS
 
 # Kept either side of every cut, inside the silence. A word's first consonant starts
 # below the detector's threshold, so a cut placed at the edge of the quiet clips it.

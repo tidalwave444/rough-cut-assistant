@@ -59,7 +59,14 @@ class AnalysisSettings:
     compute_type: str = "int8_float16"
     language: str = "en"
     silence_threshold_db: float = -35.0
-    silence_min_seconds: float = 0.5
+    silence_min_seconds: float = 0.2
+    """The shortest quiet worth writing down: what the cut may leave behind.
+
+    Quiet the cut is willing to leave at a splice is quiet it has to be able to see —
+    a stretch shorter than this is one the plan can neither find nor take off an edge,
+    however plainly it is heard. So this follows the pause floor down rather than
+    standing on its own, and `tests/test_analyze.py` holds the two together.
+    """
 
 
 @dataclass(frozen=True)
