@@ -10,7 +10,7 @@ did I say that the cut is not using.
 """
 
 from roughcut.analysis import Analysis
-from roughcut.falsestarts import FalseStart
+from roughcut.stumbles import Stumble
 from roughcut.offscript import OffScript
 from roughcut.pauses import Pause
 from roughcut.plan import PlacedLine, Plan, rough_cut, timeline_duration_seconds
@@ -68,7 +68,7 @@ def render_report(analysis: Analysis, script: list[ScriptLine], plan: Plan) -> s
             _label("Takes considered", sum(len(line.chosen.decisions) for line in plan.lines)),
             _label("Lines flagged", len(plan.flagged)),
             _label("Pauses shortened", len(plan.shortened)),
-            _label("False starts cut", len(plan.removed)),
+            _label("Stumbles cut", len(plan.removed)),
             _label("Off-script kept", len(plan.kept)),
             _label("Off-script cut", len(plan.cut)),
             "",
@@ -195,7 +195,7 @@ def _what_each_pause_gave_up(pauses: list[Pause]) -> list[str]:
     return rows
 
 
-def _what_came_out_of_a_take(removals: list[FalseStart]) -> list[str]:
+def _what_came_out_of_a_take(removals: list[Stumble]) -> list[str]:
     """Every abandoned attempt taken out from inside a line that plays.
 
     Quoted in full, for the reason the off-script section quotes what it removed: this

@@ -1,4 +1,4 @@
-"""False starts inside a take: the stumble in the middle of a line, and only that.
+"""Stumbles inside a take: the stumble in the middle of a line, and only that.
 
 A line's clip runs from its first matched word to its last, so an abandoned attempt
 sitting between the two plays in the cut. The words inside a take that the line does
@@ -9,7 +9,7 @@ match the line, so it is junk" is the obvious rule and it is wrong.
 
 Two signals separate them, neither of them a threshold.
 
-A **repeated word** marks a false start: an unmatched word that reads as a word of the
+A **repeated word** marks a stumble: an unmatched word that reads as a word of the
 line spoken elsewhere in that take, before it or after it. The speaker said the word,
 abandoned the sentence and said it again, so the stretch between the two utterances is
 what they threw away — and the second utterance is the one that survives.
@@ -46,7 +46,7 @@ UNACCOUNTED = "nothing of the line opposite it"
 
 
 @dataclass(frozen=True)
-class FalseStart:
+class Stumble:
     """One stretch taken out from inside a take, and why it went.
 
     The fault is the judgement; what was said is quoted beside it because the report
@@ -74,7 +74,7 @@ class FalseStart:
         return self.cut.seconds
 
 
-def false_starts(take: Take, heard: Transcript) -> list[FalseStart]:
+def stumbles(take: Take, heard: Transcript) -> list[Stumble]:
     """Everything inside this reading that the line did not mean to say."""
     return _Reader(take, heard).removals()
 
@@ -106,7 +106,7 @@ class _Reader:
         self._offsets = {word.token: word.offset for word in take.matched}
         self._line = tokenize(take.line.text)
 
-    def removals(self) -> list[FalseStart]:
+    def removals(self) -> list[Stumble]:
         """What comes out, in the order it was spoken.
 
         Coverage is asked of everything taken out so far and not of one candidate at a
@@ -123,7 +123,7 @@ class _Reader:
                 continue
             taken |= candidate.taken
             removals.append(
-                FalseStart(
+                Stumble(
                     line=self._take.line,
                     cut=cut,
                     text=self._heard.said_between(candidate.first, candidate.last),
@@ -231,7 +231,7 @@ class _Reader:
 
         Bounded by where the next word *starts* rather than by where the transcriber
         declared this one to end, so that nothing is left of a stumble between the two
-        — the transcriber runs a word on over whatever follows it (ADR-0001), and the
+        — the transcriber runs a word on over whatever follows it (decision 0001), and the
         word that follows is the one the cut is being made to reach. There is always
         one: a run ends before the word it was found by, and a take ends on a word the
         line accounts for.

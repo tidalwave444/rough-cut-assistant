@@ -54,7 +54,7 @@ class Matched:
 
     The way back from a reading to the recording it was heard in. It is what says
     which of the words inside a take the line accounts for — and therefore which of
-    them it does not, which is the whole of what a false start is found by.
+    them it does not, which is the whole of what a stumble is found by.
     """
 
     token: int

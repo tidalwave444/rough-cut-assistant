@@ -14,7 +14,7 @@ from roughcut.analyze import AnalysisSettings, analyze_recording
 
 pytestmark = pytest.mark.slow
 
-RECORDING = Path(__file__).resolve().parents[1] / "media" / "sequence.mp4"
+RECORDING = Path(__file__).resolve().parents[1] / "recordings" / "sequence.mp4"
 
 # The fixture's measured facts, from the spike.
 DURATION_SECONDS = 86.25

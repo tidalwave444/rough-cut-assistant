@@ -10,7 +10,7 @@ Lines not found    0
 Takes considered   8
 Lines flagged      0
 Pauses shortened   7
-False starts cut   3
+Stumbles cut       3
 Off-script kept    0
 Off-script cut     1
 

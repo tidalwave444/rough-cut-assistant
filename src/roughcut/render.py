@@ -2,7 +2,7 @@
 
 The structure here is not free invention: it reproduces a file that was hand-authored
 and confirmed to import correctly, and the deviations that were tried and failed are
-recorded in `.scratch/rough-cut-assistant/spike-findings.md`. Two of them matter most:
+recorded in `work/rough-cut-assistant/facts.md`. Two of them matter most:
 a stereo source is one audio track and not two, and the `<file>` element has to declare
 both the video and the audio stream even though the picture is never used.
 """

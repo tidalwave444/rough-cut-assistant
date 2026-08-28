@@ -9,7 +9,7 @@ Where the quiet is, is the detector's question and not the transcriber's. A paus
 detected silence region, and the words are not consulted at all: the transcriber leaves
 almost no gap between two words, stretching a word over the pause that follows it
 instead, so the quiet sits *underneath* the words rather than between them. A cut may
-therefore fall inside a word's declared span — see ADR-0001, which is also why the pad
+therefore fall inside a word's declared span — see decision 0001, which is also why the pad
 below matters: it is what keeps a collapse off audible sound, since the word claiming
 that time no longer says anything about where sound is.
 
@@ -18,8 +18,8 @@ full. A floor is a beat held between two words, which is not what sits on the ou
 of a splice. That is `splice.py`'s to do, because it decides where a clip's edges land
 and this decides what comes out from between them.
 
-A collapsed pause is not the only thing that comes out from between them: a false start
-inside a take does too (`falsestarts.py`). What is taken out and why are that module's
+A collapsed pause is not the only thing that comes out from between them: a stumble
+inside a take does too (`stumbles.py`). What is taken out and why are that module's
 business, but what a cut *does* — shorten the stretch and pull everything after it
 earlier — is one piece of arithmetic, and `Tightened` below is where both of them meet
 it. A moment covered by a pause and a removal at once is still only removed once.
@@ -58,7 +58,7 @@ class PauseSettings:
 class Cut:
     """A stretch of something that plays, taken out from the middle of it.
 
-    A collapsed pause gives one up, and so does a false start removed from inside a
+    A collapsed pause gives one up, and so does a stumble removed from inside a
     take. What is taken out and why differ entirely; what it does to the timeline does
     not, so a tightened stretch reasons about the two together.
     """

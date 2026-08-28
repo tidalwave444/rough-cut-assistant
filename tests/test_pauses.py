@@ -6,7 +6,7 @@ than the arithmetic that placed them.
 
 A pause is a stretch of detected silence, not a gap in the transcript, so several of
 these fixtures put the quiet *underneath* a word rather than between two of them: that
-is where it sits on real material, and the cut has to find it there (ADR-0001).
+is where it sits on real material, and the cut has to find it there (decision 0001).
 
 The gaps between lines are a different thing entirely and are already gone: the cut
 is butt-spliced, so only quiet *inside* a kept stretch has anything to shorten.
@@ -80,7 +80,7 @@ def test_a_silence_lying_wholly_under_one_word_is_collapsed_all_the_same() -> No
     # The transcriber left no gap to find: it stretched `part` over the pause that
     # followed it, two and a half seconds for one syllable. The detector heard two of
     # them as quiet, and those two are what comes out — the word's declared span is
-    # not a rail (ADR-0001), so the cut lands inside it.
+    # not a rail (decision 0001), so the cut lands inside it.
     words = spoken(OPENING + " coding,", at=0.0) + [
         Word("part", 3.5, 6.0, 0.34),
         Word("two.", 6.0, 6.5, 0.9),

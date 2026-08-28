@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # One-time install of the Windows bridge. Run once with sudo; idempotent.
 #
-#   sudo ~/eng/scripts/install-win-bridge.sh
+#   sudo ~/eng/running/install-win-bridge.sh
 #
 # Re-run it after editing win-bridge — the installed copy under /usr/local/sbin
 # is what sudo actually executes, not the one in this repo.

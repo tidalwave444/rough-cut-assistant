@@ -5,3 +5,4 @@ __pycache__/
 .mypy_cache/
 dist/
 out/
+.claude/settings.local.json

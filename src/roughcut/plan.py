@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 
 from roughcut.align import SpokenLine, align
 from roughcut.analysis import Analysis, SourceMedia
-from roughcut.falsestarts import FalseStart, false_starts
+from roughcut.stumbles import Stumble, stumbles
 from roughcut.offscript import OffScript, OffScriptSettings, judge
 from roughcut.pauses import Pause, PauseSettings, Tightened, pauses_to_shorten, tighten
 from roughcut.script import ScriptLine, beats
@@ -75,7 +75,7 @@ class PlacedLine:
     tightened: Tightened
     """The stretch the chosen take was read in, with its long pauses shortened."""
     timeline_start_seconds: float
-    removed: tuple[FalseStart, ...] = ()
+    removed: tuple[Stumble, ...] = ()
     """The abandoned attempts taken out from inside the reading that plays."""
 
     @property
@@ -132,8 +132,8 @@ class Plan:
     """Everything said that no line accounts for, kept or cut, in the order recorded."""
     shortened: list[Pause] = field(default_factory=list)
     """The pauses the cut took time out of, in the order they were recorded."""
-    removed: list[FalseStart] = field(default_factory=list)
-    """The false starts cut out from inside a take, in the order they were recorded."""
+    removed: list[Stumble] = field(default_factory=list)
+    """The stumbles cut out from inside a take, in the order they were recorded."""
 
     @property
     def flagged(self) -> list[PlacedLine]:
@@ -276,7 +276,7 @@ def _placed(
             )
         else:
             line, chosen = item
-            removed = tuple(false_starts(chosen.take, heard))
+            removed = tuple(stumbles(chosen.take, heard))
             tightened = tighten(
                 span.start_seconds,
                 span.end_seconds,

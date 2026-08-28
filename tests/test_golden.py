@@ -18,10 +18,10 @@ from roughcut.report import render_report
 from roughcut.script import read_script
 
 REPO = Path(__file__).resolve().parents[1]
-ANALYSIS = REPO / "tests" / "fixtures" / "sequence.analysis.json"
-SCRIPT = REPO / "media" / "textt.txt"
-GOLDEN_XML = REPO / "tests" / "fixtures" / "sequence.golden.xml"
-GOLDEN_REPORT = REPO / "tests" / "fixtures" / "sequence.golden.report.txt"
+ANALYSIS = REPO / "tests" / "committed" / "sequence.analysis.json"
+SCRIPT = REPO / "recordings" / "textt.txt"
+GOLDEN_XML = REPO / "tests" / "committed" / "sequence.golden.xml"
+GOLDEN_REPORT = REPO / "tests" / "committed" / "sequence.golden.report.txt"
 
 
 def assert_golden(path: Path, produced: str, update: bool) -> None:

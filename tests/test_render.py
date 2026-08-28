@@ -10,7 +10,7 @@ from roughcut.render import render_fcp7
 
 # Hand-authored and confirmed to import into Premiere. It is the contract, so it is
 # never regenerated from the renderer — that would make the golden test circular.
-REFERENCE_XML = Path(__file__).resolve().parents[1] / "media" / "minimal2.xml"
+REFERENCE_XML = Path(__file__).resolve().parent / "committed" / "minimal2.xml"
 
 
 def spike_plan() -> Plan:

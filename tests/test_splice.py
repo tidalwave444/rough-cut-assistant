@@ -105,7 +105,7 @@ def test_a_pad_stops_where_the_room_stops_being_quiet() -> None:
 
 
 def test_a_pad_may_cross_a_word_the_transcriber_stretched_over_the_quiet() -> None:
-    # The detector decides where the quiet is (ADR-0001). A transcriber declares a
+    # The detector decides where the quiet is (decision 0001). A transcriber declares a
     # mutter to last two seconds when it was over in a moment, and the pad reaches into
     # that declared span because the audio under it is quiet — which is the only reason
     # a pad is ever possible, since almost every word butts against the next.

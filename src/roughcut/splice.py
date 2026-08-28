@@ -23,7 +23,7 @@ The pad crosses whatever the transcriber stopped short of and stops at the far e
 the quiet beside it. A gap the detector heard no quiet in gets no pad on that side:
 something was audible there, and the something might be a mutter nobody kept.
 
-Word timestamps bound nothing here, which is ADR-0001 applied to the other direction.
+Word timestamps bound nothing here, which is decision 0001 applied to the other direction.
 On real transcripts almost every word butts straight up against the next, so the quiet
 between two lines sits *underneath* the words rather than between them; a pad that
 stopped at the neighbouring word's declared edge would be refused everywhere it is
@@ -34,7 +34,7 @@ needed. What a pad may never cross is the other rail:
   so no moment of the recording is ever laid down twice — and two pieces the transcript
   butts together have no gap at all, so neither grows.
 
-Two things this deliberately does not do, both of them ADR-0001's reasoning again.
+Two things this deliberately does not do, both of them decision 0001's reasoning again.
 
 It does not require the pad to *reach* the quiet. The stretch between a word's declared
 end and the start of the detected quiet is the fading consonant itself — 0.19 s, 0.28 s
@@ -44,11 +44,11 @@ exists to fix. The cost is the other side of the same coin: where the sound besi
 clip belongs to something the cut dropped rather than to its own word, up to a pad's
 width of it plays. The pad is small because that is the bound on how wrong it can be.
 
-And it pads the head and tail of a take, having just trimmed them — which ADR-0001 says
+And it pads the head and tail of a take, having just trimmed them — which decision 0001 says
 of pause collapsing it must not: "a take begins where sound begins", so quiet there is
 removed in full rather than collapsed to a floor. That still holds. The trim is what
 removes it in full; a floor is a beat held between two words and nothing here restores
-one. A pad is the same hundredths the ADR already keeps around every cut it makes, for
+one. A pad is the same hundredths decision 0001 already keeps around every cut it makes,
 the same reason.
 """
 
@@ -85,7 +85,7 @@ class Span:
 def trimmed_to_sound(spans: Sequence[Span], silences: Sequence[Silence]) -> list[Span]:
     """Every span begun where its sound begins and ended where its sound stops.
 
-    A take begins where sound begins (ADR-0001), so quiet at the head or the tail of
+    A take begins where sound begins (decision 0001), so quiet at the head or the tail of
     one comes out in full rather than collapsing to a floor — a floor is a beat held
     between two words, and the outside of a splice is not that. Where the transcriber
     declared a word to start before the room stopped being quiet, a span therefore
