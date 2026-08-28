@@ -45,7 +45,9 @@ These are locked. The loop reverts them after your turn and counts the iteration
 **Never run `pytest --update-golden`.** It is the single command that turns every check green
 without fixing anything, and using it here would end the loop on a lie. If your change is
 genuinely meant to move `sequence.golden.xml` or `sequence.golden.report.txt`, that is a
-golden diff a human has to read: stop, and say in your last message which lines move and why.
+golden diff a human has to read. Say in your last message which lines move and why, and stop
+there — the loop sees a red golden with nothing else red, stops on the spot rather than
+spending its remaining turns, and hands the diff to the operator.
 
 ## Read before you change anything
 
