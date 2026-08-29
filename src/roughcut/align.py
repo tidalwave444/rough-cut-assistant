@@ -440,25 +440,50 @@ def _near_misses(
     """Every word the transcriber heard wrong, paired with the word it displaced.
 
     A mishearing is identified structurally, by the script word sitting opposite it
-    (decision 0002), and "opposite" is only well defined where the two streams hold the
-    same number of words between two they agree on. Then each word left over has
-    exactly one word facing it and the two are read against each other. Where the
-    counts differ, nothing faces anything: the transcriber wrote more or fewer words
-    than were spoken there, which is also what an abandoned attempt looks like, and a
-    stumble read as a mishearing would stay in the cut.
+    (decision 0002), and what is read against what, between two words the streams agree
+    on, is settled by `_facing` below.
     """
     found: list[tuple[int, int]] = []
     for before, after in zip(said_the_same, said_the_same[1:]):
-        left_over = range(before[0] + 1, after[0])
-        facing = range(before[1] + 1, after[1])
-        if not left_over or len(left_over) != len(facing):
-            continue
-        found += [
-            (token, index)
-            for token, index in zip(left_over, facing)
-            if _a_near_miss(heard[token], written[index])
-        ]
+        found += _facing(
+            heard, written, range(before[0] + 1, after[0]), range(before[1] + 1, after[1])
+        )
     return found
+
+
+def _facing(
+    heard: Sequence[str], written: Sequence[str], left_over: range, facing: range
+) -> list[tuple[int, int]]:
+    """Which of two stretches of unmatched words stand opposite each other, and match.
+
+    "Opposite" cannot mean position for position: a stretch usually holds a word one
+    side does not account for at all — `with a wipe coating` for `with vibe coding`,
+    where the `a` is the transcriber's own — and reading position for position stops
+    at that word and leaves `vibe` unfound. Whether an intruder is stepped over is not
+    the mishearing's business; exact matching steps over one and goes on, and this does
+    the same, one grain further out.
+
+    So the pairing is the longest run of near misses that moves forward through both
+    stretches at once, exactly as the exact match does, with whatever neither side
+    accounts for left unpaired. A stretch that is an abandoned attempt rather than a
+    mishearing still pairs nothing: what makes it one is that its words are not the
+    line's words, and no monotonic pairing can make them so.
+    """
+    left = list(left_over)
+    right = list(facing)
+    empty: list[tuple[int, int]] = []
+    best = [[empty for _ in range(len(right) + 1)] for _ in range(len(left) + 1)]
+    for row in reversed(range(len(left))):
+        for column in reversed(range(len(right))):
+            token, index = left[row], right[column]
+            stepped_over = max(best[row + 1][column], best[row][column + 1], key=len)
+            paired = (
+                [(token, index)] + best[row + 1][column + 1]
+                if _a_near_miss(heard[token], written[index])
+                else []
+            )
+            best[row][column] = max(paired, stepped_over, key=len)
+    return best[0][0]
 
 
 def _a_near_miss(heard: str, written: str) -> bool:

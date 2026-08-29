@@ -49,9 +49,9 @@ purely a mishearing. That is the corpus this bar is read against.
 What shipped is a measure of sound, not spelling: every vowel one sound, `b f p v w` one
 and `d t` one, over how much of the longer word the two hold in common in order. Spelling
 could not do it — `wipe` and `vibe` differ in two letters of four, as `part` does from
-`card`. It fires only between two words the streams agree on and only where they hold the
-same number of words there, which is what "opposite" means. The `Status:` line above
-should read awaiting-listen; the loop reverts `work/` whenever that line moves at all.
+`card`. It fires between two words the streams agree on, stepping over what neither side
+accounts for — the `a` in `with a wipe coating` is the transcriber's own. The `Status:`
+line above should read awaiting-listen; the loop reverts `work/` if that line moves.
 
 Item 1 was written against the first pass, which heard `wipe`. Ticket 14's second pass
 hears `white`, which holds 0.6 of `vibe` and stays under the bar where `wipe` held all of
