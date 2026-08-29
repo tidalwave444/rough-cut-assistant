@@ -93,12 +93,19 @@ def analyze_recording(recording: Path, settings: AnalysisSettings) -> Analysis:
 
     Ordered cheapest-first: a recording with no audio stream, or an ffmpeg that isn't
     installed, fails in milliseconds rather than after a transcription.
+
+    Whatever the transcriber collapsed into one long word is then decoded again. That
+    second pass belongs here rather than inside `transcribe`, because which words those
+    are is decided by the detected silences and this is the only place the words and
+    the silences are both in hand. The model is loaded once and handed to both passes.
     """
     if not recording.is_file():
         raise _missing(recording)
     source = probe_source(recording)
     silences = detect_silences(recording, source.duration_seconds, settings)
-    words = transcribe(recording, settings)
+    model = _load_model(settings)
+    heard = transcribe(recording, settings, model)
+    words = _decoded_again(model, recording, heard, silences, settings)
     return Analysis(source=source, words=words, silences=silences)
 
 
@@ -362,13 +369,78 @@ def _buried_seconds(word: Word, silences: Sequence[Silence]) -> float:
     return word.end_seconds - word.start_seconds - quiet
 
 
-def transcribe(recording: Path, settings: AnalysisSettings) -> list[Word]:
+def transcribe(recording: Path, settings: AnalysisSettings, model: Any = None) -> list[Word]:
     """Transcribe the speech with a word-level timestamp on every word.
 
     Whisper's own voice-activity filtering is off: pause handling is this tool's job,
     and the filter would remove the very gaps the cut is decided from.
+
+    A caller that is going to decode twice loads the model itself and passes it in, so
+    that the second pass costs a decode rather than a second load.
     """
-    model = _load_model(settings)
+    return _decoded(model if model is not None else _load_model(settings), recording, settings)
+
+
+def _decoded_again(
+    model: Any,
+    recording: Path,
+    words: Sequence[Word],
+    silences: Sequence[Silence],
+    settings: AnalysisSettings,
+) -> list[Word]:
+    """The transcript with every word stretched over speech replaced by what it buried.
+
+    Only those. A word stretched over *quiet* is the ordinary case decision 0001 is
+    about, and handing every long word back to the model would rewrite the transcript
+    wherever someone paused mid-sentence.
+    """
+    stretched = stretched_over_speech(words, silences, settings)
+    replaced: list[Word] = []
+    for word in words:
+        if word in stretched:
+            replaced.extend(_decoded_alone(model, recording, word, settings))
+        else:
+            replaced.append(word)
+    return replaced
+
+
+def _decoded_alone(
+    model: Any, recording: Path, stretch: Word, settings: AnalysisSettings
+) -> list[Word]:
+    """One stretch decoded with nothing but itself in the model's window.
+
+    The same model and the same settings, and no prompt and no vocabulary either —
+    decision 0010, which names this as one of the three routes that take priming's
+    place. The only difference is what the model is shown: the stretch on its own
+    rather than thirty seconds that are mostly quiet, which is all it takes to recover
+    speech the first pass wrote no word for. `work/rough-cut-assistant/facts.md` has
+    the readings both ways.
+
+    The window is pinned to the stretch rather than the audio cut out of the recording,
+    so what comes back is already on the recording's own clock and only has to be held
+    inside the stretch it was decoded from — a word may not reach past the words either
+    side of the one it replaces. A pass that hears nothing at all leaves the word it was
+    asked about where it was: a stretch with a doubtful word against it is still better
+    described than one with no word against it.
+    """
+    heard = _decoded(model, recording, settings, stretch=stretch)
+    return [_held_inside(word, stretch) for word in heard] or [stretch]
+
+
+def _held_inside(word: Word, stretch: Word) -> Word:
+    """One word of a second pass, kept within the stretch that pass was given."""
+    start = min(max(word.start_seconds, stretch.start_seconds), stretch.end_seconds)
+    end = max(min(word.end_seconds, stretch.end_seconds), start)
+    return replace(word, start_seconds=start, end_seconds=end)
+
+
+def _decoded(
+    model: Any, recording: Path, settings: AnalysisSettings, stretch: Word | None = None
+) -> list[Word]:
+    """What the model hears, in the whole recording or in one stretch of it alone."""
+    window: dict[str, Any] = {}
+    if stretch is not None:
+        window["clip_timestamps"] = [stretch.start_seconds, stretch.end_seconds]
     try:
         segments, _ = model.transcribe(
             str(recording),
@@ -376,6 +448,7 @@ def transcribe(recording: Path, settings: AnalysisSettings) -> list[Word]:
             word_timestamps=True,
             vad_filter=False,
             temperature=0.0,
+            **window,
         )
         return [
             Word(
