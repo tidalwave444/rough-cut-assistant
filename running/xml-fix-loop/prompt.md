@@ -50,7 +50,10 @@ the check that is red for it.
 
    Red, both in `tests/test_stumbles.py`:
    `test_a_word_beside_a_removal_keeps_the_tail_the_transcriber_stopped_short_of` and
-   `test_the_quiet_a_removal_ends_in_does_not_play_after_the_splice`.
+   `test_the_quiet_a_removal_ends_in_does_not_play_after_the_splice`. Both read at the
+   defaults, so the quiet beside the removal is a pause like any other — which is the
+   world this fix has to work in. A rule handed only the quiet no pause claimed is handed
+   nothing, and the first version of these two hid that by pinning the bar out of the way.
 
 4. **The detector is asked for half a second and up, so the cut cannot see the quiet it is meant
    to take off a splice.** The blank section at 03:04 is 0.376 s long and the artifact holds no
@@ -71,12 +74,15 @@ the check that is red for it.
    word is not length: it is how much of the stretch the detector heard sound in. A word
    stretched over *quiet* is the ordinary case decision 0001 is about and must stay.
 
-   Red: `tests/test_analyze.py`, `test_a_word_stretched_over_speech_is_handed_back_to_the_model`,
-   two cases — `part` and `development.` as the recording actually holds them.
+   Red: `tests/test_analyze.py`,
+   `test_a_word_stretched_over_speech_is_decoded_again_and_replaced`, two cases — `part`
+   and `development.` as the recording actually holds them.
 
-   This is ticket 14, and it carries 4's caveat twice over: the check names which spans go back
-   to the model, and neither the second decode pass nor the words it returns can be checked
-   without a GPU. Read the ticket before starting; it is blocked on 13 for a reason.
+   This is ticket 14; read it before starting. The check drives `analyze_recording` with a
+   model that hears a stretch differently when handed that stretch alone, which is the
+   finding the ticket rests on, and it counts the calls. A span-finder nothing calls does
+   not pass it — that was the first version of this check, and a function sitting unused is
+   exactly what satisfied it.
 
 One thing the listen asked for is **not** in this loop, because nothing is red for it. At
 10:33–11:02 the operator wants the last attempt at line 2's ending to be the one that plays. It

@@ -6,7 +6,9 @@ is exercised only by the slow smoke test.
 """
 
 import json
+from dataclasses import dataclass
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -15,6 +17,7 @@ from roughcut.analysis import Analysis, Silence, SourceMedia, Word, save_analysi
 from roughcut.analyze import (
     AnalysisSettings,
     analysis_for,
+    analyze_recording,
     describe_model_failure,
     fingerprint,
     parse_probe,
@@ -317,6 +320,15 @@ STRETCHED_OVER_SPEECH = [
 WORD_SECONDS = 0.5
 """How long an ordinary word runs in the fixture below."""
 
+SOURCE = SourceMedia(
+    filename="Sequence 07.mp4",
+    duration_seconds=142.567,
+    fps=60.0,
+    ntsc=False,
+    audio_sample_rate=48000,
+)
+"""The recording the listen was made on, as the probe reads it."""
+
 
 def a_reading_with_one_long_word(
     declared_seconds: float, quiet_inside: list[tuple[float, float]]
@@ -343,19 +355,103 @@ def a_reading_with_one_long_word(
     return words, silences
 
 
+@dataclass(frozen=True)
+class HeardWord:
+    """One word as `faster-whisper` hands it over, which is not how the tool holds one."""
+
+    word: str
+    start: float
+    end: float
+    probability: float
+
+
+@dataclass
+class ASecondPass:
+    """A model that hears a stretch differently when it is handed that stretch alone.
+
+    Which is the whole finding ticket 14 rests on: the same model, the same settings,
+    gives one word for the span inside the file and the words that were spoken when the
+    span is decoded on its own. It counts its calls because the fault this replaces was
+    a span-finder nothing ever called — a check that cannot tell the difference between
+    a second pass and a function sitting unused is not a check.
+    """
+
+    whole_file: list[HeardWord]
+    on_its_own: list[HeardWord]
+    calls: int = 0
+
+    def transcribe(self, *args: object, **kwargs: object) -> tuple[list[Any], None]:
+        self.calls += 1
+        heard = self.whole_file if self.calls == 1 else self.on_its_own
+        return [SimpleNamespace(words=heard)], None
+
+
+def as_the_model_hands_it_over(words: list[Word]) -> list[HeardWord]:
+    return [
+        HeardWord(f" {word.text}", word.start_seconds, word.end_seconds, word.confidence)
+        for word in words
+    ]
+
+
+BURIED = ["oh", "no", "vibe", "coding"]
+"""What the operator hears under the stretched word, and the model does when asked alone.
+
+Timed from zero, because a stretch decoded on its own comes back on its own clock and
+`analyze` is what puts it back on the recording's — ticket 14 says so, and the assertion
+below is that it happened.
+"""
+
+
 @pytest.mark.parametrize(("declared_seconds", "quiet_inside"), STRETCHED_OVER_SPEECH)
-def test_a_word_stretched_over_speech_is_handed_back_to_the_model(
-    declared_seconds: float, quiet_inside: list[tuple[float, float]]
+def test_a_word_stretched_over_speech_is_decoded_again_and_replaced(
+    declared_seconds: float,
+    quiet_inside: list[tuple[float, float]],
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
 ) -> None:
     # Heard at 02:24 and 07:13: the reading that plays is the abandoned one, because the
     # finished one is under a word the transcriber ran across the whole attempt. What
-    # separates it from an ordinary long word is not its length but how much of it is
-    # audible: a word stretched over quiet is what decision 0001 is about and stays.
-    from roughcut.analyze import stretched_over_speech
-
+    # separates that word from an ordinary long one is not its length but how much of it
+    # the detector heard sound in — a word stretched over quiet is decision 0001's
+    # ordinary case and stays.
+    #
+    # Asserted on the analysis rather than on a helper, and that is the point of this
+    # version: the media stage is where the words and the silences are both in hand, so
+    # it is the only place a second pass can be wired in, and the only place a check can
+    # tell whether it was.
     words, silences = a_reading_with_one_long_word(declared_seconds, quiet_inside)
+    stretched = words[1]
+    model = ASecondPass(
+        whole_file=as_the_model_hands_it_over(words),
+        on_its_own=[
+            HeardWord(f" {text}", index * 0.4, index * 0.4 + 0.4, 0.9)
+            for index, text in enumerate(BURIED)
+        ],
+    )
+    recording = tmp_path / "Sequence 07.mp4"
+    recording.write_bytes(b"")
+    monkeypatch.setattr("roughcut.analyze.probe_source", lambda path: SOURCE)
+    monkeypatch.setattr(
+        "roughcut.analyze.detect_silences", lambda path, duration, settings: silences
+    )
+    monkeypatch.setattr("roughcut.analyze._load_model", lambda settings: model)
 
-    assert stretched_over_speech(words, silences, AnalysisSettings()) == [words[1]]
+    analysis = analyze_recording(recording, AnalysisSettings())
+
+    assert model.calls == 2
+    assert [word.text for word in analysis.words] == [
+        "Building",
+        *BURIED,
+        "two.",
+        "coding,",
+        "with",
+    ]
+    recovered = analysis.words[1 : 1 + len(BURIED)]
+    assert all(
+        stretched.start_seconds <= word.start_seconds
+        and word.end_seconds <= stretched.end_seconds
+        for word in recovered
+    )
 
 
 def test_the_detector_hears_quiet_as_short_as_the_cut_may_leave_behind() -> None:
