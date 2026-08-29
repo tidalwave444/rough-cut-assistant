@@ -1,8 +1,8 @@
 Rough cut — sequence.mp4
 
 Source duration    00:01:26.250
-Output duration    00:01:03.445
-Removed            00:00:22.805
+Output duration    00:01:03.595
+Removed            00:00:22.655
 Words transcribed  163
 Script lines       8
 Lines found        8
@@ -34,17 +34,17 @@ Line  Source         Timeline       Script
    2  00:00:03.640   00:00:03.640   By the end, we’ll build a website like this.
    3  00:00:12.280   00:00:09.446   In the previous video, we set up the project. Now, before we start the implementation, we’ll use a skill to fully analyze the website idea.
    4  00:00:26.120   00:00:21.675   You can get useful resources like this, along with tools used by top engineers, for free on my Telegram channel.
-   5  00:00:39.560   00:00:32.491   Here, it asks us everything about the website: what it is about, who it is for, and which tech stack we need.
-   6  00:00:56.690   00:00:44.850   The best part of this skill is that it turns the interview results into a clear implementation plan.
-   7  00:01:10.000   00:00:55.633   Then, it starts building the project based on that plan.
-   8  00:01:15.080   00:01:00.713   The next part is coming soon.
+   5  00:00:39.560   00:00:32.641   Here, it asks us everything about the website: what it is about, who it is for, and which tech stack we need.
+   6  00:00:56.690   00:00:45.000   The best part of this skill is that it turns the interview results into a clear implementation plan.
+   7  00:01:10.000   00:00:55.783   Then, it starts building the project based on that plan.
+   8  00:01:15.080   00:01:00.863   The next part is coming soon.
 
 Every take considered
 
 Line  Take  Source         Coverage  Disfluencies  Outcome
    1     1  00:00:00.000   89%       0             selected
    2     1  00:00:03.640   100%      0             selected
-   3     1  00:00:12.280   92%       0             selected
+   3     1  00:00:12.280   96%       0             selected
    4     1  00:00:26.120   95%       0             selected
    5     1  00:00:39.560   100%      0             selected
    6     1  00:00:56.840   100%      0             selected
@@ -82,7 +82,7 @@ What came out from inside a take
 
 Line  At             Duration       Why                               What was said
    2  00:00:09.180   00:00:00.300   nothing of the line opposite it   wipe
-   4  00:00:30.020   00:00:01.460   "along" said twice                along the
+   4  00:00:30.170   00:00:01.310   "along" said twice                along the
    6  00:01:00.200   00:00:00.540   nothing of the line opposite it   skills
 
 Off-script material

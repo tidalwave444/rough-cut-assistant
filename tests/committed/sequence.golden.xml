@@ -3,7 +3,7 @@
 <xmeml version="4">
   <sequence id="sequence-1">
     <name>RoughCut</name>
-    <duration>3807</duration>
+    <duration>3816</duration>
     <rate>
       <timebase>60</timebase>
       <ntsc>FALSE</ntsc>
@@ -363,9 +363,9 @@
               <ntsc>FALSE</ntsc>
             </rate>
             <start>1347</start>
-            <end>1485</end>
+            <end>1494</end>
             <in>1663</in>
-            <out>1801</out>
+            <out>1810</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -381,8 +381,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>1485</start>
-            <end>1519</end>
+            <start>1494</start>
+            <end>1528</end>
             <in>1889</in>
             <out>1923</out>
             <file id="file-1"/>
@@ -400,8 +400,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>1519</start>
-            <end>1949</end>
+            <start>1528</start>
+            <end>1958</end>
             <in>1943</in>
             <out>2373</out>
             <file id="file-1"/>
@@ -419,8 +419,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>1949</start>
-            <end>1965</end>
+            <start>1958</start>
+            <end>1974</end>
             <in>2374</in>
             <out>2390</out>
             <file id="file-1"/>
@@ -438,8 +438,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>1965</start>
-            <end>2117</end>
+            <start>1974</start>
+            <end>2126</end>
             <in>2415</in>
             <out>2567</out>
             <file id="file-1"/>
@@ -457,8 +457,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2117</start>
-            <end>2265</end>
+            <start>2126</start>
+            <end>2274</end>
             <in>2613</in>
             <out>2761</out>
             <file id="file-1"/>
@@ -476,8 +476,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2265</start>
-            <end>2304</end>
+            <start>2274</start>
+            <end>2313</end>
             <in>2789</in>
             <out>2828</out>
             <file id="file-1"/>
@@ -495,8 +495,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2304</start>
-            <end>2388</end>
+            <start>2313</start>
+            <end>2397</end>
             <in>2867</in>
             <out>2951</out>
             <file id="file-1"/>
@@ -514,8 +514,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2388</start>
-            <end>2531</end>
+            <start>2397</start>
+            <end>2540</end>
             <in>2970</in>
             <out>3113</out>
             <file id="file-1"/>
@@ -533,8 +533,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2531</start>
-            <end>2569</end>
+            <start>2540</start>
+            <end>2578</end>
             <in>3134</in>
             <out>3172</out>
             <file id="file-1"/>
@@ -552,8 +552,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2569</start>
-            <end>2691</end>
+            <start>2578</start>
+            <end>2700</end>
             <in>3195</in>
             <out>3317</out>
             <file id="file-1"/>
@@ -571,8 +571,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2691</start>
-            <end>2732</end>
+            <start>2700</start>
+            <end>2741</end>
             <in>3401</in>
             <out>3442</out>
             <file id="file-1"/>
@@ -590,8 +590,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2732</start>
-            <end>2823</end>
+            <start>2741</start>
+            <end>2832</end>
             <in>3461</in>
             <out>3552</out>
             <file id="file-1"/>
@@ -609,8 +609,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2823</start>
-            <end>2854</end>
+            <start>2832</start>
+            <end>2863</end>
             <in>3581</in>
             <out>3612</out>
             <file id="file-1"/>
@@ -628,8 +628,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2854</start>
-            <end>2955</end>
+            <start>2863</start>
+            <end>2964</end>
             <in>3644</in>
             <out>3745</out>
             <file id="file-1"/>
@@ -647,8 +647,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2955</start>
-            <end>3046</end>
+            <start>2964</start>
+            <end>3055</end>
             <in>3778</in>
             <out>3869</out>
             <file id="file-1"/>
@@ -666,8 +666,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>3046</start>
-            <end>3196</end>
+            <start>3055</start>
+            <end>3205</end>
             <in>3890</in>
             <out>4040</out>
             <file id="file-1"/>
@@ -685,8 +685,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>3196</start>
-            <end>3338</end>
+            <start>3205</start>
+            <end>3347</end>
             <in>4058</in>
             <out>4200</out>
             <file id="file-1"/>
@@ -704,8 +704,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>3338</start>
-            <end>3643</end>
+            <start>3347</start>
+            <end>3652</end>
             <in>4200</in>
             <out>4505</out>
             <file id="file-1"/>
@@ -723,8 +723,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>3643</start>
-            <end>3662</end>
+            <start>3652</start>
+            <end>3671</end>
             <in>4505</in>
             <out>4524</out>
             <file id="file-1"/>
@@ -742,8 +742,8 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>3662</start>
-            <end>3807</end>
+            <start>3671</start>
+            <end>3816</end>
             <in>4576</in>
             <out>4721</out>
             <file id="file-1"/>
@@ -782,37 +782,37 @@
     <marker>
       <name>Line 5.1</name>
       <comment>Here, it asks us everything about the website: what it is about,</comment>
-      <in>1949</in>
+      <in>1958</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 5.2</name>
       <comment>who it is for,</comment>
-      <in>2359</in>
+      <in>2368</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 5.3</name>
       <comment>and which tech stack we need.</comment>
-      <in>2484</in>
+      <in>2493</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 6</name>
       <comment>The best part of this skill is that it turns the interview results into a clear implementation plan.</comment>
-      <in>2700</in>
+      <in>2709</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 7</name>
       <comment>Then, it starts building the project based on that plan.</comment>
-      <in>3338</in>
+      <in>3347</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 8</name>
       <comment>The next part is coming soon.</comment>
-      <in>3643</in>
+      <in>3652</in>
       <out>-1</out>
     </marker>
   </sequence>
