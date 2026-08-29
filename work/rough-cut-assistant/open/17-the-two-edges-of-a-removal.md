@@ -4,7 +4,7 @@
 The head is done; the tail waits on a decision from the operator, because the two checks
 that ask for it cannot both be satisfied.
 
-**Blocked by:** A locked check only a person may move — see the finding below.
+**Blocked by:** None — the check was moved on 29 August, see the last comment.
 
 **Status:** ready-for-agent
 
@@ -17,7 +17,7 @@ that ask for it cannot both be satisfied.
 
 - [x] The head of what plays after a removal is trimmed to its sound and padded back
 - [ ] The tail of what plays before one reaches the sound the transcriber stopped short of
-- [ ] `tests/test_stumbles.py` no longer holds two checks that contradict each other
+- [x] `tests/test_stumbles.py` no longer holds two checks that contradict each other
 
 ## Comments
 
@@ -50,5 +50,11 @@ of `coding` runs to 3.6 there too, and 3.5 clips it.
 So the question for the operator is whether that green check should go on asserting a whole
 cut. If it asserted `plan.shortened == []` and the clip count, both could hold at once.
 That is an edit to `tests/`, which is locked to the loop and not to a person.
+
+The operator answered it: no. Both ticket-11 checks now assert `plan.shortened == []` and
+the clip count, which is what they were written to say — a pause and a removal never report
+the same second twice — and neither pins an out point any more. So an edge may move into
+quiet the removal reaches into, and the tail half is reachable. Nothing about what those
+two checks are for has changed.
 
 ## Heard

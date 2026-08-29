@@ -121,21 +121,28 @@ def test_quiet_a_removal_takes_with_it_is_not_also_a_shortened_pause() -> None:
     # The speaker stumbled and paused in the middle of the stumble. The whole stretch
     # goes, so the second inside it is removed once and reported once — as a removal,
     # which is the thing that took it.
+    #
+    # The clip count is how that is said: the pause added no splice of its own. Where the
+    # removal's two edges land is not this check's business and it no longer pins them —
+    # asserting a whole cut here made an incidental out point contradict the listen of
+    # 28 August, and ticket 17 is what that cost.
     plan = read(STUMBLED, [Silence(3.6, 4.4)])
 
-    assert cut_times(plan) == [(0.0, 3.5, 0.0), (4.5, 5.5, 3.5)]
-    assert [removal.text for removal in plan.removed] == ["part no"]
     assert plan.shortened == []
+    assert [removal.text for removal in plan.removed] == ["part no"]
+    assert len(cut_times(plan)) == 2
 
 
 def test_quiet_a_removal_only_reaches_into_is_left_to_the_removal_as_well() -> None:
     # Half of this pause is inside the stumble and half is not. Collapsing what is left
     # would have the pause and the removal each report taking the same half second, so
     # the removal keeps the whole stretch and the pause table says nothing about it.
+    #
+    # Its edges are the pad's to place, for the reason given above.
     plan = read(STUMBLED, [Silence(4.2, 5.1)])
 
-    assert cut_times(plan) == [(0.0, 3.5, 0.0), (4.5, 5.5, 3.5)]
     assert plan.shortened == []
+    assert len(cut_times(plan)) == 2
 
 
 def test_a_marker_after_a_removal_moves_with_the_words_it_names() -> None:
