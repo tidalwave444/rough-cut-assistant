@@ -29,12 +29,26 @@ CLAUDE_FLAGS=(--permission-mode acceptEdits)
 
 say() { printf '\n== %s\n' "$*"; }
 
+# Both checks colour their output when the environment tells them to, and they do it
+# writing to a file as readily as to a terminal — FORCE_COLOR is set inside a Claude Code
+# shell, which is where this loop is usually started from. Every grep below is anchored to
+# the start of a line, so one escape sequence in front of FAILED scores a red run as no
+# failures at all, which red_count then reads as 999. A finished run stalls on its own
+# success. Asked not to colour, and stripped anyway, because the asking is per-tool and
+# the stripping is not.
+UNCOLOURED=(env -u FORCE_COLOR -u MYPY_FORCE_COLOR NO_COLOR=1 PY_COLORS=0)
+
+strip_colour() {
+    sed -i 's/\x1b\[[0-9;]*[a-zA-Z]//g; s/\x1b[()][A-Za-z]//g' "$CHECK_LOG"
+}
+
 run_checks() {
     : > "$CHECK_LOG"
-    uv run pytest -q >>"$CHECK_LOG" 2>&1
+    "${UNCOLOURED[@]}" uv run pytest -q >>"$CHECK_LOG" 2>&1
     local pytest_status=$?
-    uv run mypy >>"$CHECK_LOG" 2>&1
+    "${UNCOLOURED[@]}" uv run mypy >>"$CHECK_LOG" 2>&1
     local mypy_status=$?
+    strip_colour
     [ $pytest_status -eq 0 ] && [ $mypy_status -eq 0 ]
 }
 
