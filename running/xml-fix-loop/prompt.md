@@ -101,18 +101,40 @@ changed and what you now know, and stop. The next iteration starts from your com
 
 ## What you may change
 
-`src/roughcut/` only.
+`src/roughcut/`, `settled/` and `work/`.
 
-These are locked. The loop reverts them after your turn and counts the iteration as wasted:
+The last two opened up on 29 August. A loop that may change the code but not the documents
+describing it produces one thing reliably: a decision still naming the number the code has
+moved, and a ticket still open on work that shipped. That is what happened on the first run
+of this loop — read `settled/decisions/0003` against `src/roughcut/pauses.py` for the shape
+of it. A document nobody may edit goes stale, and a stale document is worse than none.
+
+What that permission is for, and what it is not:
+
+- **`settled/`** — bring a decision forward when your change contradicts it. Not silently,
+  and not by deleting it: a decision carries the alternatives rejected to reach it and the
+  evidence that makes the choice checkable, and an amended one says what moved it. Amend
+  the claim in its title too if the claim has changed — a file titled as something the
+  project no longer believes is worse than the stale number inside it. If you cannot name
+  the evidence that overturns a decision, that is the signal to stop rather than to edit.
+- **`work/`** — edit a ticket that your change has made untrue. Correct a prediction where
+  it stands rather than appending the correction, keep to the 60-line ceiling, and move
+  anything that outgrows it to `settled/decisions/` or to `what-it-does.md` and `facts.md`.
+  You may open a ticket for something you found and are not fixing.
+
+**What you may never write is a ticket's own verdict.** The `Status:` line and everything
+under `## Heard` are the record of a person having played the cut and judged it, and an
+agent writing either invents an acceptance that never happened. Your last act on a ticket
+is `Status: awaiting-listen` and an empty `## Heard`; `Status: done` is not yours to write
+at all. The loop checks this against the previous commit rather than trusting the prompt:
+touch either and it reverts the whole of `work/` and counts the iteration as wasted.
+
+These stay locked, and the loop reverts them after your turn:
 
 - **`tests/`** — the checks are the contract being worked against. An agent that edits the
   contract to satisfy it has proved nothing. This includes `tests/committed/`, which holds
   the hand-verified import contract and the committed analysis of the real recording.
-- **`settled/`** — the vocabulary and the decisions. Contradicting a decision is allowed;
-  doing it silently is not, and a loop is not the place to do it at all. If your fix needs a
-  decision overturned, stop and name the decision.
 - **`recordings/`** — the input material.
-- **`work/`** — the tickets. Their `Status:` and `## Heard` belong to the person who listens.
 - **`running/`** — the operator's side of the tool, this loop and its prompt among it. A run
   that rewrites its own instructions is not a run anyone can read afterwards.
 

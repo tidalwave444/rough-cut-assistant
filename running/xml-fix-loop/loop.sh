@@ -20,9 +20,14 @@ STALL_LIMIT=${STALL_LIMIT:-2}
 PROMPT=running/xml-fix-loop/prompt.md
 CHECK_LOG=out/check.txt
 
-# Everything the model may not touch. src/ is what is left, and that is deliberate: the
-# checks are the contract, and a contract the other party can edit is not one.
-PROTECTED=(tests settled recordings running work)
+# Everything the model may not touch. The checks are the contract, and a contract the
+# other party can edit is not one — so tests/ stays locked whatever else opens up.
+#
+# settled/ and work/ came off this list on 29 August. A loop that may change the code and
+# not the documents describing it produces exactly one thing reliably: a decision still
+# naming the number the code has moved, and a ticket still open on work that shipped. A
+# document nobody may edit goes stale, and a stale document is worse than none.
+PROTECTED=(tests recordings running)
 
 # Narrow this if you want a tighter cage, e.g. --allowed-tools Read Edit Bash Grep Glob.
 CLAUDE_FLAGS=(--permission-mode acceptEdits)
@@ -79,6 +84,37 @@ only_the_goldens_are_red() {
 
 protected_edits() { git diff --name-only -- "${PROTECTED[@]}"; }
 protected_additions() { git ls-files --others --exclude-standard -- "${PROTECTED[@]}"; }
+
+# What a ticket says about its own acceptance is the one part of work/ that did not open
+# up: the Status: line and everything under ## Heard. Those are the record of a person
+# having played the cut and judged it, and how-we-work.md is not ambiguous — an agent
+# never writes them. A rule carrying that much weight is a rail here rather than a
+# sentence in the prompt, on the same reasoning as everything else in this script.
+verdict_of() { awk '/^\*\*Status:\*\*/ { print } /^## Heard/ { under = 1 } under { print }'; }
+
+# A ticket that did not exist before this iteration has no verdict to preserve, so what
+# it may not do is arrive already carrying one.
+verdict_arrived_in() {
+    awk '
+        /^\*\*Status:\*\*/ && /done/ { found = 1 }
+        under && NF { found = 1 }
+        /^## Heard/ { under = 1 }
+        END { exit !found }
+    ' "$1"
+}
+
+verdicts_written() {
+    local file
+    while IFS= read -r file; do
+        [ -f "$file" ] || continue
+        if git cat-file -e "HEAD:$file" 2>/dev/null; then
+            diff -q <(git show "HEAD:$file" | verdict_of) <(verdict_of <"$file") >/dev/null \
+                || printf '%s\n' "$file"
+        elif verdict_arrived_in "$file"; then
+            printf '%s\n' "$file"
+        fi
+    done < <(git ls-files --cached --others --exclude-standard -- work)
+}
 
 require_clean_tree() {
     [ -z "$(git status --porcelain)" ] && return 0
@@ -144,6 +180,12 @@ $(tail -n 60 "$CHECK_LOG")
         say "locked paths were edited — reverting them, the iteration is spent"
         protected_edits
         git checkout -- "${PROTECTED[@]}"
+    fi
+    if [ -n "$(verdicts_written)" ]; then
+        say "a ticket's own verdict was written — reverting work/, the iteration is spent"
+        verdicts_written
+        git checkout -- work
+        git clean -fq -- work
     fi
 
     git add -A
