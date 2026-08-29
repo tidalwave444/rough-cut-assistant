@@ -235,51 +235,43 @@ def bounded_by_sound(
     is therefore trimmed to the sound and then padded back, the same two steps in the
     same order as every span above.
 
-    The quiet an edge may move into is the quiet the removal does not itself reach
-    into. A stretch the removal runs through is already the removal's: it comes out
-    whole, and an edge stepping further into it would be two rules cutting the same
-    piece of recording between them. Every other stretch the detector heard is offered,
-    whatever the pause rule would do with it — the bar sits at a beat, so a rule handed
-    only the quiet no pause claims is handed nothing at all and can never fire.
+    Every stretch the detector heard is offered to both edges, the quiet the removal
+    arrived reaching into included. Where a removal's edges fall is the question being
+    answered here, so the word timestamps it arrived with bound nothing — that is
+    decision 0001 read against the pair of edges the stumble was found by, the same as
+    it is read against every other pair. Nothing is thereby cut twice: a pause a
+    removal reaches into at all is dropped rather than collapsed (`pauses.py`), so the
+    two never report having taken the same second.
 
-    Each pad therefore only steps back into the quiet its own trim moved it out of, and
-    an edge already sitting on sound does not move at all. Neither may cross the word
-    timestamp it started from: beyond that lies the removed speech, and a pad that
-    reached it would play the stumble again on one side or the other.
+    The head is the straightforward one: it trims to the far side of the quiet the
+    removal ends in and pads back into that quiet, so the word after the splice arrives
+    on time rather than behind a hole.
 
-    Which bounds how much of the fault this answers. The head is reachable: the quiet a
-    removal ends *in* lies outside it, so that edge trims to the far side of the quiet
-    and pads back, and the word after the splice arrives on time. The tail is not. The
-    word before a removal goes on sounding after the transcriber stops recognising it,
-    and the stretch it fades into is quiet the removal itself reaches into — which the
-    rail above will not let an edge move through. Ticket 17 holds that finding.
+    The tail trims back to where the sound stopped if the room was already quiet when
+    the removal began, and is then padded the other way — forward, across the removal's
+    declared start rather than stopping at it. It has to be: the word before a removal
+    goes on sounding after the transcriber has stopped recognising it, so where no quiet
+    had set in yet, the fading tail lies inside the removal and nothing else can reach
+    it. That is the step `widen` already takes across the sound between a word's declared
+    end and the quiet beside it, and it carries the same cost in the same direction —
+    where that sound is the stumble's own rather than the fading word's, up to a pad's
+    width of the stumble plays. The pad is small because that is the bound on how wrong
+    it can be.
+
+    Neither edge may reach the other. The tail stops at the removal's far edge, where
+    the head is waiting or later, so a removal never turns inside out however the two
+    are placed.
     """
     padding = settings.padding_seconds
-    beside = _outside(cut, silences)
-    trimmed_tail = _quiet_set_in_at(cut.start_seconds, beside)
-    trimmed_head = _quiet_runs_until(cut.end_seconds, beside)
-    tail_ends = _grown_forward(trimmed_tail, cut.start_seconds, beside, padding)
+    trimmed_tail = _quiet_set_in_at(cut.start_seconds, silences)
+    trimmed_head = _quiet_runs_until(cut.end_seconds, silences)
+    tail_ends = _grown_forward(trimmed_tail, cut.end_seconds, silences, padding)
     head_begins = (
         max(cut.end_seconds, trimmed_head - padding)
         if trimmed_head > cut.end_seconds
         else cut.end_seconds
     )
-    return Cut(min(tail_ends, head_begins), head_begins)
-
-
-def _outside(cut: Cut, silences: Sequence[Silence]) -> list[Silence]:
-    """The quiet lying against this removal rather than inside it.
-
-    Quiet a removal reaches into comes out with the removal, so an edge has nothing to
-    find there: it would only be moving through a stretch that has already gone. What is
-    left is the quiet waiting on either side of the removal — the fading tail of the word
-    before it, and the run-up to the word after — which is where both edges belong.
-    """
-    return [
-        silence
-        for silence in silences
-        if silence.start_seconds >= cut.end_seconds or silence.end_seconds <= cut.start_seconds
-    ]
+    return Cut(tail_ends, head_begins)
 
 
 def _shared(start: float, end: float) -> float:
