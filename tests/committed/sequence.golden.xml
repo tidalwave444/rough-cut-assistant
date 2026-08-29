@@ -3,7 +3,7 @@
 <xmeml version="4">
   <sequence id="sequence-1">
     <name>RoughCut</name>
-    <duration>4227</duration>
+    <duration>3807</duration>
     <rate>
       <timebase>60</timebase>
       <ntsc>FALSE</ntsc>
@@ -135,9 +135,9 @@
               <ntsc>FALSE</ntsc>
             </rate>
             <start>218</start>
-            <end>239</end>
+            <end>236</end>
             <in>218</in>
-            <out>239</out>
+            <out>236</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -153,10 +153,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>239</start>
-            <end>369</end>
-            <in>269</in>
-            <out>399</out>
+            <start>236</start>
+            <end>297</end>
+            <in>272</in>
+            <out>333</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -172,10 +172,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>369</start>
-            <end>468</end>
-            <in>452</in>
-            <out>551</out>
+            <start>297</start>
+            <end>330</end>
+            <in>363</in>
+            <out>396</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -191,10 +191,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>468</start>
-            <end>636</end>
-            <in>569</in>
-            <out>737</out>
+            <start>330</start>
+            <end>426</end>
+            <in>455</in>
+            <out>551</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -210,10 +210,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>636</start>
-            <end>1016</end>
-            <in>737</in>
-            <out>1117</out>
+            <start>426</start>
+            <end>528</end>
+            <in>569</in>
+            <out>671</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -229,10 +229,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>1016</start>
-            <end>1426</end>
-            <in>1158</in>
-            <out>1568</out>
+            <start>528</start>
+            <end>567</end>
+            <in>698</in>
+            <out>737</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -248,10 +248,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>1426</start>
-            <end>1660</end>
-            <in>1567</in>
-            <out>1801</out>
+            <start>567</start>
+            <end>722</end>
+            <in>737</in>
+            <out>892</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -267,10 +267,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>1660</start>
-            <end>2145</end>
-            <in>1889</in>
-            <out>2374</out>
+            <start>722</start>
+            <end>921</end>
+            <in>915</in>
+            <out>1114</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -286,10 +286,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2145</start>
-            <end>2341</end>
-            <in>2374</in>
-            <out>2570</out>
+            <start>921</start>
+            <end>1084</end>
+            <in>1161</in>
+            <out>1324</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -305,10 +305,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2341</start>
-            <end>2560</end>
-            <in>2610</in>
-            <out>2829</out>
+            <start>1084</start>
+            <end>1301</end>
+            <in>1351</in>
+            <out>1568</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -324,10 +324,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>2560</start>
-            <end>3013</end>
-            <in>2864</in>
-            <out>3317</out>
+            <start>1301</start>
+            <end>1331</end>
+            <in>1567</in>
+            <out>1597</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -343,10 +343,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>3013</start>
-            <end>3223</end>
-            <in>3401</in>
-            <out>3611</out>
+            <start>1331</start>
+            <end>1347</end>
+            <in>1624</in>
+            <out>1640</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -362,10 +362,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>3223</start>
-            <end>3328</end>
-            <in>3644</in>
-            <out>3749</out>
+            <start>1347</start>
+            <end>1485</end>
+            <in>1663</in>
+            <out>1801</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -381,10 +381,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>3328</start>
-            <end>3753</end>
-            <in>3775</in>
-            <out>4200</out>
+            <start>1485</start>
+            <end>1519</end>
+            <in>1889</in>
+            <out>1923</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -400,10 +400,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>3753</start>
-            <end>4058</end>
-            <in>4200</in>
-            <out>4505</out>
+            <start>1519</start>
+            <end>1949</end>
+            <in>1943</in>
+            <out>2373</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -419,10 +419,10 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>4058</start>
-            <end>4080</end>
-            <in>4505</in>
-            <out>4527</out>
+            <start>1949</start>
+            <end>1965</end>
+            <in>2374</in>
+            <out>2390</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -438,10 +438,314 @@
               <timebase>60</timebase>
               <ntsc>FALSE</ntsc>
             </rate>
-            <start>4080</start>
-            <end>4227</end>
-            <in>4573</in>
-            <out>4720</out>
+            <start>1965</start>
+            <end>2117</end>
+            <in>2415</in>
+            <out>2567</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-19">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2117</start>
+            <end>2265</end>
+            <in>2613</in>
+            <out>2761</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-20">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2265</start>
+            <end>2304</end>
+            <in>2789</in>
+            <out>2828</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-21">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2304</start>
+            <end>2388</end>
+            <in>2867</in>
+            <out>2951</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-22">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2388</start>
+            <end>2531</end>
+            <in>2970</in>
+            <out>3113</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-23">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2531</start>
+            <end>2569</end>
+            <in>3134</in>
+            <out>3172</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-24">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2569</start>
+            <end>2691</end>
+            <in>3195</in>
+            <out>3317</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-25">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2691</start>
+            <end>2732</end>
+            <in>3401</in>
+            <out>3442</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-26">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2732</start>
+            <end>2823</end>
+            <in>3461</in>
+            <out>3552</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-27">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2823</start>
+            <end>2854</end>
+            <in>3581</in>
+            <out>3612</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-28">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2854</start>
+            <end>2955</end>
+            <in>3644</in>
+            <out>3745</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-29">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2955</start>
+            <end>3046</end>
+            <in>3778</in>
+            <out>3869</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-30">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>3046</start>
+            <end>3196</end>
+            <in>3890</in>
+            <out>4040</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-31">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>3196</start>
+            <end>3338</end>
+            <in>4058</in>
+            <out>4200</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-32">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>3338</start>
+            <end>3643</end>
+            <in>4200</in>
+            <out>4505</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-33">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>3643</start>
+            <end>3662</end>
+            <in>4505</in>
+            <out>4524</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-34">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>sequence.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>5175</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>3662</start>
+            <end>3807</end>
+            <in>4576</in>
+            <out>4721</out>
             <file id="file-1"/>
             <sourcetrack>
               <mediatype>audio</mediatype>
@@ -466,49 +770,49 @@
     <marker>
       <name>Line 3</name>
       <comment>In the previous video, we set up the project. Now, before we start the implementation, we’ll use a skill to fully analyze the website idea.</comment>
-      <in>636</in>
+      <in>567</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 4</name>
       <comment>You can get useful resources like this, along with tools used by top engineers, for free on my Telegram channel.</comment>
-      <in>1426</in>
+      <in>1301</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 5.1</name>
       <comment>Here, it asks us everything about the website: what it is about,</comment>
-      <in>2145</in>
+      <in>1949</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 5.2</name>
       <comment>who it is for,</comment>
-      <in>2619</in>
+      <in>2359</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 5.3</name>
       <comment>and which tech stack we need.</comment>
-      <in>2763</in>
+      <in>2484</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 6</name>
       <comment>The best part of this skill is that it turns the interview results into a clear implementation plan.</comment>
-      <in>3022</in>
+      <in>2700</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 7</name>
       <comment>Then, it starts building the project based on that plan.</comment>
-      <in>3753</in>
+      <in>3338</in>
       <out>-1</out>
     </marker>
     <marker>
       <name>Line 8</name>
       <comment>The next part is coming soon.</comment>
-      <in>4058</in>
+      <in>3643</in>
       <out>-1</out>
     </marker>
   </sequence>
