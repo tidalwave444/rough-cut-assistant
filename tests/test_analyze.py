@@ -6,7 +6,7 @@ is exercised only by the slow smoke test.
 """
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -382,8 +382,24 @@ class ASecondPass:
 
     def transcribe(self, *args: object, **kwargs: object) -> tuple[list[Any], None]:
         self.calls += 1
-        heard = self.whole_file if self.calls == 1 else self.on_its_own
-        return [SimpleNamespace(words=heard)], None
+        if self.calls == 1:
+            return [SimpleNamespace(words=self.whole_file)], None
+        return [SimpleNamespace(words=self._alone_on(kwargs))], None
+
+    def _alone_on(self, kwargs: dict[str, object]) -> list[HeardWord]:
+        """The stretch's words, on whichever clock the caller asked for them.
+
+        `faster-whisper` times a clip window against the recording, so a caller naming
+        one gets absolute times back, and a caller handing over the stretch's audio
+        alone gets them from zero. Answering both is what keeps the check about where
+        the words land rather than about how the stretch was handed over.
+        """
+        window = kwargs.get("clip_timestamps")
+        at = float(window[0]) if isinstance(window, (list, tuple)) and window else 0.0
+        return [
+            replace(word, start=word.start + at, end=word.end + at)
+            for word in self.on_its_own
+        ]
 
 
 def as_the_model_hands_it_over(words: list[Word]) -> list[HeardWord]:
@@ -448,9 +464,11 @@ def test_a_word_stretched_over_speech_is_decoded_again_and_replaced(
     ]
     recovered = analysis.words[1 : 1 + len(BURIED)]
     assert all(
-        stretched.start_seconds <= word.start_seconds
-        and word.end_seconds <= stretched.end_seconds
+        stretched.start_seconds <= word.start_seconds < word.end_seconds <= stretched.end_seconds
         for word in recovered
+    )
+    assert [word.start_seconds for word in recovered] == sorted(
+        word.start_seconds for word in recovered
     )
 
 

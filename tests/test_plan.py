@@ -456,3 +456,38 @@ def test_only_the_last_attempt_at_a_line_s_ending_reaches_the_cut() -> None:
         Clip(source_in_seconds=0.0, source_out_seconds=3.0, timeline_start_seconds=0.0),
         Clip(source_in_seconds=5.0, source_out_seconds=6.5, timeline_start_seconds=3.0),
     ]
+
+
+# The two below are ticket 15, and the evidence for it is the cut made on 29 August after
+# the second pass of ticket 14 landed. Recovering the speech buried under one long word
+# means recovering the model's mishearings with it, and alignment compares tokens for
+# equality — so every word the second pass hands back that the model heard slightly wrong
+# lowers the line's coverage instead of raising it. `Sequence 07` came back with three
+# lines flagged where it had two, and line 1 stopped having its abandoned attempt removed
+# at all, because `white coating` repeats no word of the line it was misheard from.
+
+
+def test_a_line_the_transcriber_misheard_is_still_a_complete_reading_of_it() -> None:
+    # `rail` for `real`, `wipe` for `vibe`, `coating` for `coding` — one character each,
+    # and the line is reported at 67% and flagged as the least bad, for a reading that was
+    # read correctly from start to finish. What identifies a mishearing is structural: the
+    # script word it displaced sits opposite it (decision 0002), which is exactly what a
+    # near-miss match finds.
+    misheard = spoken("Building a rail project with wipe coating, part two.", at=0.0)
+
+    plan = build_plan(analysis(misheard), [SCRIPT[0]])
+
+    assert plan.flagged == []
+    assert rough_cut(plan).clips == [Clip(0.0, 4.5, 0.0)]
+
+
+def test_two_short_words_a_letter_apart_are_not_the_same_word() -> None:
+    # Green, and the rail under the one above: `a` is not `the` and `we` is not `he`. A
+    # measure loose enough to match them makes coverage stop meaning anything, and
+    # coverage is what disqualifies a take — so loosening it loosens every judgement
+    # downstream at once. This reading really is two words short and must go on saying so.
+    swapped = spoken("In a next part we will begin a implementation.", at=0.0)
+
+    plan = build_plan(analysis(swapped), [SCRIPT[2]])
+
+    assert [line.line.number for line in plan.flagged] == [3]

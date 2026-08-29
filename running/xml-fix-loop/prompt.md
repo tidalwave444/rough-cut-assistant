@@ -14,8 +14,9 @@ A problem with no red check is not in this loop — if you spot one, say so and 
 
 Nine faults, from one listen of `Sequence 07` on 28 August, every one of them inside the first
 fifteen seconds of the cut. They come to five problems: several of the nine are one fault heard
-in several places, and one of them is already fixed and only looks broken. Each problem names
-the check that is red for it.
+in several places, and one of them is already fixed and only looks broken. Problem 6 is not from
+that listen — it is what problem 5 did to the cut when it landed. Each problem names the check
+that is red for it.
 
 1. **Quiet the detector heard inside a line plays exactly as it was recorded.** Heard as blank
    sections at 01:42, 04:47 and 14:05 — 0.507 s, 0.565 s and 0.632 s of nothing, every one of
@@ -83,6 +84,29 @@ the check that is red for it.
    finding the ticket rests on, and it counts the calls. A span-finder nothing calls does
    not pass it — that was the first version of this check, and a function sitting unused is
    exactly what satisfied it.
+
+6. **A near miss is a total miss, so recovering buried speech lowers a line's coverage.**
+   Not from the 28 August listen: this is what problem 5 did when it landed. Cutting
+   `Sequence 07` on 29 August recovered the words under `part` — `oh no white coating`,
+   which is `vibe coding` misheard — and the cut got worse for it. Line 1 stopped having
+   its abandoned attempt removed at all, because `white coating` repeats no word of the
+   line it was misheard from; lines flagged went 2 → 3; line 2 fell from 88% coverage and
+   clean to 75% and flagged. Alignment compares tokens for equality, so every word the
+   second pass hands back that the model heard slightly wrong counts against the line.
+
+   Red: `tests/test_plan.py`,
+   `test_a_line_the_transcriber_misheard_is_still_a_complete_reading_of_it`.
+
+   This is ticket 15; read it, and decision 0002 with it — a mishearing is identified
+   structurally, by the script word it displaced sitting opposite it, which is what a
+   near-miss match finds. `test_two_short_words_a_letter_apart_are_not_the_same_word` is
+   green beside it and is the rail: `a` is not `the`, and a measure loose enough to match
+   them makes coverage stop meaning anything. Coverage is what disqualifies a take, so
+   loosening it loosens every judgement downstream at once.
+
+   Ticket 14's own `## Listen for` predicted the report would *quote* the re-decoded words
+   in place of `part 1. No, no,`. It does not — the removal stopped happening instead.
+   Correct that item where it stands rather than appending to it.
 
 One thing the listen asked for is **not** in this loop, because nothing is red for it. At
 10:33–11:02 the operator wants the last attempt at line 2's ending to be the one that plays. It
