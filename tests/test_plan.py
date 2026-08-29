@@ -491,3 +491,22 @@ def test_two_short_words_a_letter_apart_are_not_the_same_word() -> None:
     plan = build_plan(analysis(swapped), [SCRIPT[2]])
 
     assert [line.line.number for line in plan.flagged] == [3]
+
+
+def test_a_near_miss_is_found_past_a_word_the_line_does_not_account_for() -> None:
+    # `Sequence 07` line 1 as the second pass leaves it: `with a wipe coating`, where the
+    # `a` is the transcriber's own and `wipe coating` is `vibe coding`. Exact matching
+    # steps over a word the line does not account for and goes on; near-miss matching
+    # stops at it, so the line reaches `with` and everything after it — its own ending
+    # included — becomes an off-script region that plays beside it.
+    #
+    # Which is decision 0002 read at half strength. A mishearing is identified by the
+    # script word it displaced sitting opposite it, and `vibe` is opposite `wipe` once
+    # the intruder is stepped over. Whether it is stepped over is not the mishearing's
+    # business.
+    heard = spoken("Building a real project with a wipe coating part two.", at=0.0)
+
+    plan = build_plan(analysis(heard), [SCRIPT[0]])
+
+    assert plan.flagged == []
+    assert plan.off_script == []

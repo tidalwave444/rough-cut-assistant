@@ -108,6 +108,18 @@ that is red for it.
    in place of `part 1. No, no,`. It does not — the removal stopped happening instead.
    Correct that item where it stands rather than appending to it.
 
+   **A first near-miss measure shipped on 29 August and made line 1 worse, not better.**
+   It fires only where the two words sit exactly opposite each other, and exact matching
+   has always stepped over a word the line does not account for. Line 1 reads `with a
+   wipe coating`: the `a` is the transcriber's own, near-miss matching stops at it, and
+   the line now reaches `with` and hands its last four words to a kept off-script region
+   that plays beside it — 56% coverage where equality alone scored 67%. Second red check,
+   `tests/test_plan.py`,
+   `test_a_near_miss_is_found_past_a_word_the_line_does_not_account_for`. Whether an
+   intruder is stepped over is not the mishearing's business; decision 0002 identifies one
+   by the script word it displaced sitting opposite it, and `vibe` is opposite `wipe` once
+   the `a` is passed.
+
 One thing the listen asked for is **not** in this loop, because nothing is red for it. At
 10:33–11:02 the operator wants the last attempt at line 2's ending to be the one that plays. It
 already is, wherever the attempts are words at all: `tests/test_plan.py`,
