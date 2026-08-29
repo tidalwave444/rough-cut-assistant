@@ -78,6 +78,19 @@ the line's coverage and is never a candidate for removal. What still arrives her
 mishearing too far off to match, and a stumble. The split the table shows is structural
 and holds; its coverage figures are the alignment's own and move when the alignment does.
 
+**A run standing beside a near miss is not a run with nothing opposite it.** Near-miss
+matching steps over a word neither side accounts for, exactly as exact matching does, so
+where the transcriber wrote two words where the line has one — `the wipe` for `vibe`, on
+`sequence.mp4` line 1 — the near miss takes `vibe` and leaves `the` sitting between two
+consecutive words of the line. Read by the second mechanism alone that is a run with
+nothing opposite it, and it came out: a 0.3 s butt splice mid-phrase, deleting half of one
+mishearing, on the reasoning that the mishearing beside it was the line said right. So the
+mechanism asks first whether a near miss stands against the run, and leaves the run alone
+if one does. That is the same structural test as this decision's, read once more: what
+stands opposite the pair is the word the near miss already claimed. Nothing else moves —
+the two removals of this kind on `sequence.mp4`, `wipe` on line 2 and `skills` on line 6,
+both sit between exactly-matched words.
+
 Where both signals name the same run, the stronger claim wins: a repeat says which word
 the speaker went back to, where "nothing opposite it" only says nothing accounts for it.
 `along the` is named by both, and the report calls it `"along" said twice`.

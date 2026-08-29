@@ -23,7 +23,10 @@ two halves of that judgement — the line either keeps all of its words or it do
 **Words with nothing left opposite them** come out too, and need no guard: a
 mishearing always has the script word it displaced sitting opposite it, so a run in a
 place where the line has already been fully accounted for cannot be the line said
-wrong. Everything else stays whole.
+wrong. With one exception, which is a near miss standing beside the run: the
+transcriber wrote two words where the line has one — `the wipe` for `vibe` — and the
+near miss took the word that stood opposite both, so what is left of the pair reads as
+a run with nothing opposite it. Everything else stays whole.
 
 Every removal is quoted in full in the report, on the same reasoning as a removed
 off-script region: nothing else records that it was ever spoken.
@@ -170,7 +173,26 @@ class _Reader:
             _Candidate(first, last, UNACCOUNTED)
             for first, last in self._runs()
             if self._offsets[last + 1] == self._offsets[first - 1] + 1
+            and not self._beside_a_near_miss(first, last)
         ]
+
+    def _beside_a_near_miss(self, first: int, last: int) -> bool:
+        """Whether a word the alignment matched as misheard stands against this run.
+
+        The transcriber writes two words where the line has one — `the wipe` for
+        `vibe` — and the near miss matches the second of them, taking the script word
+        that stood opposite the pair with it. What is left is the other half of one
+        mishearing, reading as a run the line has already accounted for on both sides.
+        It was spoken, so it stays.
+
+        Read off the match itself: a token matched as a word it does not equal is what
+        a near miss is, and reading it here rather than carrying a flag down from the
+        alignment keeps the two saying the same thing by construction.
+        """
+        return any(
+            self._heard.texts[token] != self._line[self._offsets[token]]
+            for token in (first - 1, last + 1)
+        )
 
     def _unmatched(self) -> list[int]:
         """The tokens inside this take that the line does not account for."""
