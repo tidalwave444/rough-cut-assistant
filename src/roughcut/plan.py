@@ -16,7 +16,6 @@ from roughcut.pauses import (
     PauseSettings,
     Tightened,
     pauses_to_shorten,
-    quiet_left_whole,
     tighten,
 )
 from roughcut.script import ScriptLine, beats
@@ -213,7 +212,7 @@ def build_plan(
         ),
         pauses_to_shorten(analysis.silences, pauses),
         alignment.heard,
-        quiet_left_whole(analysis.silences, pauses),
+        analysis.silences,
         splice,
     )
     lines = [item for item in placed if isinstance(item, PlacedLine)]
@@ -259,7 +258,7 @@ def _placed(
     spans: list[Span],
     pauses: list[Pause],
     heard: Transcript,
-    left_whole: list[Silence],
+    silences: list[Silence],
     splice: SpliceSettings,
 ) -> list[Placed]:
     """Lay the cut out: each piece on the end of the last, in the order it plays.
@@ -290,7 +289,7 @@ def _placed(
         else:
             line, chosen = item
             removed = tuple(
-                replace(removal, cut=bounded_by_sound(removal.cut, left_whole, splice))
+                replace(removal, cut=bounded_by_sound(removal.cut, silences, splice))
                 for removal in stumbles(chosen.take, heard)
             )
             tightened = tighten(

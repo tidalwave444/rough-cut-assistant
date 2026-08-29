@@ -235,33 +235,51 @@ def bounded_by_sound(
     is therefore trimmed to the sound and then padded back, the same two steps in the
     same order as every span above.
 
-    The quiet handed in is the quiet no pause claims. A stretch long enough to be worth
-    an edit point is already somebody's business — the removal's where it lies inside
-    one, the pause rule's where it does not — and an edge moved into it would be two
-    rules cutting the same stretch of recording between them. That bound is worth
-    saying out loud: with the threshold down at a beat, nearly every stretch the
-    detector records is a pause, so an edge moves here only where the bar sits above
-    the quiet beside it. What is left of the fault elsewhere is a pause's to answer for.
+    The quiet an edge may move into is the quiet the removal does not itself reach
+    into. A stretch the removal runs through is already the removal's: it comes out
+    whole, and an edge stepping further into it would be two rules cutting the same
+    piece of recording between them. Every other stretch the detector heard is offered,
+    whatever the pause rule would do with it — the bar sits at a beat, so a rule handed
+    only the quiet no pause claims is handed nothing at all and can never fire.
 
-    The pad is not symmetric here, and the reason is what lies beside each edge. Ahead
-    of the first edge is the fading tail of the word the cut keeps, which is exactly
-    what decision 0006's pad is for, so it crosses that and stops at the far edge of the
-    quiet beyond. Behind the second edge is the removed speech itself — a pad that
-    crossed *that* would play back the stumble — so it only steps into quiet the trim
-    moved it out of, and where the edge was already on sound it does not move at all.
+    Each pad therefore only steps back into the quiet its own trim moved it out of, and
+    an edge already sitting on sound does not move at all. Neither may cross the word
+    timestamp it started from: beyond that lies the removed speech, and a pad that
+    reached it would play the stumble again on one side or the other.
+
+    Which bounds how much of the fault this answers. The head is reachable: the quiet a
+    removal ends *in* lies outside it, so that edge trims to the far side of the quiet
+    and pads back, and the word after the splice arrives on time. The tail is not. The
+    word before a removal goes on sounding after the transcriber stops recognising it,
+    and the stretch it fades into is quiet the removal itself reaches into — which the
+    rail above will not let an edge move through. Ticket 17 holds that finding.
     """
     padding = settings.padding_seconds
-    trimmed_tail = _quiet_set_in_at(cut.start_seconds, silences)
-    trimmed_head = _quiet_runs_until(cut.end_seconds, silences)
-    tail_ends = _grown_forward(
-        trimmed_tail, _shared(trimmed_tail, trimmed_head), silences, padding
-    )
+    beside = _outside(cut, silences)
+    trimmed_tail = _quiet_set_in_at(cut.start_seconds, beside)
+    trimmed_head = _quiet_runs_until(cut.end_seconds, beside)
+    tail_ends = _grown_forward(trimmed_tail, cut.start_seconds, beside, padding)
     head_begins = (
         max(cut.end_seconds, trimmed_head - padding)
         if trimmed_head > cut.end_seconds
         else cut.end_seconds
     )
     return Cut(min(tail_ends, head_begins), head_begins)
+
+
+def _outside(cut: Cut, silences: Sequence[Silence]) -> list[Silence]:
+    """The quiet lying against this removal rather than inside it.
+
+    Quiet a removal reaches into comes out with the removal, so an edge has nothing to
+    find there: it would only be moving through a stretch that has already gone. What is
+    left is the quiet waiting on either side of the removal — the fading tail of the word
+    before it, and the run-up to the word after — which is where both edges belong.
+    """
+    return [
+        silence
+        for silence in silences
+        if silence.start_seconds >= cut.end_seconds or silence.end_seconds <= cut.start_seconds
+    ]
 
 
 def _shared(start: float, end: float) -> float:

@@ -1,10 +1,10 @@
 # 17 — The two edges of a removal, and the check that blocks one of them
 
-**What to build:** A removal's two edges placed against the sound like every other splice
-— and, before that, a decision from the operator, because the two checks that ask for it
-cannot both be satisfied. This ticket is the finding rather than the fix.
+**What to build:** A removal's two edges placed against the sound like every other splice.
+The head is done; the tail waits on a decision from the operator, because the two checks
+that ask for it cannot both be satisfied.
 
-**Blocked by:** None. The tail half is blocked on a locked check only a person may move.
+**Blocked by:** A locked check only a person may move — see the finding below.
 
 **Status:** ready-for-agent
 
@@ -15,21 +15,21 @@ cannot both be satisfied. This ticket is the finding rather than the fix.
 2. `Sequence 07` at `03:04` — a blank section opening what plays after a removal. The word
    after the splice should arrive on time.
 
-- [ ] The head of what plays after a removal is trimmed to its sound and padded back
+- [x] The head of what plays after a removal is trimmed to its sound and padded back
 - [ ] The tail of what plays before one reaches the sound the transcriber stopped short of
 - [ ] `tests/test_stumbles.py` no longer holds two checks that contradict each other
 
 ## Comments
 
-The head half is reachable today, and the rule is the one the green check beside it is
-named for: **an edge may move only into quiet the removal does not itself reach into.**
+The head half shipped on 29 August. The rule is the one the green check beside it is named
+for: **an edge may move only into quiet the removal does not itself reach into.**
 `Silence(4.2, 5.1)` against a removal at (3.5, 4.5) begins before the removal ends, so the
 removal owns that quiet and the head stays at 4.5 —
 `test_quiet_a_removal_only_reaches_into_is_left_to_the_removal_as_well`, green. `Silence(
 4.5, 5.1)` begins exactly where the removal ends, so the head trims to 5.1 and pads back
-to 4.95 — `test_the_quiet_a_removal_ends_in_does_not_play_after_the_splice`, red. One rule
-answers both, and it needs every silence rather than `quiet_left_whole`, which at the
-0.2 s bar is empty beside every removal.
+to 4.95 — `test_the_quiet_a_removal_ends_in_does_not_play_after_the_splice`, now green too.
+`bounded_by_sound` is handed every silence and filters to the ones outside the removal;
+`quiet_left_whole` is gone, since at the 0.2 s bar it was empty beside every removal.
 
 The tail half is not reachable, and this is the finding.
 `test_quiet_a_removal_takes_with_it_is_not_also_a_shortened_pause` is green with
