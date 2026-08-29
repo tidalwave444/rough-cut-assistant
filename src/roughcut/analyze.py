@@ -15,7 +15,7 @@ import importlib.util
 import json
 import re
 import subprocess
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Any
@@ -66,6 +66,14 @@ class AnalysisSettings:
     a stretch shorter than this is one the plan can neither find nor take off an edge,
     however plainly it is heard. So this follows the pause floor down rather than
     standing on its own, and `tests/test_analyze.py` holds the two together.
+    """
+    buried_speech_seconds: float = 1.0
+    """The most speech one word may bury before the stretch is decoded again.
+
+    A word's declared span less the quiet heard inside it is the speech it buries. A
+    second of it is the bar `work/rough-cut-assistant/facts.md` measures the recordings
+    at, and above it the token is not a long word but an attempt the transcriber
+    collapsed into one — `part` buries 2.53 s of `Sequence 07` line 1.
     """
 
 
@@ -320,6 +328,38 @@ def parse_silences(output: str, duration_seconds: float) -> list[Silence]:
     if start is not None and start < duration_seconds:
         silences.append(Silence(start, duration_seconds))
     return silences
+
+
+def stretched_over_speech(
+    words: Sequence[Word], silences: Sequence[Silence], settings: AnalysisSettings
+) -> list[Word]:
+    """The words the transcriber ran across speech it wrote nothing down for.
+
+    What separates one of these from an ordinary long word is not its length but how
+    much of it was audible: a word stretched over *quiet* is the ordinary case decision
+    0001 is about and stays as it is, while one burying more than the bar is several
+    attempts collapsed into a single token — on `Sequence 07` line 1 the reading the
+    operator wanted is inside such a word, and the cut removes it without ever knowing
+    it was speech.
+
+    The stretches named here are what a second decode pass is handed (ticket 14).
+    """
+    return [
+        word for word in words if _buried_seconds(word, silences) > settings.buried_speech_seconds
+    ]
+
+
+def _buried_seconds(word: Word, silences: Sequence[Silence]) -> float:
+    """How much of a word's declared span the detector heard sound in."""
+    quiet = sum(
+        max(
+            0.0,
+            min(word.end_seconds, silence.end_seconds)
+            - max(word.start_seconds, silence.start_seconds),
+        )
+        for silence in silences
+    )
+    return word.end_seconds - word.start_seconds - quiet
 
 
 def transcribe(recording: Path, settings: AnalysisSettings) -> list[Word]:
