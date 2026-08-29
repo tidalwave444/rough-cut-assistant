@@ -35,6 +35,10 @@ Both are transcript words the line does not account for. They are opposites.
 - **stumble** — an abandoned attempt. It goes.
 - **mishearing** — a word spoken perfectly well and transcribed wrong. It stays. What
   identifies it is structural: the script word it displaced sits opposite it (decision 0002).
+- **near miss** — a mishearing the alignment matched rather than left over: a transcript
+  word read as the script word facing it, because the two are one sound a hair apart —
+  `wipe` for `vibe`, `coating` for `coding`. It counts towards the line's coverage and
+  is never a candidate for removal, which is decision 0002 arrived at from the front.
 
 "It did not match the line, so it is junk" is the rule this vocabulary exists to prevent.
 

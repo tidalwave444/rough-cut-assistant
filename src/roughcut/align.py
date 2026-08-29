@@ -43,6 +43,26 @@ RETAKE_COVERAGE = 0.6
 # line again, which is why the real bar scales with the line.
 SPAN_GAP_TOKENS = 4
 
+# Letters a transcriber trades for one another, each group heard as one sound. Every
+# vowel together, and the consonants both recordings are actually caught confusing:
+# `wipe` for `vibe` trades w for v and p for b, `coating` for `coding` trades t for d.
+# Spelling on its own cannot do this. `wipe` and `vibe` differ in two letters of four —
+# exactly as `part` differs from `card` — so no measure that reads letters as letters
+# can call one pair the same word and the other two words.
+SAME_SOUND = ("aeiouy", "bfpvw", "dt")
+
+# How much of the longer word's sound the two have to hold in common, in order, before
+# one reads as the other misheard. Heard this way `wipe` for `vibe` and `rail` for `real`
+# hold all four of four and `coating` for `coding` six of seven, where `white` for `vibe`
+# holds three of five and stays a word the line does not account for. A threshold, so a
+# listen moves it and not a distribution (decision 0003).
+A_NEAR_MISS_SHARES_AT_LEAST = 0.7
+
+# No word shorter than this is ever a near miss, however it sounds. `to` against `too`
+# is the whole of one word inside the other and they are different words; there has to
+# be enough of a word for the measure above to be saying anything about it.
+SHORTEST_NEAR_MISS_LETTERS = 4
+
 
 @dataclass(frozen=True)
 class SpokenLine:
@@ -390,16 +410,87 @@ def matched_pairs(
     Monotonic, so a match can only ever move forward through both streams and a
     repeated phrase cannot steal an earlier one's match.
 
+    Two words the transcriber heard a hair apart are the same word, and the near misses
+    below are how that is said. They are found only between two words the streams
+    already agree on, so nothing they add can displace an exact match.
+    """
+    said = _said_the_same(heard, written)
+    found = sorted(said + _near_misses(heard, written, said))
+    return [(offset + token, index) for token, index in found]
+
+
+def _said_the_same(heard: Sequence[str], written: Sequence[str]) -> list[tuple[int, int]]:
+    """Every position at which the two streams hold exactly the same word.
+
     `autojunk` off: it discards any element appearing in more than 1% of a sequence
     longer than 200, which over a transcript means "the", "a", "we" — the connective
     tissue that holds a sentence match together.
     """
     matcher = SequenceMatcher(None, list(heard), list(written), autojunk=False)
     return [
-        (offset + block.a + step, block.b + step)
+        (block.a + step, block.b + step)
         for block in matcher.get_matching_blocks()
         for step in range(block.size)
     ]
+
+
+def _near_misses(
+    heard: Sequence[str], written: Sequence[str], said_the_same: list[tuple[int, int]]
+) -> list[tuple[int, int]]:
+    """Every word the transcriber heard wrong, paired with the word it displaced.
+
+    A mishearing is identified structurally, by the script word sitting opposite it
+    (decision 0002), and "opposite" is only well defined where the two streams hold the
+    same number of words between two they agree on. Then each word left over has
+    exactly one word facing it and the two are read against each other. Where the
+    counts differ, nothing faces anything: the transcriber wrote more or fewer words
+    than were spoken there, which is also what an abandoned attempt looks like, and a
+    stumble read as a mishearing would stay in the cut.
+    """
+    found: list[tuple[int, int]] = []
+    for before, after in zip(said_the_same, said_the_same[1:]):
+        left_over = range(before[0] + 1, after[0])
+        facing = range(before[1] + 1, after[1])
+        if not left_over or len(left_over) != len(facing):
+            continue
+        found += [
+            (token, index)
+            for token, index in zip(left_over, facing)
+            if _a_near_miss(heard[token], written[index])
+        ]
+    return found
+
+
+def _a_near_miss(heard: str, written: str) -> bool:
+    """Whether one word is the other misheard — the same word, heard a hair off.
+
+    Measured as how much of the longer word's sound the two hold in common, in order:
+    coverage read at the grain of a word, and read the same way round as everywhere
+    else — how much of the one the other accounts for.
+    """
+    if min(len(heard), len(written)) < SHORTEST_NEAR_MISS_LETTERS:
+        return heard == written
+    shared = _letters_in_common(_as_sounds(heard), _as_sounds(written))
+    return shared / max(len(heard), len(written)) >= A_NEAR_MISS_SHARES_AT_LEAST
+
+
+def _as_sounds(word: str) -> str:
+    """A word with every letter written as the sound it is one of the spellings of."""
+    return "".join(
+        next((group[0] for group in SAME_SOUND if letter in group), letter) for letter in word
+    )
+
+
+def _letters_in_common(one: str, other: str) -> int:
+    """How many letters two words hold in common, in order though not side by side.
+
+    The measurement this module is built on, one grain down: the same matcher, run over
+    letters rather than over words. A mishearing lands in the middle of a word as often
+    as at either end — `coating` for `coding` — so it has to be able to step over a
+    letter and go on counting, which is exactly what it does over a word.
+    """
+    matcher = SequenceMatcher(None, one, other)
+    return sum(block.size for block in matcher.get_matching_blocks())
 
 
 def _gap_for(tokens: int) -> int:

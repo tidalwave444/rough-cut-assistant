@@ -69,6 +69,15 @@ was never about it.
 
 ## Consequences
 
+**Most mishearings no longer reach these two mechanisms at all.** The corpus above was
+read against an alignment that compares exactly-equal tokens, where every mishearing is a
+run the line does not account for. A transcript word one sound away from the script word
+facing it is now matched as that word — the same structural test as this decision's,
+applied where the two texts are first compared instead of afterwards — so it sits inside
+the line's coverage and is never a candidate for removal. What still arrives here is a
+mishearing too far off to match, and a stumble. The split the table shows is structural
+and holds; its coverage figures are the alignment's own and move when the alignment does.
+
 Where both signals name the same run, the stronger claim wins: a repeat says which word
 the speaker went back to, where "nothing opposite it" only says nothing accounts for it.
 `along the` is named by both, and the report calls it `"along" said twice`.

@@ -12,8 +12,11 @@ cut removes that speech as part of a stumble without ever knowing it was speech.
 ## Listen for
 
 1. `Sequence 07` line 1 at `00:03` of the source — the operator hears `with vibe co… tuu…
-   oh no… vibe coding`. The report's removal should quote those words rather than
-   `part 1. No, no,`. If it still quotes the short version, the span was not decoded again.
+   oh no… vibe coding`. The second pass recovers them as `oh no white coating`, and the
+   report does not quote them in the removal: on 29 August the removal stopped happening
+   at all, because the rule keys on a repeat and `white coating` repeats no word of the
+   line. So this listen is for the words being *there* — in the transcript and in what
+   plays — and the removal is ticket 15's to bring back.
 2. `Sequence 07` line 1 on the timeline — the reading that plays is the finished one, not
    the abandoned one. This is the whole point of the ticket: today the good take is inside
    the removed stretch, in the part no word was ever written for.
