@@ -60,10 +60,28 @@
       "confidence": 0.8306
     },
     {
-      "text": "part",
-      "start_seconds": 3.48,
-      "end_seconds": 8.64,
-      "confidence": 0.2225
+      "text": "oh",
+      "start_seconds": 3.98,
+      "end_seconds": 5.38,
+      "confidence": 0.4539
+    },
+    {
+      "text": "no",
+      "start_seconds": 5.38,
+      "end_seconds": 6.44,
+      "confidence": 0.9565
+    },
+    {
+      "text": "white",
+      "start_seconds": 6.44,
+      "end_seconds": 7.28,
+      "confidence": 0.7168
+    },
+    {
+      "text": "coating",
+      "start_seconds": 7.28,
+      "end_seconds": 7.72,
+      "confidence": 0.978
     },
     {
       "text": "1.",
@@ -144,10 +162,22 @@
       "confidence": 0.9048
     },
     {
-      "text": "development.",
+      "text": "Actually,",
       "start_seconds": 17.44,
-      "end_seconds": 21.02,
-      "confidence": 0.7368
+      "end_seconds": 18.28,
+      "confidence": 0.1077
+    },
+    {
+      "text": "actually,",
+      "start_seconds": 18.74,
+      "end_seconds": 18.74,
+      "confidence": 0.606
+    },
+    {
+      "text": "actually.",
+      "start_seconds": 18.74,
+      "end_seconds": 19.7,
+      "confidence": 0.5498
     },
     {
       "text": "In",
@@ -906,10 +936,28 @@
       "confidence": 0.9546
     },
     {
-      "text": "this",
+      "text": "or",
       "start_seconds": 83.94,
-      "end_seconds": 88.14,
-      "confidence": 0.6567
+      "end_seconds": 84.64,
+      "confidence": 0.2494
+    },
+    {
+      "text": "you",
+      "start_seconds": 84.64,
+      "end_seconds": 85.64,
+      "confidence": 0.752
+    },
+    {
+      "text": "can",
+      "start_seconds": 85.64,
+      "end_seconds": 87.04,
+      "confidence": 0.9976
+    },
+    {
+      "text": "find",
+      "start_seconds": 87.04,
+      "end_seconds": 87.48,
+      "confidence": 0.9731
     },
     {
       "text": "skill",
@@ -1488,10 +1536,16 @@
       "confidence": 0.8989
     },
     {
-      "text": "and",
+      "text": "website",
       "start_seconds": 117.82,
-      "end_seconds": 118.86,
-      "confidence": 0.9722
+      "end_seconds": 118.2,
+      "confidence": 0.1797
+    },
+    {
+      "text": "step",
+      "start_seconds": 118.2,
+      "end_seconds": 118.62,
+      "confidence": 0.7451
     },
     {
       "text": "other",
@@ -2380,8 +2434,16 @@
       "end_seconds": 2.443208
     },
     {
+      "start_seconds": 3.063063,
+      "end_seconds": 3.307812
+    },
+    {
       "start_seconds": 3.515687,
       "end_seconds": 4.949708
+    },
+    {
+      "start_seconds": 5.805458,
+      "end_seconds": 6.168542
     },
     {
       "start_seconds": 6.634896,
@@ -2394,6 +2456,18 @@
     {
       "start_seconds": 8.896229,
       "end_seconds": 9.457833
+    },
+    {
+      "start_seconds": 9.738708,
+      "end_seconds": 10.216417
+    },
+    {
+      "start_seconds": 10.561667,
+      "end_seconds": 10.937979
+    },
+    {
+      "start_seconds": 11.122458,
+      "end_seconds": 11.380667
     },
     {
       "start_seconds": 11.591792,
@@ -2418,6 +2492,10 @@
     {
       "start_seconds": 19.772833,
       "end_seconds": 20.524354
+    },
+    {
+      "start_seconds": 21.025,
+      "end_seconds": 21.252708
     },
     {
       "start_seconds": 21.797792,
@@ -2476,6 +2554,10 @@
       "end_seconds": 42.983125
     },
     {
+      "start_seconds": 43.352354,
+      "end_seconds": 43.734687
+    },
+    {
       "start_seconds": 44.380562,
       "end_seconds": 46.938396
     },
@@ -2484,12 +2566,32 @@
       "end_seconds": 48.194208
     },
     {
+      "start_seconds": 48.232146,
+      "end_seconds": 48.49025
+    },
+    {
       "start_seconds": 48.843792,
       "end_seconds": 50.031542
     },
     {
+      "start_seconds": 50.731938,
+      "end_seconds": 51.019667
+    },
+    {
+      "start_seconds": 52.093708,
+      "end_seconds": 52.367687
+    },
+    {
+      "start_seconds": 52.623583,
+      "end_seconds": 52.913729
+    },
+    {
       "start_seconds": 53.778375,
       "end_seconds": 55.235625
+    },
+    {
+      "start_seconds": 55.804625,
+      "end_seconds": 56.011125
     },
     {
       "start_seconds": 56.247875,
@@ -2508,12 +2610,20 @@
       "end_seconds": 65.188167
     },
     {
+      "start_seconds": 66.323604,
+      "end_seconds": 66.525292
+    },
+    {
       "start_seconds": 66.875187,
       "end_seconds": 67.699771
     },
     {
       "start_seconds": 68.489125,
       "end_seconds": 69.728813
+    },
+    {
+      "start_seconds": 70.309667,
+      "end_seconds": 70.787229
     },
     {
       "start_seconds": 71.057896,
@@ -2524,8 +2634,20 @@
       "end_seconds": 72.749792
     },
     {
+      "start_seconds": 73.238125,
+      "end_seconds": 73.636354
+    },
+    {
       "start_seconds": 73.938583,
       "end_seconds": 74.665896
+    },
+    {
+      "start_seconds": 75.481021,
+      "end_seconds": 75.757146
+    },
+    {
+      "start_seconds": 76.424208,
+      "end_seconds": 76.800354
     },
     {
       "start_seconds": 76.956354,
@@ -2568,6 +2690,10 @@
       "end_seconds": 93.658312
     },
     {
+      "start_seconds": 93.842271,
+      "end_seconds": 94.128521
+    },
+    {
       "start_seconds": 94.741333,
       "end_seconds": 95.712312
     },
@@ -2600,16 +2726,52 @@
       "end_seconds": 107.166333
     },
     {
+      "start_seconds": 108.332646,
+      "end_seconds": 108.670458
+    },
+    {
+      "start_seconds": 109.113792,
+      "end_seconds": 109.56875
+    },
+    {
+      "start_seconds": 110.118625,
+      "end_seconds": 110.320479
+    },
+    {
       "start_seconds": 110.726562,
       "end_seconds": 111.328583
+    },
+    {
+      "start_seconds": 112.590333,
+      "end_seconds": 112.863458
+    },
+    {
+      "start_seconds": 113.463125,
+      "end_seconds": 113.719437
     },
     {
       "start_seconds": 113.916438,
       "end_seconds": 115.107812
     },
     {
+      "start_seconds": 115.613083,
+      "end_seconds": 116.095
+    },
+    {
+      "start_seconds": 116.892542,
+      "end_seconds": 117.151583
+    },
+    {
+      "start_seconds": 119.502292,
+      "end_seconds": 119.718208
+    },
+    {
       "start_seconds": 120.216938,
       "end_seconds": 121.718437
+    },
+    {
+      "start_seconds": 123.104312,
+      "end_seconds": 123.510917
     },
     {
       "start_seconds": 124.382458,
@@ -2624,8 +2786,16 @@
       "end_seconds": 129.758542
     },
     {
+      "start_seconds": 130.281854,
+      "end_seconds": 130.591187
+    },
+    {
       "start_seconds": 130.765854,
       "end_seconds": 131.374542
+    },
+    {
+      "start_seconds": 131.869708,
+      "end_seconds": 132.123812
     },
     {
       "start_seconds": 132.679958,
@@ -2640,5 +2810,5 @@
       "end_seconds": 142.570667
     }
   ],
-  "fingerprint": "0f5d1ee9bbe2f6d97d6b1d5e73c4dc645b61a2908db0387efe3c089d53474d2c"
+  "fingerprint": "4b616cb5e2934e9301fd1b72df4ff9151aea8e90f5c62f8ac5c33d874f1e1a0e"
 }

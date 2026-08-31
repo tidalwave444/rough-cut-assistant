@@ -132,6 +132,24 @@ that is red for it.
    Red: `tests/test_plan.py`,
    `test_a_line_keeps_its_ending_across_an_attempt_it_abandoned`.
 
+   **A first answer shipped on 30 August and merged three retakes into one take.** It kept
+   the bar and added an escape from it: a run longer than the bar is still one reading if
+   the match after it is the *very next word of the line*, bounded by the line's own
+   length. That is right on the recording — line 1 reaches 100% and unflagged, nothing of
+   it is handed to a leftover, and the 15.5 s restart of line 3 is still cut — and it is
+   wrong on a retake that gets one word further than the attempt before it, which is
+   exactly what the two red checks describe. Three readings of line 2 that each stop short,
+   the second reaching one word past the first, now come back as a single take beginning at
+   the first. Retake selection and the alternates sequence both go with it.
+
+   The escape cannot be read off the run's length, which is the whole point of this
+   problem, and it cannot be read off what follows the run either. What separates the two
+   cases is inside the run: a restart re-says words of the line already spoken, and a
+   stumble does not. `stumbles.py` already tells a repeat from a mishearing on that signal,
+   and decision 0009 measures a region of repeated attempts attempt by attempt for the same
+   reason. Neither is a prescription — but an answer that reads only the run's ends has
+   both of these cases looking identical, and that is why this one does.
+
    Nothing about the recording changed. Before the second pass that run was `part one no
    no` — four words, inside the bar. The same abandoned attempt, written down more fully,
    is what pushed it over: a rule for telling a stumble from a restart is now deciding it
@@ -147,6 +165,13 @@ already is, wherever the attempts are words at all: `tests/test_plan.py`,
 `test_only_the_last_attempt_at_a_line_s_ending_reaches_the_cut`, green, pins exactly that. What
 the listen heard is problem 5 and nothing besides — the rule never fired because the transcriber
 wrote one long word where the three attempts were. Do not build a second rule for it.
+
+`Sequence 07` has a golden of its own as of 31 August, and it is the one that will catch
+you. Its cut is locked the same way `sequence.mp4`'s is, so any change to `plan` or
+`render` now moves two sets of expected output and the messy recording is in both. Read
+its **XML** golden rather than its report when you want to know what a change did: the
+report says line 1 is found at 100% coverage and selected, and the clips beneath it play
+all 7.67 s of the attempt the speaker abandoned. That gap is the reason the golden exists.
 
 Expect `tests/test_golden.py` to be the last thing standing. Problems 1 and 2 move every
 collapsed pause in `sequence.mp4`, and that is a diff for a person to read: the loop stops there

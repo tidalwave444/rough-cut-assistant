@@ -1,0 +1,1367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xmeml>
+<xmeml version="4">
+  <sequence id="sequence-1">
+    <name>RoughCut</name>
+    <duration>2117</duration>
+    <rate>
+      <timebase>60</timebase>
+      <ntsc>FALSE</ntsc>
+    </rate>
+    <timecode>
+      <rate>
+        <timebase>60</timebase>
+        <ntsc>FALSE</ntsc>
+      </rate>
+      <string>00:00:00:00</string>
+      <frame>0</frame>
+      <displayformat>NDF</displayformat>
+    </timecode>
+    <media>
+      <video>
+        <format>
+          <samplecharacteristics>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <width>1920</width>
+            <height>1080</height>
+            <anamorphic>FALSE</anamorphic>
+            <pixelaspectratio>square</pixelaspectratio>
+            <fielddominance>none</fielddominance>
+          </samplecharacteristics>
+        </format>
+        <track>
+          <enabled>TRUE</enabled>
+          <locked>FALSE</locked>
+        </track>
+      </video>
+      <audio>
+        <numOutputChannels>2</numOutputChannels>
+        <format>
+          <samplecharacteristics>
+            <depth>16</depth>
+            <samplerate>48000</samplerate>
+          </samplecharacteristics>
+        </format>
+        <outputs>
+          <group>
+            <index>1</index>
+            <numchannels>2</numchannels>
+            <downmix>0</downmix>
+            <channel>
+              <index>1</index>
+            </channel>
+            <channel>
+              <index>2</index>
+            </channel>
+          </group>
+        </outputs>
+        <track>
+          <enabled>TRUE</enabled>
+          <locked>FALSE</locked>
+          <clipitem id="clipitem-1">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>0</start>
+            <end>93</end>
+            <in>26</in>
+            <out>119</out>
+            <file id="file-1">
+              <name>Sequence 07.mp4</name>
+              <pathurl>file://localhost/Sequence%2007.mp4</pathurl>
+              <rate>
+                <timebase>60</timebase>
+                <ntsc>FALSE</ntsc>
+              </rate>
+              <duration>8554</duration>
+              <timecode>
+                <rate>
+                  <timebase>60</timebase>
+                  <ntsc>FALSE</ntsc>
+                </rate>
+                <string>00:00:00:00</string>
+                <frame>0</frame>
+                <displayformat>NDF</displayformat>
+              </timecode>
+              <media>
+                <video>
+                  <samplecharacteristics>
+                    <rate>
+                      <timebase>60</timebase>
+                      <ntsc>FALSE</ntsc>
+                    </rate>
+                    <width>1920</width>
+                    <height>1080</height>
+                    <anamorphic>FALSE</anamorphic>
+                    <pixelaspectratio>square</pixelaspectratio>
+                    <fielddominance>none</fielddominance>
+                  </samplecharacteristics>
+                </video>
+                <audio>
+                  <samplecharacteristics>
+                    <depth>16</depth>
+                    <samplerate>48000</samplerate>
+                  </samplecharacteristics>
+                  <channelcount>2</channelcount>
+                  <audiochannel>
+                    <sourcechannel>1</sourcechannel>
+                  </audiochannel>
+                  <audiochannel>
+                    <sourcechannel>2</sourcechannel>
+                  </audiochannel>
+                </audio>
+              </media>
+            </file>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-2">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>93</start>
+            <end>142</end>
+            <in>141</in>
+            <out>190</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-3">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>142</start>
+            <end>167</end>
+            <in>192</in>
+            <out>217</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-4">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>167</start>
+            <end>230</end>
+            <in>291</in>
+            <out>354</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-5">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>230</start>
+            <end>270</end>
+            <in>364</in>
+            <out>404</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-6">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>270</start>
+            <end>331</end>
+            <in>422</in>
+            <out>483</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-7">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>331</start>
+            <end>357</end>
+            <in>514</in>
+            <out>540</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-8">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>357</start>
+            <end>386</end>
+            <in>561</in>
+            <out>590</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-9">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>386</start>
+            <end>418</end>
+            <in>607</in>
+            <out>639</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-10">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>418</start>
+            <end>441</end>
+            <in>650</in>
+            <out>673</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-11">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>441</start>
+            <end>460</end>
+            <in>677</in>
+            <out>696</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-12">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>460</start>
+            <end>506</end>
+            <in>795</in>
+            <out>841</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-13">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>506</start>
+            <end>631</end>
+            <in>859</in>
+            <out>984</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-14">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>631</start>
+            <end>672</end>
+            <in>1014</in>
+            <out>1055</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-15">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>672</start>
+            <end>687</end>
+            <in>1252</in>
+            <out>1267</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-16">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>687</start>
+            <end>732</end>
+            <in>1269</in>
+            <out>1314</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-17">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>732</start>
+            <end>807</end>
+            <in>1372</in>
+            <out>1447</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-18">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>807</start>
+            <end>854</end>
+            <in>1490</in>
+            <out>1537</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-19">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>854</start>
+            <end>894</end>
+            <in>1563</in>
+            <out>1603</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-20">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>894</start>
+            <end>904</end>
+            <in>1874</in>
+            <out>1884</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-21">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>904</start>
+            <end>939</end>
+            <in>1929</in>
+            <out>1964</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-22">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>939</start>
+            <end>986</end>
+            <in>1985</in>
+            <out>2032</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-23">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>986</start>
+            <end>1036</end>
+            <in>2116</in>
+            <out>2166</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-24">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1036</start>
+            <end>1075</end>
+            <in>2193</in>
+            <out>2232</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-25">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1075</start>
+            <end>1132</end>
+            <in>2278</in>
+            <out>2335</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-26">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1132</start>
+            <end>1202</end>
+            <in>2355</in>
+            <out>2425</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-27">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1202</start>
+            <end>1412</end>
+            <in>3442</in>
+            <out>3652</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-28">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1412</start>
+            <end>1456</end>
+            <in>3692</in>
+            <out>3736</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-29">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1456</start>
+            <end>1479</end>
+            <in>3787</in>
+            <out>3810</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-30">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1479</start>
+            <end>1562</end>
+            <in>3902</in>
+            <out>3985</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-31">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1562</start>
+            <end>1595</end>
+            <in>3986</in>
+            <out>4019</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-32">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1595</start>
+            <end>1655</end>
+            <in>4056</in>
+            <out>4116</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-33">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1655</start>
+            <end>1701</end>
+            <in>4178</in>
+            <out>4224</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-34">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1701</start>
+            <end>1730</end>
+            <in>4241</in>
+            <out>4270</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-35">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1730</start>
+            <end>1759</end>
+            <in>4309</in>
+            <out>4338</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-36">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1759</start>
+            <end>1800</end>
+            <in>4359</in>
+            <out>4400</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-37">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1800</start>
+            <end>1830</end>
+            <in>4412</in>
+            <out>4442</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-38">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1830</start>
+            <end>1891</end>
+            <in>4474</in>
+            <out>4535</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-39">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1891</start>
+            <end>1943</end>
+            <in>4539</in>
+            <out>4591</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-40">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1943</start>
+            <end>1965</end>
+            <in>4602</in>
+            <out>4624</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-41">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1965</start>
+            <end>1993</end>
+            <in>4648</in>
+            <out>4676</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-42">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1993</start>
+            <end>2046</end>
+            <in>4698</in>
+            <out>4751</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-43">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2046</start>
+            <end>2095</end>
+            <in>4793</in>
+            <out>4842</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-44">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2095</start>
+            <end>2117</end>
+            <in>8383</in>
+            <out>8405</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+        </track>
+      </audio>
+    </media>
+    <marker>
+      <name>Line 1</name>
+      <comment>Building a real project with vibe coding — Part 2.</comment>
+      <in>0</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 2</name>
+      <comment>Today, we’re moving from setup to actual development.</comment>
+      <in>460</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 3</name>
+      <comment>In the previous part, we prepared the project and installed everything we needed. But before writing any code, we need a clear plan.</comment>
+      <in>681</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 4</name>
+      <comment>That’s why I’m using a special skill that works like a product interview.</comment>
+      <in>1202</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 5.1</name>
+      <comment>It asks important questions: What problem does the website solve?</comment>
+      <in>1479</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 5.2</name>
+      <comment>Who is it for?</comment>
+      <in>1730</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 5.3</name>
+      <comment>What features do we need?</comment>
+      <in>1822</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 5.4</name>
+      <comment>And which technologies should we use?</comment>
+      <in>1943</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6</name>
+      <comment>You can find this skill and other useful tools used by experienced engineers for free on my Telegram channel.</comment>
+      <in>2104</in>
+      <out>-1</out>
+    </marker>
+  </sequence>
+  <sequence id="sequence-2">
+    <name>RoughCut_Alternates</name>
+    <duration>3197</duration>
+    <rate>
+      <timebase>60</timebase>
+      <ntsc>FALSE</ntsc>
+    </rate>
+    <timecode>
+      <rate>
+        <timebase>60</timebase>
+        <ntsc>FALSE</ntsc>
+      </rate>
+      <string>00:00:00:00</string>
+      <frame>0</frame>
+      <displayformat>NDF</displayformat>
+    </timecode>
+    <media>
+      <video>
+        <format>
+          <samplecharacteristics>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <width>1920</width>
+            <height>1080</height>
+            <anamorphic>FALSE</anamorphic>
+            <pixelaspectratio>square</pixelaspectratio>
+            <fielddominance>none</fielddominance>
+          </samplecharacteristics>
+        </format>
+        <track>
+          <enabled>TRUE</enabled>
+          <locked>FALSE</locked>
+        </track>
+      </video>
+      <audio>
+        <numOutputChannels>2</numOutputChannels>
+        <format>
+          <samplecharacteristics>
+            <depth>16</depth>
+            <samplerate>48000</samplerate>
+          </samplecharacteristics>
+        </format>
+        <outputs>
+          <group>
+            <index>1</index>
+            <numchannels>2</numchannels>
+            <downmix>0</downmix>
+            <channel>
+              <index>1</index>
+            </channel>
+            <channel>
+              <index>2</index>
+            </channel>
+          </group>
+        </outputs>
+        <track>
+          <enabled>TRUE</enabled>
+          <locked>FALSE</locked>
+          <clipitem id="clipitem-45">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>0</start>
+            <end>1201</end>
+            <in>4860</in>
+            <out>6061</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-46">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1201</start>
+            <end>1201</end>
+            <in>6280</in>
+            <out>6280</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-47">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1201</start>
+            <end>1205</end>
+            <in>6280</in>
+            <out>6284</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-48">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1205</start>
+            <end>1580</end>
+            <in>6283</in>
+            <out>6658</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-49">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1580</start>
+            <end>1748</end>
+            <in>6660</in>
+            <out>6828</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-50">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>1748</start>
+            <end>2160</end>
+            <in>6876</in>
+            <out>7288</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-51">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2160</start>
+            <end>2458</end>
+            <in>7288</in>
+            <out>7586</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-52">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2458</start>
+            <end>2570</end>
+            <in>7585</in>
+            <out>7697</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-53">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2570</start>
+            <end>2712</end>
+            <in>7736</in>
+            <out>7878</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-54">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2712</start>
+            <end>2815</end>
+            <in>7878</in>
+            <out>7981</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-55">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2815</start>
+            <end>2947</end>
+            <in>7981</in>
+            <out>8113</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+          <clipitem id="clipitem-56">
+            <masterclipid>masterclip-1</masterclipid>
+            <name>Sequence 07.mp4</name>
+            <enabled>TRUE</enabled>
+            <duration>8554</duration>
+            <rate>
+              <timebase>60</timebase>
+              <ntsc>FALSE</ntsc>
+            </rate>
+            <start>2947</start>
+            <end>3197</end>
+            <in>8142</in>
+            <out>8392</out>
+            <file id="file-1"/>
+            <sourcetrack>
+              <mediatype>audio</mediatype>
+              <trackindex>1</trackindex>
+            </sourcetrack>
+          </clipitem>
+        </track>
+      </audio>
+    </media>
+    <marker>
+      <name>Line 6 take 1</name>
+      <comment>a later take was also complete</comment>
+      <in>0</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6 take 2</name>
+      <comment>incomplete — 16 of 19 words</comment>
+      <in>1201</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6 take 3</name>
+      <comment>a later take was also complete</comment>
+      <in>1201</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6 take 4</name>
+      <comment>a later take was also complete</comment>
+      <in>1205</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6 take 5</name>
+      <comment>a later take was also complete</comment>
+      <in>1580</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6 take 6</name>
+      <comment>a later take was also complete</comment>
+      <in>1748</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6 take 7</name>
+      <comment>a later take was also complete</comment>
+      <in>2160</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6 take 8</name>
+      <comment>a later take was also complete</comment>
+      <in>2458</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6 take 9</name>
+      <comment>a later take was also complete</comment>
+      <in>2570</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6 take 10</name>
+      <comment>a later take was also complete</comment>
+      <in>2712</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6 take 11</name>
+      <comment>a later take was also complete</comment>
+      <in>2815</in>
+      <out>-1</out>
+    </marker>
+    <marker>
+      <name>Line 6 take 12</name>
+      <comment>a later take was also complete</comment>
+      <in>2947</in>
+      <out>-1</out>
+    </marker>
+  </sequence>
+</xmeml>

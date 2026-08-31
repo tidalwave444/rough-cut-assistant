@@ -53,11 +53,30 @@ suite runs in half a second without a GPU.
 
 - `tests/committed/minimal2.xml` is the hand-verified import contract. It is never produced by the
   renderer; regenerating it would make its test circular.
-- `tests/committed/sequence.analysis.json` is the committed real recording. Re-running
-  `analyze` over the fixture invalidates every golden below it.
+- `tests/committed/sequence.analysis.json` and `tests/committed/Sequence 07.analysis.json`
+  are the committed real recordings. Re-running `analyze` over either invalidates every
+  golden below it, and doing so costs a GPU.
 
 `--update-golden` applies to the rendered outputs only, and a golden diff is meant to be
 read: an alignment change should show up in the report as a line moving.
+
+## Why there are two goldens and not one
+
+`sequence.mp4` is the small clean read. `Sequence 07.mp4` is the messy one — three lines
+never found, a line read thirteen times, speech buried under single words, an attempt
+abandoned mid-line — and it is the one that catches things.
+
+Between 28 and 31 August four changes went in green and were wrong on the recording: a
+span-finder nothing called, a rule that could never fire at the bar it shipped with, a
+measure that lowered the coverage it was built to raise, and a line playing seven seconds
+of the attempt it abandoned. Every one was found by cutting `Sequence 07` and listening.
+None was caught by a hand-written fixture, and none could be: a fixture holds one thing at
+a time, and each of those faults was two rules meeting.
+
+Read the **XML** golden for what plays. The report can say a line was found at full
+coverage while the clips beneath it play the whole abandoned attempt — that is not a
+hypothetical, it is `Sequence 07` line 1 as committed. A clip list cannot describe a cut as
+healthier than it is.
 
 ## Closing work
 
