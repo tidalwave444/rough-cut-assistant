@@ -42,7 +42,7 @@ Line  Source         Timeline       Script
 Every take considered
 
 Line  Take  Source         Coverage  Disfluencies  Outcome
-   1     1  00:00:00.000   89%       0             selected
+   1     1  00:00:00.000   100%      0             selected
    2     1  00:00:03.640   100%      0             selected
    3     1  00:00:12.280   96%       0             selected
    4     1  00:00:26.120   95%       0             selected
