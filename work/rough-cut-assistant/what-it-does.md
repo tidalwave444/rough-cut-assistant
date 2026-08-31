@@ -76,7 +76,7 @@ CPU fallback is supported but not optimised for.
 
 Both the script and the transcript are normalised to token streams (lowercased, punctuation stripped, numbers expanded). Longest-matching-block sequence alignment produces the spine: the monotonic mapping of transcript regions to script lines representing the good read of each line.
 
-A line's take is a **span** of its matched tokens rather than all of them, split wherever too much unheard speech sits between matches — otherwise a restarted line stretches from its first attempt to its last and swallows every retake.
+A line's take is a **span** of its matched tokens rather than all of them, split wherever a reading of the line was left behind — otherwise a restarted line stretches from its first attempt to its last and swallows every retake. How much unheard speech sits between two matches says so first, scaled to the line; but a reading that goes on to the very next word of the line did not stop and start again however much was said in between, and up to the length of the line again that run is a stumble inside one reading rather than the seam between two. See decision 0004.
 
 Transcript regions not claimed by the spine are then scored against the script lines their neighbours map to, and the score is **coverage** — how much of the line the region accounts for — not similarity:
 

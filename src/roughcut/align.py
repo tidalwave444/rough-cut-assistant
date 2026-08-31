@@ -41,6 +41,10 @@ RETAKE_COVERAGE = 0.6
 # The shortest run of unheard words that separates two readings of a line rather than
 # sitting inside one. A stumble mid-sentence is a few words; a restart is most of the
 # line again, which is why the real bar scales with the line.
+#
+# Length is not the whole of it, and cannot be: how long a run is, is how well the
+# transcriber heard the attempt buried in it, and that is the one thing this question
+# may not turn on. What the length is read against is `_one_reading` below.
 SPAN_GAP_TOKENS = 4
 
 # Letters a transcriber trades for one another, each group heard as one sound. Every
@@ -193,7 +197,7 @@ class _Aligner:
             tokens = len(self._tokens[line.number])
             spans = [
                 span
-                for span in _split(matched[line.number], _gap_for(tokens))
+                for span in _split(matched[line.number], tokens)
                 if span.covers(tokens) >= MINIMUM_COVERAGE
             ]
             if spans:
@@ -519,16 +523,42 @@ def _letters_in_common(one: str, other: str) -> int:
 
 
 def _gap_for(tokens: int) -> int:
-    """How many unheard words separate two readings of a line of this length."""
+    """How much unheard speech says two readings of a line of this length, not one."""
     return max(SPAN_GAP_TOKENS, tokens // 2)
 
 
-def _split(pairs: list[tuple[int, int]], gap: int) -> list[_Span]:
-    """Break a line's matches wherever too much unheard speech sits between them."""
+def _split(pairs: list[tuple[int, int]], tokens: int) -> list[_Span]:
+    """Break a line's matches wherever a reading of it was left behind."""
     spans: list[list[tuple[int, int]]] = []
     for pair in pairs:
-        if spans and pair[0] - spans[-1][-1][0] - 1 <= gap:
+        if spans and _one_reading(spans[-1][-1], pair, tokens):
             spans[-1].append(pair)
         else:
             spans.append([pair])
     return [_Span(span) for span in spans]
+
+
+def _one_reading(before: tuple[int, int], after: tuple[int, int], tokens: int) -> bool:
+    """Whether one reading of the line runs from one of its matches on to the next.
+
+    A short run of unheard words between them is a stumble inside a reading, and the
+    bar above says how short. What a count of them cannot see is which of the *line's*
+    own words sit either side of the run: a reading that goes on to the very next word
+    of the line did not stop and start again, however much was said in between.
+
+    That is what `Sequence 07` line 1 needed. It reads `…with a wipe coating / oh no
+    white coating one no no / part two`, and the seven words in the middle are one
+    abandoned attempt written down more fully than the four the same attempt was
+    written as before the transcriber was asked again. Nothing about the recording
+    changed, so nothing about where the reading ends may change either — and no count
+    that admits seven words of it can refuse a restart, which is nine.
+
+    Bounded by the line all the same, because two matches can also be far apart with
+    nothing of any line between them. An attempt abandoned mid-line is at most the line
+    said over again; longer than that and what sits between is not something said in
+    the middle of a reading, whatever the line does across it.
+    """
+    unheard = after[0] - before[0] - 1
+    if unheard <= _gap_for(tokens):
+        return True
+    return after[1] == before[1] + 1 and unheard <= tokens
