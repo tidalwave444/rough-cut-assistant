@@ -120,6 +120,27 @@ that is red for it.
    by the script word it displaced sitting opposite it, and `vibe` is opposite `wipe` once
    the `a` is passed.
 
+7. **A line loses its own ending because the attempt it abandoned was written down more
+   fully.** The last of the 02:24 fault, and what is left of it after 5 and 6 both landed.
+   Line 1 now reads `…with a wipe coating / oh no white coating one no no / part 2.` The
+   run in the middle is seven words the line does not account for; `SPAN_GAP_TOKENS`
+   tolerates four and not five, so the take ends at `coating` and `part 2` — the line's
+   own last words — become a kept off-script region playing beside it. Line 1 is at 78%
+   and flagged where equality alone scored 67%, so this is better than it was and still
+   not right.
+
+   Red: `tests/test_plan.py`,
+   `test_a_line_keeps_its_ending_across_an_attempt_it_abandoned`.
+
+   Nothing about the recording changed. Before the second pass that run was `part one no
+   no` — four words, inside the bar. The same abandoned attempt, written down more fully,
+   is what pushed it over: a rule for telling a stumble from a restart is now deciding it
+   on how well the transcriber heard, which is the one thing it cannot mean. Whether that
+   is answered by moving the bar, by scaling it as the comment beside it says the real one
+   does, or by judging the run for what it is rather than how long it is, is yours — but a
+   number moved far enough to swallow this run will also swallow restarts, so say in your
+   commit what you measured it against. Decision 0003 governs if you move it.
+
 One thing the listen asked for is **not** in this loop, because nothing is red for it. At
 10:33–11:02 the operator wants the last attempt at line 2's ending to be the one that plays. It
 already is, wherever the attempts are words at all: `tests/test_plan.py`,

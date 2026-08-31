@@ -510,3 +510,25 @@ def test_a_near_miss_is_found_past_a_word_the_line_does_not_account_for() -> Non
 
     assert plan.flagged == []
     assert plan.off_script == []
+
+
+def test_a_line_keeps_its_ending_across_an_attempt_it_abandoned() -> None:
+    # `Sequence 07` line 1 once the second pass has written the buried attempt down:
+    # `oh no white coating one no no` sits between `coding` and `part two`, and the take
+    # ends before it. The line's own last two words become a leftover that plays beside
+    # it, and the line is flagged for stopping two words short of an ending it reached.
+    #
+    # `SPAN_GAP_TOKENS` tolerates four such words and not five, and until the second pass
+    # landed the run here was `part one no no` — four. Nothing about the recording
+    # changed; the same abandoned attempt written down more fully is what pushed it over.
+    # So a rule for telling a stumble from a restart is now deciding it on how well the
+    # transcriber heard, which is the one thing it cannot mean.
+    heard = spoken(
+        "Building a real project with a wipe coating oh no white coating one no no part two.",
+        at=0.0,
+    )
+
+    plan = build_plan(analysis(heard), [SCRIPT[0]])
+
+    assert plan.flagged == []
+    assert plan.off_script == []
