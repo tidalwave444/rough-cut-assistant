@@ -21,6 +21,25 @@ This repo is **single-context**: one `settled/words.md` and one `settled/decisio
 it ever grows into several bounded contexts, switch to a `settled/words-map.md` pointing
 at one `words.md` per context.
 
+## Before a ticket is written
+
+A ticket is written once the questions are answered, not as a place to keep them. Work the
+open questions in rounds: in one round ask every question whose answer does not depend on
+another question still open, numbered, each with the answer you recommend. Then stop and
+wait. The answers settle some questions and open others, and those are the next round.
+When a round has nothing left to ask, file.
+
+Facts are the agent's job and decisions are the person's. Anything the repo, the
+recordings or the environment can answer is looked up, never asked. What is put to the
+person is only what the material cannot settle: what the tool should do, and what would
+count as it working.
+
+**File one slice, not the set.** A ticket is something that can be built and heard in one
+pass. Filing the whole imagined sequence up front commits the project to behaviour nobody
+has heard yet, and every ticket after the first is written against a guess about how the
+one before it turned out. `Blocked by:` is for the follow-up that is already known, not
+for a plan filed in advance. Write the next ticket once the last one has been heard.
+
 ## The shape of a ticket
 
 Fixed, in this order, and nothing may be inserted above `## Listen for`:
@@ -70,6 +89,12 @@ mean the tests pass. **An agent never writes it.**
 of its `## Listen for`, one line giving the reason, and may then close on tests. That
 claim is made when the ticket is written and a human is still reading it — an agent may
 not grant itself the exemption at the end of the work it has just done.
+
+A check that cannot disagree with the code is not evidence. An expected value computed the
+way the code computes it, or a golden regenerated from the run it is meant to judge, agrees
+by construction and would have passed whatever the code did. The expected value has to come
+from somewhere the code cannot reach: a hand-verified file, a worked example, something
+someone counted. `AGENTS.md` names the two files here that are never regenerated, and why.
 
 ## Ticket length
 
