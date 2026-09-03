@@ -1,7 +1,7 @@
 """The golden tests: both real recordings, end to end below the seam.
 
-Each recording's analysis is committed, so this runs the whole cut — plan, XML, report —
-against real transcript timings without a GPU or the MP4. One assertion therefore covers
+Each recording's analysis and script are committed, so this runs the whole cut — plan, XML,
+report — against real transcript timings without a GPU or the MP4. One assertion therefore covers
 the schema, the timebase, the sequence structure and the report's wording at once.
 
 Two recordings rather than one, because a hand-written fixture holds one thing at a time
@@ -33,7 +33,6 @@ from roughcut.script import ScriptLine, read_script
 
 REPO = Path(__file__).resolve().parents[1]
 COMMITTED = REPO / "tests" / "committed"
-RECORDINGS = REPO / "recordings"
 
 
 @dataclass(frozen=True)
@@ -57,7 +56,7 @@ class Committed:
 FIXTURE = Committed(
     name="sequence.mp4",
     analysis=COMMITTED / "sequence.analysis.json",
-    script=RECORDINGS / "textt.txt",
+    script=COMMITTED / "sequence.script.txt",
     golden_xml=COMMITTED / "sequence.golden.xml",
     golden_report=COMMITTED / "sequence.golden.report.txt",
 )
@@ -65,7 +64,7 @@ FIXTURE = Committed(
 SEQUENCE_07 = Committed(
     name="Sequence 07.mp4",
     analysis=COMMITTED / "Sequence 07.analysis.json",
-    script=RECORDINGS / "text_for_Sequence 07.txt",
+    script=COMMITTED / "Sequence 07.script.txt",
     golden_xml=COMMITTED / "Sequence 07.golden.xml",
     golden_report=COMMITTED / "Sequence 07.golden.report.txt",
 )

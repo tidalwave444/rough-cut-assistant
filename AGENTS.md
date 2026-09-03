@@ -13,9 +13,10 @@ Rough Cut Assistant: a recording plus its script in, an FCP7 XML for Premiere ou
 - **`work/<feature>/`** — the live work: `what-it-does.md`, `facts.md`, `open/`, `closed.md`.
 - **`src/`, `tests/`** — the tool itself. `tests/committed/` holds what is committed by
   hand rather than produced: the reference XML, the real recording's analysis, the goldens.
-- **`recordings/`** — the recordings and the scripts read from them. The tool's input.
-  The MP4s are git-ignored and absent from the history; the scripts are committed because
-  the golden tests read them.
+- **`recordings/`** — the tool's input on the operator's machine, git-ignored and absent
+  from the history. The two recordings the tests are named for are the author's own
+  footage; their transcripts and scripts are committed under `tests/committed/` instead,
+  which is why the suite runs without them.
 - **`running/`** — for the person operating it: getting a recording in and an XML back out
   to Windows, `xml-fix-loop/`, which runs an agent against the checks until they pass, and
   `dashboard.py`, which reads the repo and writes `out/dashboard.html` — the pipeline, the
@@ -58,8 +59,9 @@ suite runs in half a second without a GPU.
 - `tests/committed/minimal2.xml` is the hand-verified import contract. It is never produced by the
   renderer; regenerating it would make its test circular.
 - `tests/committed/sequence.analysis.json` and `tests/committed/Sequence 07.analysis.json`
-  are the committed real recordings. Re-running `analyze` over either invalidates every
-  golden below it, and doing so costs a GPU.
+  are the committed real recordings, each read against the `*.script.txt` beside it.
+  Re-running `analyze` over either invalidates every golden below it, and doing so costs
+  a GPU.
 
 `--update-golden` applies to the rendered outputs only, and a golden diff is meant to be
 read: an alignment change should show up in the report as a line moving.

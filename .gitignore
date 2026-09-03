@@ -5,5 +5,4 @@ __pycache__/
 .mypy_cache/
 dist/
 out/
-.claude/settings.local.json
-recordings/*.mp4
+recordings/
