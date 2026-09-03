@@ -34,6 +34,12 @@ changed, so iterating on the cut costs no transcription.
 Recordings live in `recordings/` and results land in `out/`. Getting a recording in from
 Windows and the XML back out again: `running/getting-it-to-windows.md`.
 
+The MP4s themselves are not in this repository — `recordings/*.mp4` is git-ignored, and
+the two the tests are named for are the author's own footage. Everything below the
+analysis seam runs without them: each recording's transcript is committed under
+`tests/committed/`, so the whole cut can be planned, rendered and asserted from an
+artifact. Point `roughcut cut` at a recording of your own to see the media stage.
+
 ```bash
 uv run python running/dashboard.py        # out/dashboard.html — where the project stands
 ```

@@ -109,7 +109,7 @@ every `sudo` other than `win-bridge` still asks for a password, and `win-bridge`
 itself is root-owned, so its hardcoded paths cannot be edited from the account the
 agent runs as.
 
-The Linux side is not fenced off. The agent runs as `<your-user>` and can read and write
+The Linux side is not fenced off. The agent runs as your own account and can read and write
 anything in that home directory. Closing that too would mean running the agent as a
 separate user.
 

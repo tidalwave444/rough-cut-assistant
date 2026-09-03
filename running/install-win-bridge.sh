@@ -6,7 +6,7 @@
 # Re-run it after editing win-bridge — the installed copy under /usr/local/sbin
 # is what sudo actually executes, not the one in this repo.
 #
-# Installs the mount script as root-owned, then grants <your-user> a NOPASSWD rule for
+# Installs the mount script as root-owned, then grants the invoking user a NOPASSWD rule for
 # that one script and nothing else. Every other sudo command keeps asking for the
 # password, which is what keeps `sudo mount -t drvfs C: /mnt/c` out of reach.
 
@@ -15,7 +15,7 @@ set -euo pipefail
 [ "$(id -u)" -eq 0 ] || { echo "run this with sudo" >&2; exit 1; }
 
 SRC_DIR=$(cd "$(dirname "$0")" && pwd)
-SUDO_USER_NAME=${SUDO_USER:-<your-user>}
+SUDO_USER_NAME=${SUDO_USER:?run this with sudo, so the rule names the account you use}
 
 install -o root -g root -m 0755 "$SRC_DIR/win-bridge" /usr/local/sbin/win-bridge
 

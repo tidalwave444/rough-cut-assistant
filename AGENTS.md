@@ -14,6 +14,8 @@ Rough Cut Assistant: a recording plus its script in, an FCP7 XML for Premiere ou
 - **`src/`, `tests/`** — the tool itself. `tests/committed/` holds what is committed by
   hand rather than produced: the reference XML, the real recording's analysis, the goldens.
 - **`recordings/`** — the recordings and the scripts read from them. The tool's input.
+  The MP4s are git-ignored and absent from the history; the scripts are committed because
+  the golden tests read them.
 - **`running/`** — for the person operating it: getting a recording in and an XML back out
   to Windows, `xml-fix-loop/`, which runs an agent against the checks until they pass, and
   `dashboard.py`, which reads the repo and writes `out/dashboard.html` — the pipeline, the

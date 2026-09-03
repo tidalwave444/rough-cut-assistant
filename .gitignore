@@ -6,3 +6,4 @@ __pycache__/
 dist/
 out/
 .claude/settings.local.json
+recordings/*.mp4
