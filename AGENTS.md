@@ -24,12 +24,6 @@ Rough Cut Assistant: a recording plus its script in, an FCP7 XML for Premiere ou
   imported by the tool.
 - **`out/`** — what a run writes. Disposable, and git-ignored.
 
-## Skills
-
-Skills from `~/.claude/skills` (a third-party set) are forbidden in this project, and so
-are their conventions — no `.scratch/` tracker, no `docs/agents/`, no `CONTEXT.md`. The
-full rule and the list of names is in `CLAUDE.md`.
-
 ## Commands
 
 ```bash
