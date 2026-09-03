@@ -15,8 +15,10 @@ Rough Cut Assistant: a recording plus its script in, an FCP7 XML for Premiere ou
   hand rather than produced: the reference XML, the real recording's analysis, the goldens.
 - **`recordings/`** — the recordings and the scripts read from them. The tool's input.
 - **`running/`** — for the person operating it: getting a recording in and an XML back out
-  to Windows, and `xml-fix-loop/`, which runs an agent against the checks until they pass.
-  Nothing here is imported by the tool.
+  to Windows, `xml-fix-loop/`, which runs an agent against the checks until they pass, and
+  `dashboard.py`, which reads the repo and writes `out/dashboard.html` — the pipeline, the
+  loop run by run, the tickets, and the newest cut read from its clips. Nothing here is
+  imported by the tool.
 - **`out/`** — what a run writes. Disposable, and git-ignored.
 
 ## Skills

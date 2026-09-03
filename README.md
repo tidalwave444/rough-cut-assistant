@@ -34,6 +34,15 @@ changed, so iterating on the cut costs no transcription.
 Recordings live in `recordings/` and results land in `out/`. Getting a recording in from
 Windows and the XML back out again: `running/getting-it-to-windows.md`.
 
+```bash
+uv run python running/dashboard.py        # out/dashboard.html — where the project stands
+```
+
+The dashboard reads what is already written down: the pipeline and where each artifact
+lands, every run of the fix loop with its red count falling, the open tickets and what
+they are waiting on, and the newest cut in `out/` described from its clip list beside
+what its report claims. It scores nothing and decides nothing.
+
 What lands in the XML: one clip per script line in script order — where a line was
 read more than once, the last complete reading plays — a marker at each line
 carrying its text and one per item where a line enumerates, long pauses shortened,
