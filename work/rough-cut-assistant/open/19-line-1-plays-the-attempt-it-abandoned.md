@@ -1,4 +1,4 @@
-# 18 — Line 1 plays the attempt it abandoned
+# 19 — Line 1 plays the attempt it abandoned
 
 **What to build:** The abandoned reading of line 1 out of the cut. It plays in full today —
 7.67 s of `a wipe coating / oh no / white coating / one no no` before the finished
